@@ -27,8 +27,6 @@ interface ProjectSeed {
   summary: string;
   /** Duration of the full film in seconds, measured from the encode. */
   filmDuration: number;
-  /** Number of supporting stills produced by scripts/encode-stills.sh. */
-  stills: number;
   /** True for the two vertically-shot pieces. */
   vertical?: boolean;
   credits?: [string, string][];
@@ -43,7 +41,6 @@ const seeds: ProjectSeed[] = [
     summary:
       "A first look at the MANTIS 135mm T3.2 anamorphic, shot to show the lens doing what the spec sheet cannot: flare behaviour, focus falloff, and how it renders skin at close range.",
     filmDuration: 290,
-    stills: 5,
     year: 2025,
   },
   {
@@ -53,7 +50,6 @@ const seeds: ProjectSeed[] = [
     summary:
       "A short promo cut for a credit giveaway campaign — fast, bright, and built to hold attention in a feed rather than a cinema.",
     filmDuration: 34,
-    stills: 0,
     year: 2025,
   },
   {
@@ -63,7 +59,6 @@ const seeds: ProjectSeed[] = [
     summary:
       "Track coverage from the Salt Lake City round, cut vertical for social. Follow cams and multicam pit coverage condensed into a promo reel.",
     filmDuration: 24,
-    stills: 6,
     vertical: true,
     year: 2022,
   },
@@ -74,7 +69,6 @@ const seeds: ProjectSeed[] = [
     summary:
       "A build film for a custom Raptor R, shot to sit alongside the studio's stills work for the same client.",
     filmDuration: 76,
-    stills: 6,
     year: 2024,
   },
   {
@@ -84,7 +78,6 @@ const seeds: ProjectSeed[] = [
     summary:
       "The finished piece — shot wide, graded cool, and cut long enough to let the location do the work.",
     filmDuration: 88,
-    stills: 0,
     year: 2024,
   },
   {
@@ -94,7 +87,6 @@ const seeds: ProjectSeed[] = [
     summary:
       "A near-three-minute promo shot on location, paced deliberately slowly against the usual conventions of the format.",
     filmDuration: 174,
-    stills: 0,
     year: 2024,
   },
   {
@@ -104,7 +96,6 @@ const seeds: ProjectSeed[] = [
     summary:
       "A driver showcase built around one competitor across a full event weekend, cut to the rhythm of the runs rather than a music bed.",
     filmDuration: 143,
-    stills: 0,
     year: 2023,
   },
   {
@@ -114,7 +105,6 @@ const seeds: ProjectSeed[] = [
     summary:
       "Product film for a wheel fitment on a Model S Plaid, shot ultrawide to keep the full stance of the car in frame.",
     filmDuration: 70,
-    stills: 6,
     year: 2023,
   },
   {
@@ -124,7 +114,6 @@ const seeds: ProjectSeed[] = [
     summary:
       "A short documentary piece shot at 2:1, following its subject without narration.",
     filmDuration: 83,
-    stills: 0,
     credits: [
       ["Director", "Loren Henley"],
       ["Director", "Gabriel Bendana"],
@@ -138,7 +127,6 @@ const seeds: ProjectSeed[] = [
     summary:
       "Product content shot on location in Joshua Tree, cut vertical for mobile placement alongside a full product stills set.",
     filmDuration: 23,
-    stills: 6,
     vertical: true,
     year: 2023,
   },
@@ -163,7 +151,7 @@ export const projects: Project[] = seeds.map((seed, i) => {
       duration: seed.filmDuration,
     }),
     loop: derivedLoop(seed.slug, { alt: `${label}, silent loop`, aspect }),
-    gallery: derivedStills(seed.slug, seed.stills, label, aspect),
+    gallery: derivedStills(seed.slug, label),
     credits: (seed.credits ?? []).map(([role, name]) => ({ role, name })),
     year: seed.year,
   };

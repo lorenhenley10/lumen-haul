@@ -1,4 +1,5 @@
 import type { ImageAsset, VideoAsset, AspectRatio } from "./types";
+import { stillsManifest } from "./stills.generated";
 
 /**
  * Media registry.
@@ -76,23 +77,30 @@ export function derivedFilm(
   };
 }
 
-/** Supporting stills, numbered 01..n by the encode script. */
-export function derivedStills(
-  slug: string,
-  count: number,
-  altPrefix: string,
-  aspect: AspectRatio = "16/9",
-): ImageAsset[] {
-  return Array.from({ length: count }, (_, i) => {
-    const n = String(i + 1).padStart(2, "0");
+/**
+ * Supporting stills, numbered 01..n by the encode script.
+ *
+ * Dimensions come from `stills.generated.ts` rather than being assumed, because
+ * shoots mix orientations — Blazar and JOBY both contain portrait frames
+ * alongside landscape ones. Declaring one aspect ratio for a whole project
+ * would size half the gallery wrong.
+ *
+ * The list is driven by the manifest too, so adding or removing photos is a
+ * re-run of ./scripts/encode-stills.sh with no edit here.
+ */
+export function derivedStills(slug: string, altPrefix: string): ImageAsset[] {
+  const entries = stillsManifest[slug] ?? [];
+
+  return entries.map((entry, i) => {
+    const portrait = entry.height > entry.width;
     return {
       kind: "image",
-      id: `${slug}-still-${n}`,
-      src: `${DERIVED}/${slug}/stills/${n}.jpg`,
+      id: `${slug}-still-${entry.file.replace(".jpg", "")}`,
+      src: `${DERIVED}/${slug}/stills/${entry.file}`,
       alt: `${altPrefix} — still ${i + 1}`,
-      aspect,
-      width: 1600,
-      height: aspect === "9/16" ? 2844 : 1067,
+      aspect: portrait ? "3/4" : "16/9",
+      width: entry.width,
+      height: entry.height,
     };
   });
 }
