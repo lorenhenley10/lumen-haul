@@ -24,6 +24,16 @@
 .DS_Store
 *.pem
 
+# Camera masters. ~27GB of 4K source at 40-113 Mbps, dropped into
+# public/media/<Project>/ for transcoding. These must never be committed or
+# deployed: GitHub hard-rejects files over 100MB and several of these exceed
+# 1GB. Only the web-ready derivatives in public/media/derived/ are tracked.
+#
+# Run ./scripts/encode-media.sh to regenerate derivatives from the masters.
+/public/media/*
+!/public/media/derived/
+!/public/media/placeholder/
+
 # debug
 npm-debug.log*
 yarn-debug.log*

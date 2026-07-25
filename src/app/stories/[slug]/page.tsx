@@ -65,23 +65,32 @@ export default async function ProjectPage({
               />
             </section>
 
-            <DragGallery stills={project.gallery} />
+            {/* Not every project has a stills set yet. An empty drag canvas
+                would read as a broken viewport, so the section is skipped
+                entirely rather than rendered empty. */}
+            {project.gallery.length > 0 && (
+              <DragGallery stills={project.gallery} />
+            )}
 
             <section className="container py-32">
-              <Reveal>
-                <h2 className="text-heading">Credits</h2>
-              </Reveal>
-              <Reveal staggerChildren className="mt-8">
-                {project.credits.map((credit) => (
-                  <div
-                    key={`${credit.role}-${credit.name}`}
-                    className="grid border-b border-border py-4 last:border-b-0 md:grid-cols-2"
-                  >
-                    <p className="text-muted-foreground">{credit.role}</p>
-                    <p>{credit.name}</p>
-                  </div>
-                ))}
-              </Reveal>
+              {project.credits.length > 0 && (
+                <>
+                  <Reveal>
+                    <h2 className="text-heading">Credits</h2>
+                  </Reveal>
+                  <Reveal staggerChildren className="mt-8">
+                    {project.credits.map((credit) => (
+                      <div
+                        key={`${credit.role}-${credit.name}`}
+                        className="grid border-b border-border py-4 last:border-b-0 md:grid-cols-2"
+                      >
+                        <p className="text-muted-foreground">{credit.role}</p>
+                        <p>{credit.name}</p>
+                      </div>
+                    ))}
+                  </Reveal>
+                </>
+              )}
               <p className="mt-8 text-caption text-muted-foreground">
                 {project.year}
               </p>

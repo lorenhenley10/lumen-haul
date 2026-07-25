@@ -1,19 +1,86 @@
 import type { ImageAsset, VideoAsset, AspectRatio } from "./types";
 
 /**
- * Media registry + placeholder factory.
+ * Media registry.
  *
- * Until real masters land, every asset points at the shared stand-in files in
- * /public/media/placeholder/. `placeholder: true` drives a dev-only badge and
- * keeps the build honest about what is still missing.
+ * Two kinds of asset live here:
  *
- * TO SWAP IN REAL MEDIA: replace the `sources`/`poster` paths here and delete
- * the `placeholder` flag. No component changes.
+ * 1. REAL media, produced by `scripts/encode-media.sh` from the camera masters
+ *    and written to /public/media/derived/<slug>/. The masters themselves are
+ *    27GB of 4K at 40-113 Mbps, are gitignored, and are never served.
+ *
+ *      loop.mp4    ~10s silent excerpt, long side 1920 — home reel + card hover
+ *      film.mp4    full piece with audio      — the fullscreen player
+ *      poster.jpg  a frame from the loop's start point
+ *      stills/NN.jpg  supporting photography
+ *
+ * 2. PLACEHOLDER assets, for anything without media yet. These carry an empty
+ *    `sources` array on purpose: AutoVideo then renders the poster and issues
+ *    zero network requests, which beats 404ing on a missing file.
+ *
+ * TO ADJUST CONTENT: edit projects.ts. To re-encode after adding masters, run
+ * ./scripts/encode-media.sh (and ./scripts/encode-stills.sh for photos).
  */
 
 export const PLACEHOLDER_POSTER = "/media/placeholder/poster.svg";
 export const PLACEHOLDER_STILL = "/media/placeholder/still.svg";
 
+const DERIVED = "/media/derived";
+
+/** The ambient loop for a project: silent, short, used on the home reel. */
+export function derivedLoop(
+  slug: string,
+  opts: { alt: string; aspect?: AspectRatio },
+): VideoAsset {
+  return {
+    kind: "video",
+    id: `${slug}-loop`,
+    sources: [{ src: `${DERIVED}/${slug}/loop.mp4`, type: "video/mp4" }],
+    poster: `${DERIVED}/${slug}/poster.jpg`,
+    aspect: opts.aspect ?? "16/9",
+    duration: 10,
+    alt: opts.alt,
+  };
+}
+
+/** The full piece, opened in the fullscreen player. Carries audio. */
+export function derivedFilm(
+  slug: string,
+  opts: { alt: string; aspect?: AspectRatio; duration: number },
+): VideoAsset {
+  return {
+    kind: "video",
+    id: `${slug}-film`,
+    sources: [{ src: `${DERIVED}/${slug}/film.mp4`, type: "video/mp4" }],
+    poster: `${DERIVED}/${slug}/poster.jpg`,
+    aspect: opts.aspect ?? "16/9",
+    duration: opts.duration,
+    alt: opts.alt,
+  };
+}
+
+/** Supporting stills, numbered 01..n by the encode script. */
+export function derivedStills(
+  slug: string,
+  count: number,
+  altPrefix: string,
+  aspect: AspectRatio = "16/9",
+): ImageAsset[] {
+  return Array.from({ length: count }, (_, i) => {
+    const n = String(i + 1).padStart(2, "0");
+    return {
+      kind: "image",
+      id: `${slug}-still-${n}`,
+      src: `${DERIVED}/${slug}/stills/${n}.jpg`,
+      alt: `${altPrefix} — still ${i + 1}`,
+      aspect,
+      width: 1600,
+      height: aspect === "9/16" ? 2844 : 1067,
+    };
+  });
+}
+
+/** A video with no file behind it yet. Renders as poster only, fetches nothing. */
 export function video(
   id: string,
   opts: {
@@ -28,13 +95,9 @@ export function video(
   return {
     kind: "video",
     id,
-    // A placeholder asset carries NO sources on purpose. An empty source list
-    // means the player renders the poster and issues zero network requests —
-    // far better than pointing at a missing file and eating a 404 per tile.
     sources: isPlaceholder ? [] : [{ src: opts.src!, type: "video/mp4" }],
     poster: opts.poster ?? PLACEHOLDER_POSTER,
     aspect: opts.aspect ?? "16/9",
-    // Declared duration drives reel pacing and progress UI even with no file.
     duration: opts.duration ?? 12,
     alt: opts.alt,
     placeholder: isPlaceholder,
@@ -64,8 +127,10 @@ export function still(
   };
 }
 
-/** Site-wide background film behind the home hero. */
-export const heroFilm = video("hero-reel", {
+/**
+ * The film behind the home hero. Reuses the Blazar MANTIS loop so the landing
+ * frame is real footage rather than a placeholder card.
+ */
+export const heroFilm = derivedLoop("blazar-mantis-135", {
   alt: "Lumen Haul showreel",
-  duration: 24,
 });

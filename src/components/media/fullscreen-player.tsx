@@ -84,6 +84,9 @@ function PlayerShell({
   const [buffering, setBuffering] = useState(true);
   const [controlsVisible, setControlsVisible] = useState(true);
   const [scrubbing, setScrubbing] = useState(false);
+  // A film that 404s or uses a codec the browser can't decode must not leave
+  // the spinner turning forever — that reads as a hang rather than a failure.
+  const [failed, setFailed] = useState(false);
 
   // --- Scroll lock ---------------------------------------------------------
   // Both halves are required: Lenis owns the wheel, the body style owns
@@ -259,6 +262,10 @@ function PlayerShell({
           onWaiting={() => setBuffering(true)}
           onPlaying={() => setBuffering(false)}
           onCanPlay={() => setBuffering(false)}
+          onError={() => {
+            setFailed(true);
+            setBuffering(false);
+          }}
           onTimeUpdate={(e) => {
             if (!scrubbing) setCurrent(e.currentTarget.currentTime);
           }}
@@ -270,9 +277,27 @@ function PlayerShell({
           ))}
         </video>
 
+        {/* Playback failure — poster stays visible behind this. */}
+        {failed && (
+          <div className="absolute inset-0 grid place-items-center bg-background/70 px-container">
+            <div className="text-center">
+              <p className="text-caption text-muted-foreground">
+                This film can&rsquo;t be played right now.
+              </p>
+              <button
+                type="button"
+                onClick={onClose}
+                className="mt-4 rounded-full bg-white/10 px-6 py-3 text-caption uppercase backdrop-blur-lg transition-colors hover:bg-white/20"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Buffering indicator */}
         <AnimatePresence>
-          {buffering && (
+          {buffering && !failed && (
             <motion.div
               className="pointer-events-none absolute inset-0 grid place-items-center"
               initial={{ opacity: 0 }}
