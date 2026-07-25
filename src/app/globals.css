@@ -1,26 +1,227 @@
 @import "tailwindcss";
 
+/* ============================================================================
+   LUMEN HAUL — DESIGN TOKENS
+   Single source of truth. Never hardcode a colour, duration, easing, gutter,
+   or z-index in a component: add it here and reference the token.
+   ========================================================================= */
+
+@theme {
+  /* --- Colour -------------------------------------------------------------
+     Neutral dark system. Chroma is deliberately 0 across the ramp so footage
+     is the only colour on screen. */
+  --color-background: oklch(15.43% 0 0);
+  --color-foreground: oklch(94.3% 0 0);
+  --color-primary: oklch(100% 0 0);
+  --color-primary-foreground: oklch(15.43% 0 0);
+  --color-muted: oklch(24% 0 0);
+  --color-muted-foreground: oklch(55.6% 0 0);
+  --color-border: oklch(100% 0 0 / 0.15);
+  --color-ring: oklch(70.8% 0 0);
+  --color-destructive: oklch(57.7% 0.245 27.325);
+
+  /* Scrims layered over footage so text stays legible on any frame. */
+  --color-scrim: oklch(0% 0 0 / 0.2);
+  --color-scrim-strong: oklch(0% 0 0 / 0.45);
+
+  /* --- Typography ---------------------------------------------------------
+     Two families only. Display carries all headline weight; mono carries
+     every piece of UI text, label, caption and body copy. */
+  --font-display: var(--font-display-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-ui-mono), ui-monospace, monospace;
+
+  /* Fluid display ramp: 32px at <=640px, 56px at >=1280px, linear between. */
+  --text-display: clamp(2rem, 0.5rem + 3.75vw, 3.5rem);
+  --text-display--line-height: 1;
+  /* -0.8px at 56px on the reference. Tighter values crowd the counters at
+     display size; the two-weight project lockups add `tracking-tighter` on
+     top of this where a denser setting is wanted. */
+  --text-display--letter-spacing: -0.0143em;
+
+  /* Section headings — the "h2" step.
+     Measured on the reference: 24px at 390px rising to 32px at >=1280px. */
+  --text-heading: clamp(1.5rem, 1rem + 1.25vw, 2rem);
+  --text-heading--line-height: 1.15;
+  --text-heading--letter-spacing: -0.025em;
+
+  /* Mono UI ramp. Body copy sits at --text-ui; captions at --text-caption. */
+  --text-ui: 0.875rem;
+  --text-ui--line-height: 1.3;
+  --text-ui--letter-spacing: -0.03em;
+  --text-caption: 0.75rem;
+  --text-caption--line-height: 1.35;
+  --text-caption--letter-spacing: -0.03em;
+
+  /* --- Spacing ------------------------------------------------------------
+     `container` is the page gutter; `top-section` is the standing clearance
+     every inner page leaves for the fixed header. */
+  --spacing-container: 1rem;
+  --spacing-top-section: 16rem;
+  --spacing-section: 4rem;
+
+  /* --- Radii & shadow ----------------------------------------------------- */
+  --radius: 0.625rem;
+  --radius-card: 0.5rem;
+  --radius-pill: 9999px;
+  --shadow-base: 0px 10px 50px rgb(0 0 0 / 0.1);
+
+  /* --- Motion -------------------------------------------------------------
+     Durations in seconds so they can be handed straight to GSAP. */
+  --duration-instant: 0.12s;
+  --duration-fast: 0.2s;
+  --duration-base: 0.35s;
+  --duration-slow: 0.6s;
+  --duration-page: 0.8s;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  /* --- Media aspect ratios ------------------------------------------------ */
+  --aspect-video: 16 / 9;
+  --aspect-portrait: 3 / 4;
+  --aspect-still: 1 / 1;
+}
+
+/* ============================================================================
+   Z-INDEX SCALE
+   Named layers keep stacking decisions reviewable. Use `z-[var(--z-header)]`.
+   ========================================================================= */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --z-below: -1;
+  --z-media: 1;
+  --z-content: 10;
+  --z-rail: 20;
+  --z-header: 50;
+  --z-menu: 60;
+  --z-player: 999;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* ============================================================================
+   BASE
+   ========================================================================= */
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  html {
+    /* Lenis drives scrolling; native smooth would fight it. */
+    scroll-behavior: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-mono);
+    font-size: var(--text-ui);
+    line-height: var(--text-ui--line-height);
+    letter-spacing: var(--text-ui--letter-spacing);
+    text-transform: uppercase;
+    overscroll-behavior-y: none;
+  }
+
+  /* Display face opts back out of the mono/uppercase default. */
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    text-transform: none;
+    letter-spacing: var(--text-display--letter-spacing);
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: var(--color-primary);
+    color: var(--color-primary-foreground);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/*
+   Page gutter. Full-bleed by design: no max-width, just a symmetric gutter, so
+   wide displays get more image rather than more margin.
+
+   This MUST be `@utility`, not a `.container` rule in @layer components.
+   Tailwind v4 ships its own `container` utility with per-breakpoint
+   max-widths, and the utility layer outranks the components layer — declaring
+   it as a component silently loses, capping every page at 1280px.
+*/
+@utility container {
+  width: 100%;
+  max-width: none;
+  margin-inline: auto;
+  padding-inline: var(--spacing-container);
+}
+
+@layer components {
+  .text-display {
+    font-family: var(--font-display);
+    font-size: var(--text-display);
+    line-height: var(--text-display--line-height);
+    letter-spacing: var(--text-display--letter-spacing);
+    text-transform: none;
+  }
+
+  .text-heading {
+    font-family: var(--font-display);
+    font-size: var(--text-heading);
+    line-height: var(--text-heading--line-height);
+    letter-spacing: var(--text-heading--letter-spacing);
+    text-transform: none;
+  }
+
+  /*
+     Long-form editorial copy. Distinct from the 14px UI step: larger, set
+     justified with automatic hyphenation, and tracked tighter. Measured from
+     the reference's studio prose — 16px/1.5, -0.05em, uppercase mono.
+     Justification only reads well WITH hyphens; do not drop them.
+  */
+  .text-prose {
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: -0.05em;
+    text-align: justify;
+    hyphens: auto;
+  }
+
+  /* Horizontal tab strips (header nav, studio section nav) hide their bar. */
+  .hide-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@layer utilities {
+  /* Masked line/word wrapper for text reveals. Children translate up from
+     100% and are clipped by this element. */
+  .reveal-mask {
+    display: block;
+    overflow: hidden;
+  }
+}
+
+/* ============================================================================
+   REDUCED MOTION
+   The JS layer also reads this (see useReducedMotion) and skips building
+   timelines entirely; this block is the belt-and-braces CSS half.
+   ========================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

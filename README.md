@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Lumen Haul
 
-## Getting Started
+A film and photography studio site: full-bleed autoplaying video, scroll-driven
+choreography, a fullscreen film player, and a distinct mobile interaction model.
 
-First, run the development server:
+Built as a structural recreation of the interaction design and motion
+architecture at `letitrippictures.com`. **The structure is the reference; the
+content is not.** All copy, project names and creator names in this repository
+are invented placeholder material for Lumen Haul.
+
+## Quick start
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Documentation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Document | What's in it |
+|---|---|
+| `AGENTS.md` | Start here if you're an agent. Ten rules, entry points |
+| `docs/ARCHITECTURE.md` | Stack, boundaries, directory rules, the decisions already made |
+| `docs/plan/00-OVERVIEW.md` | Build status and the slice queue |
+| `docs/plan/01…07` | One executable slice per file |
+| `docs/audit/routes.md` | Route inventory and page anatomy |
+| `docs/audit/visual-system.md` | Colour, type, grid, layering |
+| `docs/audit/motion-system.md` | Every animation, catalogued |
+| `docs/audit/video-system.md` | Playback policy and player spec |
+| `docs/audit/responsive.md` | Breakpoint behaviour, test matrix |
 
-## Learn More
+## Stack
 
-To learn more about Next.js, take a look at the following resources:
+Next.js 16 (App Router, static) · React 19 · TypeScript · Tailwind v4 ·
+GSAP + ScrollTrigger · Motion · Lenis · native HTML5 video.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The animation boundary is deliberate: GSAP owns anything tied to scroll
+position, Motion owns mount/unmount and layout transitions, CSS owns hover and
+small state changes. See `docs/ARCHITECTURE.md` §1.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project layout
 
-## Deploy on Vercel
+```
+src/app/          Routes. Thin — pages compose, they don't implement
+src/components/   layout · media · motion · providers · home · stories
+src/content/      All copy and typed media metadata
+src/lib/          cn, GSAP registration, motion tokens, hooks
+public/brand/     Logo assets
+public/media/     Placeholder poster + still
+docs/             Audit, architecture, build plan
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Current state
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Built and verified:** design tokens, motion primitives, the video system and
+fullscreen player, header/footer/nav/mobile menu, `/`, `/stories`,
+`/stories/[slug]` (18 SSG pages), and a 404.
+
+**Not built yet:** `/creators` and `/studio` — both are linked from the
+navigation and currently 404. They are slices 01 and 02.
+
+**Placeholder by design:**
+
+- **Media.** No footage exists yet. Placeholder video assets carry an empty
+  `sources` array, so `AutoVideo` renders the poster and issues no network
+  request — better than 404ing on a missing file. A dev-only badge marks them.
+  Swapping in real media is a config change in `src/content/media.ts` with no
+  component changes.
+- **Copy.** Every project, creator and studio string is invented and marked
+  `PLACEHOLDER CONTENT`.
+- **Fonts.** Inter Tight and JetBrains Mono stand in for licensed faces. Swap
+  via `next/font/local` in `layout.tsx`, keeping the CSS variable names.
+- **Brand.** The supplied assets are a square mark only (4167×4167) with no
+  wordmark lockup, so the full-bleed wordmark is set as type rather than placed
+  as an image.
+
+## Verification
+
+```bash
+npx tsc --noEmit && npm run lint && npm run build
+```
+
+Then check 390 / 768 / 1024 / 1440 and one pass with
+`prefers-reduced-motion: reduce`.
