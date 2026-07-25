@@ -19,9 +19,13 @@
 #     real aspect ratios drive the layout.
 #
 # Usage:
-#   ./scripts/encode-media.sh          # everything
-#   ./scripts/encode-media.sh loops    # loops + posters only (fast)
-#   ./scripts/encode-media.sh films    # films only (slow)
+#   ./scripts/encode-media.sh                        # everything
+#   ./scripts/encode-media.sh loops                  # loops + posters only (fast)
+#   ./scripts/encode-media.sh films                  # films only (slow)
+#   ./scripts/encode-media.sh all shoreline-f150-raptor   # one project only
+#
+# The optional second argument limits the run to a single slug, so re-cutting
+# one piece does not mean re-encoding the whole slate.
 
 set -uo pipefail
 export PATH="/opt/homebrew/bin:$PATH"
@@ -29,6 +33,7 @@ export PATH="/opt/homebrew/bin:$PATH"
 MEDIA="$(cd "$(dirname "$0")/.." && pwd)/public/media"
 OUT="$MEDIA/derived"
 MODE="${1:-all}"
+ONLY="${2:-}"
 
 # Cap the long side at 1920 while preserving aspect ratio, keeping dims even.
 SCALE="scale='if(gt(iw,ih),1920,-2)':'if(gt(iw,ih),-2,1920)'"
@@ -38,7 +43,7 @@ read -r -d '' JOBS <<'EOF'
 blazar-mantis-135|Blazar/MANTIS/Blazar MANTIS 135mm T3.2 First Look.mp4|60
 nozomio-folk-doordash|Nozomio/V2 Folk DoorDash Credit Giveway Promo.mp4|6
 fd-2022-buy-now-japan|Formula Drift 2022 - Buy Now Japan/SLC/FD SLC Promo Reel.mp4|4
-shoreline-f150-raptor|Shoreline Motoring/F150/Shoreline Motoring - Ford F150 Raptor R Custom.mp4|12
+shoreline-f150-raptor|Shoreline Motoring/F150/F150 Raptor R - Shoreline Motoring.mp4|12
 88-silo|88/88 - Final final final.mp4|18
 los-lamentos|Los Lamentos/Los Lamentos Promo Final.mp4|30
 hotpit-autofest|Hotpit Autofest/Elliot Bright - Driver Showcase.mp4|25
@@ -51,6 +56,7 @@ mkdir -p "$OUT"
 
 while IFS='|' read -r slug src start; do
   [ -z "${slug:-}" ] && continue
+  [ -n "$ONLY" ] && [ "$slug" != "$ONLY" ] && continue
   input="$MEDIA/$src"
   dir="$OUT/$slug"
   mkdir -p "$dir"

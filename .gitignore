@@ -24,14 +24,21 @@
 .DS_Store
 *.pem
 
-# Camera masters. ~27GB of 4K source at 40-113 Mbps, dropped into
-# public/media/<Project>/ for transcoding. These must never be committed or
-# deployed: GitHub hard-rejects files over 100MB and several of these exceed
-# 1GB. Only the web-ready derivatives in public/media/derived/ are tracked.
+# ALL media is out of git.
 #
-# Run ./scripts/encode-media.sh to regenerate derivatives from the masters.
+#   public/media/<Project>/   ~27GB of 4K camera masters, archived locally by
+#                             hand. Never committed, never deployed.
+#   public/media/derived/     ~425MB of web-ready loops, films, posters and
+#                             stills. These now live in Cloudflare R2 and are
+#                             served from https://media.lumenhaul.com — see
+#                             docs/MEDIA-HOSTING.md.
+#
+# Only the tiny SVG placeholders stay in the repo, so a checkout with no R2
+# access still renders something rather than broken frames.
+#
+# Regenerate derivatives:  ./scripts/encode-media.sh && ./scripts/encode-stills.sh
+# Publish them:            ./scripts/sync-r2.sh
 /public/media/*
-!/public/media/derived/
 !/public/media/placeholder/
 
 # debug
