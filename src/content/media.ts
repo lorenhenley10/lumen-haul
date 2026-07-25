@@ -25,7 +25,24 @@ import type { ImageAsset, VideoAsset, AspectRatio } from "./types";
 export const PLACEHOLDER_POSTER = "/media/placeholder/poster.svg";
 export const PLACEHOLDER_STILL = "/media/placeholder/still.svg";
 
-const DERIVED = "/media/derived";
+/**
+ * Where derived media is served from.
+ *
+ * Unset  -> "/media/derived", i.e. the files in /public. Works offline with no
+ *           configuration, which is what you want for local development.
+ * Set    -> an absolute origin such as https://media.lumenhaul.com, pointing at
+ *           the Cloudflare R2 bucket.
+ *
+ * The bucket's layout mirrors public/media/derived/ exactly (<slug>/loop.mp4,
+ * <slug>/poster.jpg, <slug>/stills/NN.jpg), so switching between the two is a
+ * single environment variable and nothing else in the codebase changes.
+ *
+ * NEXT_PUBLIC_ is required: these URLs are needed during render, both on the
+ * server and in the browser.
+ */
+const DERIVED = (
+  process.env.NEXT_PUBLIC_MEDIA_BASE_URL || "/media/derived"
+).replace(/\/$/, "");
 
 /** The ambient loop for a project: silent, short, used on the home reel. */
 export function derivedLoop(

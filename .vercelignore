@@ -1,0 +1,12 @@
+# Vercel uploads the working directory, NOT the git index — it reads this file,
+# not .gitignore. Without these rules `vercel deploy` tries to upload the 27GB
+# of camera masters in public/media/ and fails outright on Vercel's 2GB
+# per-file limit (one master is 5.78GB).
+#
+# Production deploys normally come from the connected GitHub repo, which only
+# ever contains the committed derivatives, so this matters for manual CLI
+# deploys.
+#
+# Keep in sync with the matching block in .gitignore.
+public/media/*
+!public/media/placeholder
