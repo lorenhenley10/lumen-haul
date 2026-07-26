@@ -30,33 +30,70 @@ import { heroFilm } from "@/content/media";
 export function ReelMobile({ projects }: { projects: Project[] }) {
   const [activeIndex, setActiveIndex] = useState(-1); // -1 = hero panel
   const scrollerRef = useRef<HTMLDivElement>(null);
-  const panelsRef = useRef<(HTMLElement | null)[]>([]);
 
+  /**
+   * Which panel is showing, derived from scroll offset.
+   *
+   * This was an IntersectionObserver over the panels, which had two problems.
+   * The ref it used as `root` was never attached to an element, so the observer
+   * was never created and the film layer stayed permanently hidden — the mobile
+   * home page was simply black below the hero.
+   *
+   * Rather than only reattaching the ref, the whole mechanism is now arithmetic:
+   * panels are exactly one scroller-height each, so the active one is just
+   * `scrollTop / height`. That is deterministic, has no threshold to tune, and
+   * cannot silently do nothing the way a misconfigured observer can.
+   *
+   * Panel 0 is the hero, which maps to index -1 (no project film showing).
+   */
   useEffect(() => {
     const root = scrollerRef.current;
     if (!root) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
-          const index = Number(
-            (entry.target as HTMLElement).dataset.panelIndex ?? "-1",
-          );
-          setActiveIndex(index);
-        }
-      },
-      { root, threshold: 0.6 },
-    );
+    const update = () => {
+      const height = root.clientHeight || 1;
+      const panel = Math.round(root.scrollTop / height);
+      const next = Math.min(Math.max(panel - 1, -1), projects.length - 1);
+      setActiveIndex((current) => (current === next ? current : next));
+    };
 
-    panelsRef.current.forEach((panel) => panel && observer.observe(panel));
-    return () => observer.disconnect();
+    // Deliberately not rAF-throttled: this is one division and a bailing
+    // setState, and a rAF wrapper would stall wherever frames are throttled.
+    root.addEventListener("scroll", update, { passive: true });
+    // Mobile browser chrome collapses as you scroll, which changes the
+    // scroller's height and therefore which panel a given offset maps to.
+    window.addEventListener("resize", update);
+    update();
+
+    return () => {
+      root.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
   }, [projects.length]);
 
   return (
-    <div className="fixed inset-0 h-svh snap-y snap-mandatory overflow-y-auto">
-      {/* Fixed film layer — one element per project, only the active one visible. */}
-      <div className="pointer-events-none fixed inset-0 -z-[1] h-svh select-none">
+    <>
+      {/*
+        The film layer is a SIBLING of the scroll container, not a child, and
+        both are plain `fixed` layers ordered by positive z-index.
+
+        It used to be a `position: fixed` element *inside* the
+        `fixed + overflow-y: auto` scroller, sitting at `z-index: -1`. That
+        renders on desktop but is black on iOS, for two separate reasons:
+
+          1. iOS Safari mispositions and clips `position: fixed` descendants of
+             a scrolling container — a long-standing WebKit bug.
+          2. `position: fixed` establishes a stacking context in WebKit, so a
+             child at `z-index: -1` paints *behind* its parent rather than
+             behind the page, and disappears against the opaque body colour.
+
+        Hoisting it out and using z-0 / z-10 avoids both. Never reintroduce a
+        negative z-index or a nested fixed element here.
+      */}
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-0 z-0 h-svh select-none"
+      >
         {projects.map((project, index) => (
           <div
             key={project.slug}
@@ -73,14 +110,15 @@ export function ReelMobile({ projects }: { projects: Project[] }) {
         ))}
       </div>
 
-      {/* Hero panel */}
-      <section
-        ref={(el) => {
-          panelsRef.current[0] = el;
-        }}
-        data-panel-index={-1}
-        className="relative h-svh snap-start"
+      {/* Scroll container. Transparent, so the film layer reads through the
+          panels' scrim. */}
+      <div
+        ref={scrollerRef}
+        className="fixed inset-0 z-10 h-svh snap-y snap-mandatory overflow-y-auto"
       >
+      {/* Hero panel. `data-panel-index` is kept purely as a debugging aid —
+          the active panel is derived from scroll offset, not from these. */}
+      <section data-panel-index={-1} className="relative h-svh snap-start">
         <div className="h-full w-full brightness-[0.8]">
           <MediaFrame placeholder={heroFilm.placeholder}>
             <AutoVideo asset={heroFilm} priority audible />
@@ -110,9 +148,6 @@ export function ReelMobile({ projects }: { projects: Project[] }) {
       {projects.map((project, index) => (
         <div
           key={project.slug}
-          ref={(el) => {
-            panelsRef.current[index + 1] = el;
-          }}
           data-panel-index={index}
           className="relative h-svh w-full snap-start bg-scrim p-12"
         >
@@ -132,6 +167,7 @@ export function ReelMobile({ projects }: { projects: Project[] }) {
       <div className="flex h-svh snap-start flex-col justify-end bg-linear-to-b from-scrim to-background">
         <SiteFooter className="static" />
       </div>
-    </div>
+      </div>
+    </>
   );
 }
