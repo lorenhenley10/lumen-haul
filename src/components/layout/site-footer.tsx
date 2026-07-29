@@ -45,7 +45,9 @@ export function SiteFooter({ className }: { className?: string }) {
           <div className="rounded-t-2xl rounded-b-md bg-white/10 px-4 py-2 backdrop-blur-lg">
             <p className="text-caption">{site.email}</p>
           </div>
-          <div className="mt-2 grid w-full grid-cols-3 gap-2 lg:grid-cols-6">
+          {/* Column count tracks the number of links so the row stays full —
+              a fixed 6 would leave a hole now that Creators is gone. */}
+          <div className="mt-2 grid w-full grid-cols-3 gap-2 lg:grid-cols-5">
             {footerNav.map((item) => (
               <Link
                 key={item.label}

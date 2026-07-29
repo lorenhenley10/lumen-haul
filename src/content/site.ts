@@ -16,7 +16,6 @@ export const site = {
 export const primaryNav = [
   { label: "Home", href: "/" },
   { label: "Stories", href: "/stories" },
-  { label: "Creators", href: "/creators" },
   { label: "Studio", href: "/studio" },
 ] as const;
 
@@ -30,11 +29,10 @@ export const socialLinks = [
   // pointing at linkedin.com's homepage is worse than no icon at all.
 ] as const;
 
-/** Footer link grid — six columns on desktop, three on mobile. */
+/** Footer link grid — three columns on mobile, five across on desktop. */
 export const footerNav = [
   { label: "Home", href: "/" },
   { label: "Stories", href: "/stories" },
-  { label: "Creators", href: "/creators" },
   { label: "Studio", href: "/studio" },
   { label: "Contact", href: "/studio#contact" },
   { label: "Instagram", href: "https://www.instagram.com/lumenhaul/" },

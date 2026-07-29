@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { cn } from "@/lib/cn";
 import { primaryNav, socialLinks } from "@/content/site";
-import { useVideo } from "@/components/media/video-provider";
 import { TabNav } from "./tab-nav";
 import { MobileMenu } from "./mobile-menu";
 
@@ -21,7 +20,6 @@ import { MobileMenu } from "./mobile-menu";
  */
 export function SiteHeader() {
   const pathname = usePathname();
-  const { muted, toggleMuted } = useVideo();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const activeIndex = primaryNav.findIndex((item) =>
@@ -48,12 +46,6 @@ export function SiteHeader() {
           />
 
           <div className="flex items-center justify-end gap-1 max-lg:hidden">
-            <IconButton
-              label={muted ? "Unmute site" : "Mute site"}
-              onClick={toggleMuted}
-            >
-              {muted ? "🔇" : "🔊"}
-            </IconButton>
             {socialLinks.map((link) => (
               <IconButton key={link.label} label={link.label} href={link.href}>
                 {link.icon === "instagram" ? "◎" : "in"}
@@ -70,12 +62,6 @@ export function SiteHeader() {
             Lumen Haul
           </Link>
           <div className="flex items-center justify-end gap-1 lg:hidden">
-            <IconButton
-              label={muted ? "Unmute site" : "Mute site"}
-              onClick={toggleMuted}
-            >
-              {muted ? "🔇" : "🔊"}
-            </IconButton>
             <button
               type="button"
               onClick={() => setMenuOpen(true)}

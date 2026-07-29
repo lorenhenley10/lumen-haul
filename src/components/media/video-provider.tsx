@@ -11,9 +11,11 @@ import {
 import type { Project } from "@/content/types";
 
 interface VideoContextValue {
-  /** Site-wide audio state, toggled from the header. Starts muted — always. */
+  /**
+   * Site-wide audio state. Starts muted — always — and is only ever changed
+   * from inside the fullscreen player. There is no site-level mute control.
+   */
   muted: boolean;
-  toggleMuted: () => void;
   setMuted: (muted: boolean) => void;
 
   /** The project currently open in the fullscreen player, if any. */
@@ -36,8 +38,9 @@ export function useVideo(): VideoContextValue {
  * Two things are genuinely app-wide and must not be duplicated per component:
  *
  *  1. MUTE. Browsers only autoplay muted video, so every ambient loop on the
- *     site is silent by default. The header's speaker toggle flips one flag
- *     that every player reads — there is no per-video mute button.
+ *     site is silent by default and stays that way. The only control that can
+ *     unmute anything is the fullscreen player's own toggle, and closing the
+ *     player resets the flag — so audio can never leak back onto a page.
  *
  *  2. THE FULLSCREEN FILM. Only one film can be open at a time, and opening it
  *     must pause ambient playback behind it. Holding the open project here
@@ -47,8 +50,6 @@ export function useVideo(): VideoContextValue {
 export function VideoProvider({ children }: { children: ReactNode }) {
   const [muted, setMuted] = useState(true);
   const [activeFilm, setActiveFilm] = useState<Project | null>(null);
-
-  const toggleMuted = useCallback(() => setMuted((m) => !m), []);
 
   const openFilm = useCallback((project: Project) => {
     setActiveFilm(project);
@@ -62,8 +63,8 @@ export function VideoProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value = useMemo(
-    () => ({ muted, toggleMuted, setMuted, activeFilm, openFilm, closeFilm }),
-    [muted, toggleMuted, activeFilm, openFilm, closeFilm],
+    () => ({ muted, setMuted, activeFilm, openFilm, closeFilm }),
+    [muted, activeFilm, openFilm, closeFilm],
   );
 
   return (
