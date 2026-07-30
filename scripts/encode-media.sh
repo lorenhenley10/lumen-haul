@@ -42,7 +42,7 @@ SCALE="scale='if(gt(iw,ih),1920,-2)':'if(gt(iw,ih),-2,1920)'"
 read -r -d '' JOBS <<'EOF'
 blazar-mantis-135|Blazar/MANTIS/Blazar MANTIS 135mm T3.2 First Look.mp4|60
 nozomio-folk-doordash|Nozomio/V2 Folk DoorDash Credit Giveway Promo.mp4|6
-fd-2022-buy-now-japan|Formula Drift 2022 - Buy Now Japan/SLC/FD SLC Promo Reel.mp4|4
+fd-2022-buy-now-japan|Formula Drift 2022 - Buy Now Japan/SLC/FD SLC Final Cut.mp4|600
 shoreline-f150-raptor|Shoreline Motoring/F150/Ford F150 Raptor R - Shoreline Motoring.mp4|37
 88-silo|88/88 - Final final final.mp4|18
 los-lamentos|Los Lamentos/Los Lamentos Promo Final.mp4|30

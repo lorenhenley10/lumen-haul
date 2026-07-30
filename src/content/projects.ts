@@ -57,9 +57,8 @@ const seeds: ProjectSeed[] = [
     client: "Formula Drift",
     title: "Buy Now Japan, Salt Lake City",
     summary:
-      "Track coverage from the Salt Lake City round, cut vertical for social. Follow cams and multicam pit coverage condensed into a promo reel.",
-    filmDuration: 24,
-    vertical: true,
+      "The full Salt Lake City round, in-car and aerial, from morning practice through the last smoke-filled battle at night.",
+    filmDuration: 890,
     year: 2022,
   },
   {
