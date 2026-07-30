@@ -33,7 +33,7 @@ file and confirm each item. Do not mark a slice done on a failing build.
 |---|---|---|---|
 | — | Foundation: tokens, motion, video, layout, home, stories, project page | **Done** | — |
 | — | Home reel: pinned scroll sequence | **Done** | — |
-| 01 | Creators index + detail | **Deferred by request** | — |
+| 01 | Creators index + detail | **Removed by request** | — |
 | 02 | Studio page | **Done** | — |
 | 03 | Home polish: parallax, hero exit, reel hover previews | To do | — |
 | 04 | Page transitions | To do | — |
@@ -41,10 +41,10 @@ file and confirm each item. Do not mark a slice done on a failing build.
 | 06 | Performance & accessibility pass | To do | all |
 | 07 | SEO, metadata, launch readiness | To do | all |
 
-**Slice 01 (Creators) is intentionally on hold.** `/creators` exists as a
-deliberately blank scaffold so the route, nav active state and footer link all
-resolve; the page is not to be designed or populated until asked. The full
-build spec is still in `docs/plan/01-creators.md`.
+**Slice 01 (Creators) is removed, not deferred.** The route, its nav entry,
+the footer link, and the placeholder content/plan files have all been deleted
+by request. If a creators page is wanted later, it is a fresh build with no
+scaffold to resume — there is nothing left to reference.
 
 ## What is already built
 
@@ -62,8 +62,8 @@ Working, verified, and not to be rewritten:
 - **Smooth scroll** — `LenisProvider`, wired to GSAP's ticker, disabled under
   reduced motion, resets scroll + refreshes ScrollTrigger per route.
 - **Routes** — `/` (both desktop and mobile trees), `/stories`,
-  `/stories/[slug]` (18 SSG pages), `/studio`, `/creators` (blank scaffold),
-  `not-found`.
+  `/stories/[slug]` (SSG), `/studio`, `not-found`. There is no `/creators` —
+  see Status above.
 - **Home reel** — a pinned, scroll-driven sequence: 1.5 viewport heights per
   film, bubble fill scrubbed to scroll, timed crossfades, release after the
   last film. Measured against the reference; see `docs/audit/motion-system.md`
@@ -81,8 +81,8 @@ Working, verified, and not to be rewritten:
 - **Fonts are substituted** (Inter Tight / JetBrains Mono) for licensed faces.
 - **Brand assets are a square mark only.** The hero/footer wordmark is set as
   type, not placed as an image.
-- `/creators` and `/studio` are linked from the nav but **do not exist yet** —
-  they 404. Slices 01 and 02 fix this. This is the highest-priority gap.
+- There is no `/creators` route or nav entry. It was built once as a blank
+  scaffold, then removed entirely by request — do not re-add it speculatively.
 
 ## Verification, every slice
 
