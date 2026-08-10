@@ -25,6 +25,16 @@ if (mediaBase && /^https?:\/\//i.test(mediaBase)) {
 
 const nextConfig: NextConfig = {
   images: { remotePatterns },
+
+  /**
+   * /studio became /about. The old path was live, is linked from the footer of
+   * every page that has been indexed so far, and `/studio#contact` was the
+   * header CTA — so it redirects rather than 404s. The fragment survives a 308
+   * on its own; browsers reattach it to the destination.
+   */
+  async redirects() {
+    return [{ source: "/studio", destination: "/about", permanent: true }];
+  },
 };
 
 export default nextConfig;

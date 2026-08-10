@@ -6,7 +6,13 @@ export const site = {
   description:
     "Lumen Haul is a film and photography studio making work for brands that would rather be remembered than noticed.",
   url: "https://lumenhaul.com",
-  email: "hello@lumenhaul.com",
+  /**
+   * Shown in the footer on every page, so it has to be an address that is
+   * actually monitored. It was hello@lumenhaul.com, a placeholder from the
+   * original build — a visitor writing to it would have been writing to nobody.
+   * Kept in step with the address on /about; there is only one inbox.
+   */
+  email: "lorenhenley10@gmail.com",
 } as const;
 
 /**
@@ -16,7 +22,7 @@ export const site = {
 export const primaryNav = [
   { label: "Home", href: "/" },
   { label: "Stories", href: "/stories" },
-  { label: "Studio", href: "/studio" },
+  { label: "About", href: "/about" },
 ] as const;
 
 export const socialLinks = [
@@ -33,8 +39,8 @@ export const socialLinks = [
 export const footerNav = [
   { label: "Home", href: "/" },
   { label: "Stories", href: "/stories" },
-  { label: "Studio", href: "/studio" },
-  { label: "Contact", href: "/studio#contact" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/about#contact" },
   { label: "Instagram", href: "https://www.instagram.com/lumenhaul/" },
 ] as const;
 

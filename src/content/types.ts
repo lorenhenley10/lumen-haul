@@ -93,27 +93,8 @@ export interface Creator {
   bio: string;
 }
 
-/**
- * One panel of the /studio tab strip.
- *
- * A section carries EITHER tabular `rows` (the contact directory) or prose
- * `body` paragraphs — never both. That mirrors the reference, where the
- * contact panel is a four-column grid and every other panel is a single
- * justified prose column.
- */
-export interface StudioSection {
-  /** Stable id; also the deep-link hash (e.g. /studio#contact). */
-  id: string;
-  /** Short label for the tab strip. Keep it to one word where possible. */
-  label: string;
-  heading: string;
-  rows?: StudioRow[];
-  body?: string[];
-}
-
-export interface StudioRow {
-  label: string;
-  name?: string;
-  email?: string;
-  detail?: string;
+/** One line of the /about services list. */
+export interface Service {
+  title: string;
+  body: string;
 }

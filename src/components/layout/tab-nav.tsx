@@ -24,9 +24,10 @@ interface TabNavProps {
 /**
  * The pill tab strip.
  *
- * Used twice with different jobs: as the site's primary navigation in the
- * header, and as the section switcher on /studio. Both need the same sliding
- * white indicator, so it lives here once.
+ * Currently the site's primary navigation in the header, and nothing else — it
+ * was also the section switcher on /studio until that page became a plain
+ * single column. Kept general rather than folded into the header, because the
+ * sliding indicator is the fiddly part and worth having in one place.
  *
  * The indicator is a `layoutId` element rather than a measured-and-translated
  * div: Motion handles the FLIP maths, so the pill tracks correctly through

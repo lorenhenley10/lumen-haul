@@ -96,7 +96,7 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
 
           <div className="container pb-8">
             <Link
-              href="/studio#contact"
+              href="/about#contact"
               onClick={onClose}
               className="block rounded-[var(--radius)] bg-white/10 py-4 text-center text-caption uppercase"
             >
