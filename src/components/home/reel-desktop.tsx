@@ -63,14 +63,21 @@ function applyActive(slide: HTMLElement) {
   gsap.set(layers.media, { yPercent: 0, scale: 1 });
 }
 
-/** Off-screen resting state. Every film that is neither entering nor leaving. */
+/**
+ * Off-screen resting state. Every film that is neither entering nor leaving.
+ *
+ * Parked BELOW the frame, matching the common case: scrolling down is what
+ * advances the reel, and the next film rises into place. An entering film has
+ * its start state written explicitly anyway, so this only decides where the
+ * idle stack waits.
+ */
 function applyParked(slide: HTMLElement) {
   const layers = layersOf(slide);
   if (!layers) return;
   gsap.set(slide, { opacity: 0 });
-  gsap.set(layers.mask, { yPercent: -100 });
-  gsap.set(layers.counter, { yPercent: 100 });
-  gsap.set(layers.media, { yPercent: -MEDIA_SHIFT_PCT, scale: MEDIA_SCALE });
+  gsap.set(layers.mask, { yPercent: 100 });
+  gsap.set(layers.counter, { yPercent: -100 });
+  gsap.set(layers.media, { yPercent: MEDIA_SHIFT_PCT, scale: MEDIA_SCALE });
 }
 
 /**
@@ -107,12 +114,18 @@ function applyParked(slide: HTMLElement) {
  * and never smears or squashes. The film reads as sliding because the media
  * layer drifts MEDIA_SHIFT_PCT in the same direction at a slower rate, so the
  * incoming film settles into register as its window opens and the outgoing one
- * drifts away underneath. This is the reference's construction, measured off
- * its own resting states: inactive films sit at mask −100% / counter +100% /
- * media `scale(1.05) translateY(-105.75px)`, active films at zero.
+ * drifts away underneath.
  *
- * Direction is derived from which way the index moved, so scrolling back up
- * runs the whole thing in reverse rather than replaying a one-way entrance.
+ * The layer construction and the ±100% / 1.05 / 15% magnitudes come from the
+ * reference, measured off its resting states. THE DIRECTION DOES NOT — resting
+ * states cannot tell you which way a transition runs, only where it starts and
+ * stops, and the first cut of this inferred it backwards.
+ *
+ * The rule is that FILM TRAVELS AGAINST THE SCROLL, like a strip being pulled
+ * through a gate: scrolling down advances the reel, so the next film rises from
+ * below and the outgoing one is carried up and out. Scrolling back up mirrors
+ * every axis of that. If this ever feels wrong again, it is the sign of
+ * `direction` below, and nothing else.
  */
 export function ReelDesktop({ projects }: { projects: Project[] }) {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -174,8 +187,9 @@ export function ReelDesktop({ projects }: { projects: Project[] }) {
 
     setLeavingIndex(from);
 
-    // +1 advancing: the window opens downward from the top and both films
-    // travel down. −1 reverses every axis of that.
+    // +1 advancing. Film travels AGAINST the scroll: going down, the incoming
+    // window opens upward from the bottom and both films are carried up and
+    // out. −1 mirrors every axis of that.
     const direction = to > from ? 1 : -1;
 
     const timeline = gsap.timeline({
@@ -188,16 +202,16 @@ export function ReelDesktop({ projects }: { projects: Project[] }) {
 
     gsap.set(incoming, { opacity: 1 });
     timeline
-      .fromTo(entering.mask, { yPercent: -100 * direction }, { yPercent: 0 }, 0)
+      .fromTo(entering.mask, { yPercent: 100 * direction }, { yPercent: 0 }, 0)
       .fromTo(
         entering.counter,
-        { yPercent: 100 * direction },
+        { yPercent: -100 * direction },
         { yPercent: 0 },
         0,
       )
       .fromTo(
         entering.media,
-        { yPercent: -MEDIA_SHIFT_PCT * direction, scale: MEDIA_SCALE },
+        { yPercent: MEDIA_SHIFT_PCT * direction, scale: MEDIA_SCALE },
         { yPercent: 0, scale: 1 },
         0,
       );
@@ -211,7 +225,7 @@ export function ReelDesktop({ projects }: { projects: Project[] }) {
       gsap.set([leaving.mask, leaving.counter], { yPercent: 0 });
       timeline.to(
         leaving.media,
-        { yPercent: MEDIA_SHIFT_PCT * direction, scale: MEDIA_SCALE },
+        { yPercent: -MEDIA_SHIFT_PCT * direction, scale: MEDIA_SCALE },
         0,
       );
     }
