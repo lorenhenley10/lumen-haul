@@ -9,10 +9,15 @@ import { derivedFilm, derivedLoop, derivedStills } from "./media";
  * public/media/ = one project.
  *
  * ORDER IS INTENTIONAL. `index` and array position drive both the /stories
- * grid and the home reel, so reordering this array reorders the site. The
- * first five positions were specified directly; 6-10 are sequenced for visual
- * rhythm — cinematic, then motorsport, then automotive, then documentary,
- * closing on the vertical product piece as a deliberate format change.
+ * grid and the home reel — including the reel's numbered rail — so reordering
+ * this array reorders the site and renumbers it to match. Nothing else needs
+ * touching. The opening four were specified directly; 5-10 are sequenced for
+ * visual rhythm, closing on the vertical product piece as a deliberate format
+ * change.
+ *
+ * The home hero's background film is chosen separately, in media.ts, and is
+ * currently the Shoreline Raptor. A project appearing both there and in the
+ * reel is expected.
  *
  * TITLES AND SUMMARIES ARE EDITORIAL PLACEHOLDERS derived from the filenames.
  * They read correctly but were not supplied by the studio — adjust freely.
@@ -35,6 +40,15 @@ interface ProjectSeed {
 
 const seeds: ProjectSeed[] = [
   {
+    slug: "fd-2022-buy-now-japan",
+    client: "Formula Drift",
+    title: "Buy Now Japan, Salt Lake City",
+    summary:
+      "The full Salt Lake City round, in-car and aerial, from morning practice through the last smoke-filled battle at night.",
+    filmDuration: 890,
+    year: 2022,
+  },
+  {
     slug: "blazar-mantis-135",
     client: "Blazar",
     title: "MANTIS 135mm First Look",
@@ -51,15 +65,6 @@ const seeds: ProjectSeed[] = [
       "A short promo cut for a credit giveaway campaign — fast, bright, and built to hold attention in a feed rather than a cinema.",
     filmDuration: 34,
     year: 2025,
-  },
-  {
-    slug: "fd-2022-buy-now-japan",
-    client: "Formula Drift",
-    title: "Buy Now Japan, Salt Lake City",
-    summary:
-      "The full Salt Lake City round, in-car and aerial, from morning practice through the last smoke-filled battle at night.",
-    filmDuration: 890,
-    year: 2022,
   },
   {
     slug: "shoreline-f150-raptor",

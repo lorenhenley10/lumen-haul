@@ -153,9 +153,13 @@ export function still(
 }
 
 /**
- * The film behind the home hero. Reuses the Blazar MANTIS loop so the landing
- * frame is real footage rather than a placeholder card.
+ * The film behind the home hero. Reuses a project loop so the landing frame is
+ * real footage rather than a placeholder card.
+ *
+ * The hero film also appears in the reel below it; that overlap is deliberate
+ * and long-standing, so changing this does not require pulling the project out
+ * of projects.ts.
  */
-export const heroFilm = derivedLoop("blazar-mantis-135", {
+export const heroFilm = derivedLoop("shoreline-f150-raptor", {
   alt: "Lumen Haul showreel",
 });
