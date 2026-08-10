@@ -2,7 +2,25 @@
 
 export const site = {
   name: "Lumen Haul",
-  tagline: "An award-winning studio blending true filmmaking craft with future-ready innovation.",
+  /**
+   * The line under the wordmark on the hero, and the default page title.
+   *
+   * DO NOT RESTORE THE PREVIOUS ONE. It read "An award-winning studio blending
+   * true filmmaking craft with future-ready innovation" — which is, character
+   * for character, the `caption` field on letitrippictures.com, the site this
+   * build was referenced against. It was another studio's positioning running
+   * as this one's headline, and it made an awards claim nobody here had
+   * counted.
+   *
+   * Keep any replacement to things that are true and checkable from the work:
+   * what gets made, and how. No awards, no years, no superlatives.
+   *
+   * Two sentences rather than one em-dashed clause, because layout.tsx sets the
+   * page title as `${name} — ${tagline}` and a dash here makes that read
+   * "Lumen Haul — ... — ...".
+   */
+  tagline:
+    "Branded films, commercials and stills. Crewed to the job, cut in-house.",
   description:
     "Lumen Haul is a film and photography studio making work for brands that would rather be remembered than noticed.",
   url: "https://lumenhaul.com",

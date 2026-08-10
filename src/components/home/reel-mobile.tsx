@@ -132,7 +132,7 @@ export function ReelMobile({ projects }: { projects: Project[] }) {
             width={brand.markWidth}
             height={brand.markHeight}
             priority
-            className="h-16 w-auto object-contain"
+            className="h-32 w-auto object-contain"
           />
           <h1
             className="w-full text-center font-display font-medium uppercase leading-[0.82] tracking-[-0.04em]"
