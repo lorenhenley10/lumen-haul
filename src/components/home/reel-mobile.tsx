@@ -129,10 +129,10 @@ export function ReelMobile({ projects }: { projects: Project[] }) {
             src={brand.mark}
             alt=""
             aria-hidden
-            width={512}
-            height={512}
+            width={brand.markWidth}
+            height={brand.markHeight}
             priority
-            className="size-14 object-contain"
+            className="h-16 w-auto object-contain"
           />
           <h1
             className="w-full text-center font-display font-medium uppercase leading-[0.82] tracking-[-0.04em]"

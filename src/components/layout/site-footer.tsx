@@ -29,9 +29,9 @@ export function SiteFooter({ className }: { className?: string }) {
             src={brand.mark}
             alt=""
             aria-hidden
-            width={512}
-            height={512}
-            className="size-12 object-contain"
+            width={brand.markWidth}
+            height={brand.markHeight}
+            className="h-14 w-auto object-contain"
           />
           <p
             className="w-full text-center font-display font-medium uppercase leading-[0.82] tracking-[-0.04em]"

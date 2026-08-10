@@ -65,10 +65,10 @@ export function HomeHero() {
             src={brand.mark}
             alt=""
             aria-hidden
-            width={512}
-            height={512}
+            width={brand.markWidth}
+            height={brand.markHeight}
             priority
-            className="mb-6 size-16 object-contain"
+            className="mb-6 h-20 w-auto object-contain"
           />
           {/*
             The brand assets are a square mark only — there is no wordmark

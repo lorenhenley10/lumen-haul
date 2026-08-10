@@ -39,8 +39,23 @@ export const footerNav = [
 ] as const;
 
 export const brand = {
-  /** Wordmark used in the hero and footer. */
-  wordmark: "/brand/LumenHaul Logo 2 white.png",
-  wordmarkDark: "/brand/LumenHaul Logo 2.png",
-  mark: "/brand/LumenHaul Logo Transparent.png",
+  /**
+   * The studio mark, used above the set wordmark in the hero and footer.
+   *
+   * Derived from `Lumen Haul Logo.png`, which ships as RGB on solid black. The
+   * mark sits over video, so it needs real transparency — the derived file
+   * carries the glow in its alpha channel and is trimmed to the artwork, with
+   * none of the source's surrounding dead space.
+   *
+   * It is PORTRAIT (roughly 3:5). Size it by height and let the width follow;
+   * a square box would leave it floating in its own padding.
+   *
+   * The intrinsic size is deliberately close to the largest on-screen render
+   * (80px tall) rather than the source artwork's. Declaring the full 512×860
+   * makes next/image generate a 1080px variant of a 48px logo — a slow encode
+   * for a payload nothing can see.
+   */
+  mark: "/brand/lumen-haul-mark.png",
+  markWidth: 384,
+  markHeight: 645,
 } as const;
