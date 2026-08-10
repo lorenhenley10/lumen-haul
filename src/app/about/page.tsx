@@ -16,11 +16,13 @@ export const metadata: Metadata = {
  * photography here would be the obvious way to make it worse, and the work
  * itself is one click away on /stories.
  *
- * This used to be /studio, a six-panel tab strip built for a team that does not
- * exist. The tab strip went with the panels — a switcher is worth its
- * complexity at six sections and looks like leftover scaffolding at two — so
- * this is now a plain single column. The `#contact` anchor is kept because the
- * footer, the mobile menu and the header CTA all link straight to it.
+ * This used to be /studio, a six-panel tab strip listing eight invented
+ * departments and a physical address. The studio does crew up — off a standing
+ * roster, per project — but it has never had a switchboard. The tab strip went
+ * with the panels: a switcher is worth its complexity at six sections and looks
+ * like leftover scaffolding at two, so this is now a plain single column. The
+ * `#contact` anchor is kept because the footer, the mobile menu and the header
+ * CTA all link straight to it.
  */
 export default function AboutPage() {
   return (
@@ -46,7 +48,9 @@ export default function AboutPage() {
         contact panel used.
       */}
       <section className="mt-24">
-        <h2 className="text-heading mb-6">What I do</h2>
+        {/* "Services", not "What I do" — the studio scales past one person, and
+            a first-person heading over a crewed commercial reads wrong. */}
+        <h2 className="text-heading mb-6">Services</h2>
         <dl className="border-t border-border">
           {services.map((service) => (
             <Reveal

@@ -4,32 +4,46 @@ import type { Service } from "./types";
  * /about copy.
  *
  * This replaced a placeholder studio page written for a large team — a contact
- * directory of eight departments, an address, a partners network, a service
- * production arm and a page of crew commitments. None of it was true. Lumen
- * Haul is one person, so the page is now one statement, what that person does,
- * and how to reach them.
+ * directory of eight departments with invented names, an address, a partners
+ * network, a service production arm and a page of crew commitments. None of it
+ * was true.
  *
- * Keep it that way. The temptation with an about page is to inflate: to write
- * "we" for one person, to claim years or awards that have not been counted, to
- * describe a network that is really a phone contact. Everything here is either
- * verifiable from the work on the site or plainly true.
+ * THE CORRECTION THAT MATTERS, because the first rewrite got it wrong in the
+ * other direction: this is not a solo-only operation. It is owner-led, and it
+ * scales — single-operator where that serves the work, a full crew off a
+ * standing roster where it does not. Copy here must not imply that one man
+ * band is the ceiling; it is one end of a range.
+ *
+ * The other correction: the work is not "automotive" flatly. It is branded
+ * automotive work, plus commercials for startups and established brands.
+ *
+ * Keep it honest in both directions. Do not inflate into a "we" that implies
+ * permanent staff, and do not claim years or awards that have not been counted
+ * — but do not undersell the range either.
  */
 
 /**
  * The opening statement, set in display type.
  *
- * The previous statement was tuned to fill eight lines at 1440x900, because it
- * was matched to a reference layout. This one is deliberately shorter — the
- * honest version of this page is not eight lines long, and padding it back out
- * would mean inventing something. Expect a shorter block than the old page had.
+ * The original was tuned to fill eight lines at 1440x900 to match a reference
+ * layout. This one is sized by what is true rather than to a line count, so
+ * expect a shorter block than the old page had.
  */
 export const aboutStatement =
-  "Lumen Haul is a one-person studio. I direct, shoot and cut the work myself, so the person you brief is the person behind the camera and the person in the edit. Mostly automotive, motorsport and product films, with the stills to match.";
+  "Lumen Haul is a film and photography studio that scales to the job — a one man band automotive shoot, or a fully crewed commercial for a product rollout. I direct and shoot, and bring in a roster of crew I trust when the work calls for it. Branded automotive films, and commercials for startups and established brands.";
 
 export const services: Service[] = [
   {
     title: "Video production",
-    body: "Directing and cinematography, from the first conversation about an idea through to the shoot itself. Single-operator where the job suits it, with a crew brought in where it does not.",
+    body: "Directing and cinematography, crewed to the brief. Single-operator where that serves the work, and a full unit — camera, lighting, grip, sound — where it does not. The same eye is on it either way.",
+  },
+  {
+    title: "Commercials",
+    body: "Product rollouts, launches and announcements for startups and established brands, from the first conversation about an idea through to final delivery.",
+  },
+  {
+    title: "Automotive and motorsport",
+    body: "Branded work for marques, builders and aftermarket brands, plus event and race coverage — the thread running through most of the slate.",
   },
   {
     title: "Editing and post",
