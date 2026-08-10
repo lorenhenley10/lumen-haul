@@ -40,7 +40,7 @@ SCALE="scale='if(gt(iw,ih),1920,-2)':'if(gt(iw,ih),-2,1920)'"
 
 # slug | source (relative to public/media) | loop start seconds
 read -r -d '' JOBS <<'EOF'
-blazar-mantis-135|Blazar/MANTIS/Blazar MANTIS 135mm T3.2 First Look.mp4|60
+blazar-mantis-135|Blazar/MANTIS/Blazar MANTIS 135mm T3.2 First Look.mp4|1
 nozomio-folk-doordash|Nozomio/V2 Folk DoorDash Credit Giveway Promo.mp4|6
 fd-2022-buy-now-japan|Formula Drift 2022 - Buy Now Japan/SLC/FD SLC Final Cut.mp4|8.5
 shoreline-f150-raptor|Shoreline Motoring/F150/Ford F150 Raptor R - Shoreline Motoring.mp4|37
