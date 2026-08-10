@@ -45,16 +45,52 @@ const DERIVED = (
   process.env.NEXT_PUBLIC_MEDIA_BASE_URL || "/media/derived"
 ).replace(/\/$/, "");
 
+/**
+ * Cache-busting revisions for RE-CUT loops and posters.
+ *
+ * sync-r2.sh uploads these with `Cache-Control: immutable, max-age=1y` under
+ * filenames that never change. `immutable` is a promise that a given URL's
+ * bytes will never move, so the URL is the only thing that can tell a cache
+ * otherwise — re-uploading the object is not enough.
+ *
+ * This is not theoretical. After re-cutting the FD loop, the bare URL served a
+ * twelve-day-old body on every request (`cf-cache-status: HIT`) while the same
+ * path with a `?v=` token returned the new bytes immediately. The Shoreline
+ * poster had been stale the same way since its July re-cut, unnoticed, and it
+ * is the frame behind the home hero.
+ *
+ * BUMP A SLUG HERE whenever you change its loop start in encode-media.sh.
+ * Slugs absent from this map are still on their first cut and need no token.
+ *
+ * Loop and poster share one number because encode-media.sh always regenerates
+ * them together. film.mp4 is deliberately left alone: films are encoded
+ * independently and are hundreds of megabytes, so it gets its own bump if one
+ * is ever re-encoded.
+ */
+const LOOP_REVISION: Record<string, number> = {
+  // Re-cut to 8.5s, just past the "ELEVATED" intro title card.
+  "fd-2022-buy-now-japan": 2,
+  // Re-cut to 37s in July; the poster never reached anyone behind the CDN.
+  "shoreline-f150-raptor": 2,
+};
+
+/** `?v=n` for a re-cut slug, or an empty string for a first cut. */
+function loopRevision(slug: string): string {
+  const revision = LOOP_REVISION[slug];
+  return revision ? `?v=${revision}` : "";
+}
+
 /** The ambient loop for a project: silent, short, used on the home reel. */
 export function derivedLoop(
   slug: string,
   opts: { alt: string; aspect?: AspectRatio },
 ): VideoAsset {
+  const rev = loopRevision(slug);
   return {
     kind: "video",
     id: `${slug}-loop`,
-    sources: [{ src: `${DERIVED}/${slug}/loop.mp4`, type: "video/mp4" }],
-    poster: `${DERIVED}/${slug}/poster.jpg`,
+    sources: [{ src: `${DERIVED}/${slug}/loop.mp4${rev}`, type: "video/mp4" }],
+    poster: `${DERIVED}/${slug}/poster.jpg${rev}`,
     aspect: opts.aspect ?? "16/9",
     duration: 10,
     alt: opts.alt,
@@ -69,8 +105,10 @@ export function derivedFilm(
   return {
     kind: "video",
     id: `${slug}-film`,
+    // The film's own bytes are untouched by a loop re-cut, so it keeps a clean
+    // URL; the poster it shares with the loop does not.
     sources: [{ src: `${DERIVED}/${slug}/film.mp4`, type: "video/mp4" }],
-    poster: `${DERIVED}/${slug}/poster.jpg`,
+    poster: `${DERIVED}/${slug}/poster.jpg${loopRevision(slug)}`,
     aspect: opts.aspect ?? "16/9",
     duration: opts.duration,
     alt: opts.alt,
