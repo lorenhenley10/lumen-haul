@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ProjectHero } from "@/components/stories/project-hero";
+import { StoryFilms } from "@/components/stories/story-films";
 import { DragGallery } from "@/components/stories/drag-gallery";
 import { SplitText } from "@/components/motion/split-text";
 import { Reveal } from "@/components/motion/reveal";
@@ -56,6 +57,10 @@ export default async function ProjectPage({
           <div className="h-96 bg-linear-to-b from-transparent to-background" />
 
           <div className="bg-background">
+            {/* Any further films in this story come before the stills: scrolling
+                off the hero should land on more work, not on support material. */}
+            <StoryFilms client={project.client} films={project.moreFilms} />
+
             <section className="grid place-items-center py-32">
               <SplitText
                 as="h2"

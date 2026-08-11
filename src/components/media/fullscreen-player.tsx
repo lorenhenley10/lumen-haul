@@ -23,8 +23,8 @@ const IDLE_MS = 2500;
  * The fullscreen film player.
  *
  * Mounted once, at the root, and driven entirely by `useVideo().activeFilm` —
- * any card, reel slide or CTA anywhere in the app opens it by calling
- * `openFilm(project)`.
+ * any card, reel slide, story block or CTA anywhere in the app opens it by
+ * calling `openFilm({ id, title, asset })`.
  *
  * Deliberate choices worth keeping:
  *  - Controls are WORDS, not icons. It reads as a cutting-room monitor, and it
@@ -44,12 +44,12 @@ export function FullscreenPlayer() {
     <AnimatePresence>
       {activeFilm && (
         <PlayerShell
-          key={activeFilm.slug}
+          key={activeFilm.id}
           onClose={closeFilm}
           muted={muted}
           setMuted={setMuted}
-          title={`${activeFilm.client} — ${activeFilm.title}`}
-          asset={activeFilm.film}
+          title={activeFilm.title}
+          asset={activeFilm.asset}
         />
       )}
     </AnimatePresence>,

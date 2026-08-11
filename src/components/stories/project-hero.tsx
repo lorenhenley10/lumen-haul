@@ -4,6 +4,7 @@ import { AutoVideo } from "@/components/media/auto-video";
 import { MediaFrame } from "@/components/media/media-frame";
 import { useVideo } from "@/components/media/video-provider";
 import { Reveal } from "@/components/motion/reveal";
+import { heroFilmOf } from "@/content/projects";
 import type { Project } from "@/content/types";
 
 /**
@@ -33,7 +34,7 @@ export function ProjectHero({ project }: { project: Project }) {
     <section className="relative sticky top-0 h-dvh">
       <button
         type="button"
-        onClick={() => openFilm(project)}
+        onClick={() => openFilm(heroFilmOf(project))}
         aria-label={label}
         className="group absolute inset-0 h-full w-full cursor-pointer"
       >
@@ -68,7 +69,7 @@ export function ProjectHero({ project }: { project: Project }) {
 
             <button
               type="button"
-              onClick={() => openFilm(project)}
+              onClick={() => openFilm(heroFilmOf(project))}
               className="pointer-events-auto flex items-center gap-3 rounded-full bg-white/10 px-6 py-3 backdrop-blur-lg transition-colors hover:bg-white/20"
             >
               <span aria-hidden>▶</span>

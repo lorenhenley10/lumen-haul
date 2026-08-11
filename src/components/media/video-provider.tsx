@@ -8,7 +8,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import type { Project } from "@/content/types";
+import type { PlayableFilm } from "@/content/types";
 
 interface VideoContextValue {
   /**
@@ -18,9 +18,15 @@ interface VideoContextValue {
   muted: boolean;
   setMuted: (muted: boolean) => void;
 
-  /** The project currently open in the fullscreen player, if any. */
-  activeFilm: Project | null;
-  openFilm: (project: Project) => void;
+  /**
+   * The film currently open in the fullscreen player, if any.
+   *
+   * A PlayableFilm rather than a Project: a story can hold several films, and
+   * holding the project here would have meant the player could only ever reach
+   * `project.film`.
+   */
+  activeFilm: PlayableFilm | null;
+  openFilm: (film: PlayableFilm) => void;
   closeFilm: () => void;
 }
 
@@ -49,10 +55,10 @@ export function useVideo(): VideoContextValue {
  */
 export function VideoProvider({ children }: { children: ReactNode }) {
   const [muted, setMuted] = useState(true);
-  const [activeFilm, setActiveFilm] = useState<Project | null>(null);
+  const [activeFilm, setActiveFilm] = useState<PlayableFilm | null>(null);
 
-  const openFilm = useCallback((project: Project) => {
-    setActiveFilm(project);
+  const openFilm = useCallback((film: PlayableFilm) => {
+    setActiveFilm(film);
   }, []);
 
   const closeFilm = useCallback(() => {

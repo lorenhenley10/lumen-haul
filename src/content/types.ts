@@ -60,6 +60,37 @@ export interface Credit {
   name: string;
 }
 
+/**
+ * Anything the fullscreen player can open.
+ *
+ * The player used to take a whole `Project`, which quietly capped a story at
+ * one film — `project.film` was the only asset it could ever reach. Stories now
+ * carry several, so the player takes only what it actually needs to play.
+ */
+export interface PlayableFilm {
+  /** Stable key. Changing it remounts the player on a new film. */
+  id: string;
+  /** Label shown in the player chrome. */
+  title: string;
+  asset: VideoAsset;
+}
+
+/**
+ * A film inside a story other than the hero — the ones stacked below it.
+ *
+ * Each carries its own loop, because the block on the page plays ambiently the
+ * same way the hero does, and its own poster comes with that loop.
+ */
+export interface StoryFilm {
+  /** Unique within the story; also the deep-link hash on the project page. */
+  id: string;
+  title: string;
+  /** Optional one-liner under the title. */
+  summary?: string;
+  film: VideoAsset;
+  loop: VideoAsset;
+}
+
 export interface Project {
   slug: string;
   /** Brand or client. Rendered in the medium weight. */
@@ -76,6 +107,11 @@ export interface Project {
   film: VideoAsset;
   /** Muted loop used for the card and reel backgrounds. */
   loop: VideoAsset;
+  /**
+   * Further films in the same story, in the order they appear below the hero.
+   * Empty for single-film stories, which is most of them.
+   */
+  moreFilms: StoryFilm[];
   /** Behind-the-scenes stills for the drag gallery. */
   gallery: ImageAsset[];
   credits: Credit[];

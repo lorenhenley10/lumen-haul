@@ -6,6 +6,7 @@ import { AutoVideo } from "@/components/media/auto-video";
 import { MediaFrame } from "@/components/media/media-frame";
 import { useVideo } from "@/components/media/video-provider";
 import { useMediaQuery } from "@/lib/hooks";
+import { heroFilmOf } from "@/content/projects";
 import type { Project } from "@/content/types";
 
 /**
@@ -67,7 +68,7 @@ export function ProjectCard({ project }: { project: Project }) {
 
           <button
             type="button"
-            onClick={() => openFilm(project)}
+            onClick={() => openFilm(heroFilmOf(project))}
             aria-label={`Play ${project.client} — ${project.title}`}
             className="absolute inset-0 grid place-items-center opacity-0 transition-opacity duration-[var(--duration-fast)] focus-visible:opacity-100 group-hover/card:opacity-100"
           >

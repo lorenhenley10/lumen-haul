@@ -1,4 +1,4 @@
-import type { Project } from "./types";
+import type { PlayableFilm, Project, StoryFilm } from "./types";
 import { derivedFilm, derivedLoop, derivedStills } from "./media";
 
 /**
@@ -25,15 +25,39 @@ import { derivedFilm, derivedLoop, derivedStills } from "./media";
  * hides the section when there are none.
  */
 
+/**
+ * One more film in the same story, rendered below the hero in this order.
+ *
+ * `media` is a folder under public/media/derived — NOT a project slug. A story
+ * with several films has several media folders and one URL, so the two stopped
+ * being the same thing the moment stories could hold more than one film.
+ */
+interface StoryFilmSeed {
+  media: string;
+  title: string;
+  summary?: string;
+  /** Duration of the full film in seconds, measured from the encode. */
+  duration: number;
+  vertical?: boolean;
+}
+
 interface ProjectSeed {
   slug: string;
   client: string;
   title: string;
   summary: string;
+  /**
+   * Media folder for the HERO film. Defaults to `slug`, which is right for
+   * every single-film story. Set it when the lead film is not the one the URL
+   * is named after.
+   */
+  media?: string;
   /** Duration of the full film in seconds, measured from the encode. */
   filmDuration: number;
   /** True for the two vertically-shot pieces. */
   vertical?: boolean;
+  /** Further films in this story, in page order below the hero. */
+  moreFilms?: StoryFilmSeed[];
   credits?: [string, string][];
   year: number;
 }
@@ -55,6 +79,29 @@ const seeds: ProjectSeed[] = [
     summary:
       "A first look at the MANTIS 135mm T3.2 anamorphic, shot to show the lens doing what the spec sheet cannot: flare behaviour, focus falloff, and how it renders skin at close range.",
     filmDuration: 290,
+    /*
+     * The 25/100 set test sits BELOW the 135, not above it, which is the
+     * reverse of what was asked — see the note in AGENTS-facing terms:
+     *
+     * The film requested for the lead slot ("MANTIS 25mm & 100mm Lens Test |
+     * Classic Car Show") is not in public/media/Blazar/. The only 25/100 master
+     * on disk is this one, a different edit: a studio set test with burned-in
+     * focal-length and T-stop labels on nearly every frame, title cards, and
+     * chart sequences. Leading with it would put those labels full-screen on the
+     * home reel in place of a dynamic cut.
+     *
+     * Drop the car-show master in, add it to encode-media.sh, then set
+     * `media:` on this seed to its folder and move the 135 into moreFilms.
+     */
+    moreFilms: [
+      {
+        media: "blazar-mantis-25-100",
+        title: "MANTIS 25mm & 100mm Lens Test",
+        summary:
+          "The wider end of the set — flare, distortion and focus falloff at 25mm and 100mm, alongside the full five-lens comparison.",
+        duration: 318,
+      },
+    ],
     year: 2025,
   },
   {
@@ -139,6 +186,28 @@ const seeds: ProjectSeed[] = [
 export const projects: Project[] = seeds.map((seed, i) => {
   const label = `${seed.client} — ${seed.title}`;
   const aspect = seed.vertical ? ("9/16" as const) : ("16/9" as const);
+  // Media folder for the hero. Same as the slug unless the story leads with a
+  // film the URL is not named after.
+  const heroMedia = seed.media ?? seed.slug;
+
+  const moreFilms: StoryFilm[] = (seed.moreFilms ?? []).map((extra) => {
+    const extraLabel = `${seed.client} — ${extra.title}`;
+    const extraAspect = extra.vertical ? ("9/16" as const) : ("16/9" as const);
+    return {
+      id: extra.media,
+      title: extra.title,
+      summary: extra.summary,
+      film: derivedFilm(extra.media, {
+        alt: `${extraLabel}, full film`,
+        aspect: extraAspect,
+        duration: extra.duration,
+      }),
+      loop: derivedLoop(extra.media, {
+        alt: `${extraLabel}, silent loop`,
+        aspect: extraAspect,
+      }),
+    };
+  });
 
   return {
     slug: seed.slug,
@@ -149,14 +218,17 @@ export const projects: Project[] = seeds.map((seed, i) => {
     // holding work back from it would just make the reel feel thin.
     featured: true,
     summary: seed.summary,
-    film: derivedFilm(seed.slug, {
+    film: derivedFilm(heroMedia, {
       alt: `${label}, full film`,
       aspect,
       duration: seed.filmDuration,
     }),
-    loop: derivedLoop(seed.slug, { alt: `${label}, silent loop`, aspect }),
+    loop: derivedLoop(heroMedia, { alt: `${label}, silent loop`, aspect }),
+    // Stills stay keyed to the SLUG, not the hero media folder: a story has one
+    // behind-the-scenes set regardless of how many films sit in it.
     gallery: derivedStills(seed.slug, label),
     credits: (seed.credits ?? []).map(([role, name]) => ({ role, name })),
+    moreFilms,
     year: seed.year,
   };
 });
@@ -166,6 +238,21 @@ export const featuredProjects = projects.filter((p) => p.featured);
 
 export function getProject(slug: string): Project | undefined {
   return projects.find((p) => p.slug === slug);
+}
+
+/**
+ * A story's hero film, in the shape the fullscreen player takes.
+ *
+ * Lives here so the "Client — Title" label is built once. Every surface that
+ * opens the hero (the story card, the project page) shows the same string, and
+ * the additional films below the hero build their labels the same way.
+ */
+export function heroFilmOf(project: Project): PlayableFilm {
+  return {
+    id: project.slug,
+    title: `${project.client} — ${project.title}`,
+    asset: project.film,
+  };
 }
 
 /** Next project, wrapping — powers the "next story" link on project pages. */
