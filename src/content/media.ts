@@ -70,8 +70,9 @@ const DERIVED = (
 const LOOP_REVISION: Record<string, number> = {
   // Re-cut to 8.5s, just past the "ELEVATED" intro title card.
   "fd-2022-buy-now-japan": 2,
-  // Re-cut to 37s in July; the poster never reached anyone behind the CDN.
-  "shoreline-f150-raptor": 2,
+  // 2: re-cut to 37s in July; the poster never reached anyone behind the CDN.
+  // 3: re-encoded from the regraded "Color + Audio fix final" master.
+  "shoreline-f150-raptor": 3,
   // Re-cut from 60s to 1s. 60s landed inside the red-and-black lens product
   // sequence, so the preview was all graphic and no footage.
   "blazar-mantis-135": 2,
