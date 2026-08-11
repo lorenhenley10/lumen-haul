@@ -127,7 +127,7 @@ const seeds: ProjectSeed[] = [
     client: "88",
     title: "Silo",
     summary:
-      "The finished piece — shot wide, graded cool, and cut long enough to let the location do the work.",
+      "Shot handheld through a derelict, graffiti-covered building — close to the subject, kinetic, and cut to keep the location moving past the camera.",
     filmDuration: 88,
     year: 2024,
   },

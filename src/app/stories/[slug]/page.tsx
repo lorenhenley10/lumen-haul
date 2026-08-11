@@ -61,20 +61,23 @@ export default async function ProjectPage({
                 off the hero should land on more work, not on support material. */}
             <StoryFilms client={project.client} films={project.moreFilms} />
 
-            <section className="grid place-items-center py-32">
-              <SplitText
-                as="h2"
-                text="(Behind the Scenes)"
-                by="char"
-                className="text-heading text-center"
-              />
-            </section>
-
-            {/* Not every project has a stills set yet. An empty drag canvas
-                would read as a broken viewport, so the section is skipped
-                entirely rather than rendered empty. */}
+            {/* Not every project has a stills set. The HEADING has to be inside
+                this condition too — half the slate has no stills, and hanging
+                "(Behind the Scenes)" over nothing reads as a page that failed
+                to load rather than one with nothing to show. */}
             {project.gallery.length > 0 && (
-              <DragGallery stills={project.gallery} />
+              <>
+                <section className="grid place-items-center py-32">
+                  <SplitText
+                    as="h2"
+                    text="(Behind the Scenes)"
+                    by="char"
+                    className="text-heading text-center"
+                  />
+                </section>
+
+                <DragGallery stills={project.gallery} />
+              </>
             )}
 
             <section className="container py-32">
