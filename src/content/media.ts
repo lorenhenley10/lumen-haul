@@ -72,7 +72,8 @@ const LOOP_REVISION: Record<string, number> = {
   "fd-2022-buy-now-japan": 2,
   // 2: re-cut to 37s in July; the poster never reached anyone behind the CDN.
   // 3: re-encoded from the regraded "Color + Audio fix final" master.
-  "shoreline-f150-raptor": 3,
+  // 4: again, from "Color + Audio fix final 2".
+  "shoreline-f150-raptor": 4,
   // Re-cut from 60s to 1s. 60s landed inside the red-and-black lens product
   // sequence, so the preview was all graphic and no footage.
   "blazar-mantis-135": 2,
