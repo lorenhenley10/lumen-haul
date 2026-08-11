@@ -70,6 +70,10 @@ const DERIVED = (
 const LOOP_REVISION: Record<string, number> = {
   // Re-cut to 8.5s, just past the "ELEVATED" intro title card.
   "fd-2022-buy-now-japan": 2,
+  // 2: the folder changed film entirely — it held a studio set test, and now
+  // holds the classic car show piece. Same paths, completely different footage,
+  // so without this the old test stays in front of everyone for a year.
+  "blazar-mantis-25-100": 2,
   // 2: re-cut to 37s in July; the poster never reached anyone behind the CDN.
   // 3: re-encoded from the regraded "Color + Audio fix final" master.
   // 4: again, from "Color + Audio fix final 2".

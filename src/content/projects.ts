@@ -73,33 +73,23 @@ const seeds: ProjectSeed[] = [
     year: 2022,
   },
   {
+    // The URL keeps its original name so the page does not move, even though
+    // the story now leads with the 25/100. Renaming it would cost a redirect
+    // and break the stills lookup for no visible gain.
     slug: "blazar-mantis-135",
     client: "Blazar",
-    title: "MANTIS 135mm First Look",
+    title: "MANTIS 25 & 100mm, Classic Car Show",
+    media: "blazar-mantis-25-100",
     summary:
-      "A first look at the MANTIS 135mm T3.2 anamorphic, shot to show the lens doing what the spec sheet cannot: flare behaviour, focus falloff, and how it renders skin at close range.",
-    filmDuration: 290,
-    /*
-     * The 25/100 set test sits BELOW the 135, not above it, which is the
-     * reverse of what was asked — see the note in AGENTS-facing terms:
-     *
-     * The film requested for the lead slot ("MANTIS 25mm & 100mm Lens Test |
-     * Classic Car Show") is not in public/media/Blazar/. The only 25/100 master
-     * on disk is this one, a different edit: a studio set test with burned-in
-     * focal-length and T-stop labels on nearly every frame, title cards, and
-     * chart sequences. Leading with it would put those labels full-screen on the
-     * home reel in place of a dynamic cut.
-     *
-     * Drop the car-show master in, add it to encode-media.sh, then set
-     * `media:` on this seed to its folder and move the 135 into moreFilms.
-     */
+      "A night shoot at a classic car show, cut to show the 25mm and 100mm wide open — string-light bokeh, headlight flare, and how the set holds skin at close focus.",
+    filmDuration: 55,
     moreFilms: [
       {
-        media: "blazar-mantis-25-100",
-        title: "MANTIS 25mm & 100mm Lens Test",
+        media: "blazar-mantis-135",
+        title: "MANTIS 135mm T3.2 First Look",
         summary:
-          "The wider end of the set — flare, distortion and focus falloff at 25mm and 100mm, alongside the full five-lens comparison.",
-        duration: 318,
+          "The long end on its own, shot wide open on location — flare behaviour and focus falloff at 135mm.",
+        duration: 290,
       },
     ],
     year: 2025,
