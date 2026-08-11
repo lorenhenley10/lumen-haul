@@ -52,6 +52,14 @@ interface ProjectSeed {
    * is named after.
    */
   media?: string;
+  /**
+   * Folder the behind-the-scenes stills were encoded into. Defaults to `slug`.
+   *
+   * Needed once a story's URL stops matching its folders: encode-stills.sh
+   * writes to a media folder, so renaming a slug would otherwise empty the
+   * gallery silently — the page still builds, there is just nothing in it.
+   */
+  stills?: string;
   /** Duration of the full film in seconds, measured from the encode. */
   filmDuration: number;
   /** True for the two vertically-shot pieces. */
@@ -73,13 +81,15 @@ const seeds: ProjectSeed[] = [
     year: 2022,
   },
   {
-    // The URL keeps its original name so the page does not move, even though
-    // the story now leads with the 25/100. Renaming it would cost a redirect
-    // and break the stills lookup for no visible gain.
-    slug: "blazar-mantis-135",
+    // Named for the client, not a film: the story holds two, and a URL naming
+    // one of them goes stale the moment the lead changes — which it already
+    // has once. /stories/blazar-mantis-135 redirects here (see next.config.ts).
+    slug: "blazar",
     client: "Blazar",
     title: "MANTIS 25 & 100mm, Classic Car Show",
     media: "blazar-mantis-25-100",
+    // The stills were encoded under the old folder and stay there.
+    stills: "blazar-mantis-135",
     summary:
       "A night shoot at a classic car show, cut to show the 25mm and 100mm wide open — string-light bokeh, headlight flare, and how the set holds skin at close focus.",
     filmDuration: 55,
@@ -214,9 +224,10 @@ export const projects: Project[] = seeds.map((seed, i) => {
       duration: seed.filmDuration,
     }),
     loop: derivedLoop(heroMedia, { alt: `${label}, silent loop`, aspect }),
-    // Stills stay keyed to the SLUG, not the hero media folder: a story has one
-    // behind-the-scenes set regardless of how many films sit in it.
-    gallery: derivedStills(seed.slug, label),
+    // A story has one behind-the-scenes set regardless of how many films sit in
+    // it, so this is a single folder — but not necessarily the slug's, once a
+    // story's URL and its folders have diverged.
+    gallery: derivedStills(seed.stills ?? seed.slug, label),
     credits: (seed.credits ?? []).map(([role, name]) => ({ role, name })),
     moreFilms,
     year: seed.year,

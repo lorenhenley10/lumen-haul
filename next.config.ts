@@ -33,7 +33,19 @@ const nextConfig: NextConfig = {
    * on its own; browsers reattach it to the destination.
    */
   async redirects() {
-    return [{ source: "/studio", destination: "/about", permanent: true }];
+    return [
+      { source: "/studio", destination: "/about", permanent: true },
+      /*
+       * The Blazar story was named after a film rather than the client, and
+       * went stale as soon as a different film took the lead. The old path was
+       * live and indexed, so it redirects rather than 404s.
+       */
+      {
+        source: "/stories/blazar-mantis-135",
+        destination: "/stories/blazar",
+        permanent: true,
+      },
+    ];
   },
 };
 
