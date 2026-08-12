@@ -49,7 +49,7 @@ shoreline-f150-raptor|Shoreline Motoring/F150/Raptor R Color + Audio fix final 2
 los-lamentos|Los Lamentos/Los Lamentos Promo Final.mp4|30
 hotpit-autofest|Hotpit Autofest/Elliot Bright - Driver Showcase.mp4|25
 blaque-diamond-model-s|Blaque Diamond Wheels/Model S Plaid/Tesla_Model_S_Plaid_Blaque_Diamond_Wheels_BD_F29_Gloss_Black YT Vid.mp4|14
-born-to-ride|Born to Ride/Born To Ride - Loren Henley, Gabriel Bendana.mp4|15
+born-to-ride|Born to Ride/Born To Ride - Loren Henley, Gabriel Bendana.mp4|41.5
 joby-joshua-tree|JOBY/JOBY Joshua Tree Shoot/Joshua Tree Video Content/JOBY Telepod - Mobile REEL.mp4|4
 EOF
 

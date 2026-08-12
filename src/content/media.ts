@@ -74,6 +74,8 @@ const LOOP_REVISION: Record<string, number> = {
   // holds the classic car show piece. Same paths, completely different footage,
   // so without this the old test stays in front of everyone for a year.
   "blazar-mantis-25-100": 2,
+  // 2: re-cut from 15s to the tunnel exit at 41.5s.
+  "born-to-ride": 2,
   // 2: re-cut to 37s in July; the poster never reached anyone behind the CDN.
   // 3: re-encoded from the regraded "Color + Audio fix final" master.
   // 4: again, from "Color + Audio fix final 2".
