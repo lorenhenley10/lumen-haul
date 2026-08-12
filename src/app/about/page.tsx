@@ -29,13 +29,16 @@ export default function AboutPage() {
     <PageShell>
       <section>
         {/*
-          `text-pretty` and `hyphens-auto` both matter at this size: without
-          hyphenation the ragged edge on a 56px face is severe.
+          `text-pretty` balances the rag; hyphenation is deliberately OFF.
+          It was inherited from a much longer statement, and on this one it
+          split "automotive" across a line at 56px — a broken word in display
+          type is the single most amateur thing a studio page can do. Measured
+          before removing it: the block is the same height either way, and the
+          longest word sets to 387px in a 1393px column, so there is nothing
+          for hyphenation to rescue.
         */}
         <Reveal immediate y={16}>
-          <h1 className="text-display text-pretty hyphens-auto">
-            {aboutStatement}
-          </h1>
+          <h1 className="text-display text-pretty">{aboutStatement}</h1>
         </Reveal>
       </section>
 
