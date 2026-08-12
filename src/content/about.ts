@@ -87,6 +87,9 @@ export const clients = [
   "Blaque Diamond Wheels",
   "Hotpit Autofest",
   "1886 Wheels",
+  "Watanabe Wheels",
+  "Buy Now Japan",
+  "eufy Make",
 ] as const;
 
 /**
