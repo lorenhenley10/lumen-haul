@@ -80,7 +80,9 @@ const LOOP_REVISION: Record<string, number> = {
   // 2: re-cut to 37s in July; the poster never reached anyone behind the CDN.
   // 3: re-encoded from the regraded "Color + Audio fix final" master.
   // 4: again, from "Color + Audio fix final 2".
-  "shoreline-f150-raptor": 4,
+  // 5: re-encoded from the new music edit — a genuinely different cut, not
+  //    another grade pass, so the film changed too.
+  "shoreline-f150-raptor": 5,
   // Re-cut from 60s to 1s. 60s landed inside the red-and-black lens product
   // sequence, so the preview was all graphic and no footage.
   "blazar-mantis-135": 2,
