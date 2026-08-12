@@ -75,7 +75,8 @@ const LOOP_REVISION: Record<string, number> = {
   // so without this the old test stays in front of everyone for a year.
   "blazar-mantis-25-100": 2,
   // 2: re-cut from 15s to the tunnel exit at 41.5s.
-  "born-to-ride": 2,
+  // 3: moved off the tunnel to 46s — the golden-hour run into the flares.
+  "born-to-ride": 3,
   // 2: re-cut to 37s in July; the poster never reached anyone behind the CDN.
   // 3: re-encoded from the regraded "Color + Audio fix final" master.
   // 4: again, from "Color + Audio fix final 2".
