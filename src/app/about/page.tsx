@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { PageShell } from "@/components/layout/page-shell";
 import { Reveal } from "@/components/motion/reveal";
-import { aboutStatement, contact, services } from "@/content/about";
+import { aboutStatement, clients, contact, services } from "@/content/about";
 import { site } from "@/content/site";
 
 export const metadata: Metadata = {
@@ -68,6 +68,30 @@ export default function AboutPage() {
             </Reveal>
           ))}
         </dl>
+      </section>
+
+      {/*
+        Sits between the services and the contact details on purpose: it is the
+        evidence for the claims above it, and the last thing read before the
+        decision to get in touch.
+
+        A plain list, not a logo wall. Sourced logos would arrive at seven
+        different weights and colours and would need policing every time one
+        rebrands; set in the studio's own type they read as a credit list,
+        which is the more confident version of the same information.
+      */}
+      <section className="mt-24">
+        <h2 className="text-heading mb-6">Selected clients</h2>
+        <Reveal
+          as="ul"
+          staggerChildren
+          y={12}
+          className="grid grid-cols-2 gap-x-8 gap-y-4 border-t border-border pt-6 md:grid-cols-3 lg:grid-cols-4"
+        >
+          {clients.map((client) => (
+            <li key={client}>{client}</li>
+          ))}
+        </Reveal>
       </section>
 
       {/*

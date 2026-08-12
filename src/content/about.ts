@@ -68,6 +68,28 @@ export const services: Service[] = [
 ];
 
 /**
+ * Clients, confirmed by the studio.
+ *
+ * DELIBERATELY NOT DERIVED from projects.ts, even though it would stay in sync
+ * for free. Not every piece on the slate is a commission — Born to Ride is
+ * directed work and Los Lamentos is not a client — so generating this list
+ * would have put names under a "clients" heading that do not belong there.
+ * That is the one error this section cannot afford.
+ *
+ * Add a name here only when the studio confirms it. A client with no work on
+ * the site yet still belongs; a project on the site does not automatically.
+ */
+export const clients = [
+  "Formula Drift",
+  "Blazar",
+  "Nozomio",
+  "Shoreline Motoring",
+  "Blaque Diamond Wheels",
+  "Hotpit Autofest",
+  "1886 Wheels",
+] as const;
+
+/**
  * The only contact details on the site.
  *
  * `href` is stored next to the display string rather than derived, because the
