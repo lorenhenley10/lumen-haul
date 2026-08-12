@@ -45,6 +45,16 @@ const nextConfig: NextConfig = {
         destination: "/stories/blazar",
         permanent: true,
       },
+      /*
+       * JOBY was pulled from the slate. The page was live, so its URL lands on
+       * the index rather than a dead end — a visitor following an old link gets
+       * the rest of the work instead of a 404.
+       */
+      {
+        source: "/stories/joby-joshua-tree",
+        destination: "/stories",
+        permanent: true,
+      },
     ];
   },
 };

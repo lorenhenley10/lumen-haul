@@ -171,16 +171,6 @@ const seeds: ProjectSeed[] = [
     ],
     year: 2023,
   },
-  {
-    slug: "joby-joshua-tree",
-    client: "JOBY",
-    title: "Telepod, Joshua Tree",
-    summary:
-      "Product content shot on location in Joshua Tree, cut vertical for mobile placement alongside a full product stills set.",
-    filmDuration: 23,
-    vertical: true,
-    year: 2023,
-  },
 ];
 
 export const projects: Project[] = seeds.map((seed, i) => {

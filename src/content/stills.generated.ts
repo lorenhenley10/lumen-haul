@@ -33,14 +33,6 @@ export const stillsManifest: Record<string, StillMeta[]> = {
     { file: "05.jpg", width: 1600, height: 1066 },
     { file: "06.jpg", width: 1600, height: 1066 },
   ],
-  "joby-joshua-tree": [
-    { file: "01.jpg", width: 1600, height: 900 },
-    { file: "02.jpg", width: 1066, height: 1600 },
-    { file: "03.jpg", width: 1600, height: 1066 },
-    { file: "04.jpg", width: 1600, height: 1066 },
-    { file: "05.jpg", width: 1600, height: 1066 },
-    { file: "06.jpg", width: 1600, height: 1066 },
-  ],
   "shoreline-f150-raptor": [
     { file: "01.jpg", width: 1600, height: 1066 },
     { file: "02.jpg", width: 1600, height: 1066 },

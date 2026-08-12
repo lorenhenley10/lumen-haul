@@ -131,7 +131,7 @@ export function derivedFilm(
  * Supporting stills, numbered 01..n by the encode script.
  *
  * Dimensions come from `stills.generated.ts` rather than being assumed, because
- * shoots mix orientations — Blazar and JOBY both contain portrait frames
+ * shoots mix orientations — the Blazar set contains portrait frames
  * alongside landscape ones. Declaring one aspect ratio for a whole project
  * would size half the gallery wrong.
  *

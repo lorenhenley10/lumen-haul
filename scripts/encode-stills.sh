@@ -43,7 +43,6 @@ blazar-mantis-135|Blazar/APEX-L
 fd-2022-buy-now-japan|Formula Drift 2022 - Buy Now Japan/SLC/Photos
 shoreline-f150-raptor|Shoreline Motoring/F150/WEB VERSION
 blaque-diamond-model-s|Blaque Diamond Wheels/Model S Plaid/Final Photo Set/2023 Website Version
-joby-joshua-tree|JOBY/JOBY Joshua Tree Shoot/JOBY Joshua Tree Product photos
 EOF
 
 while IFS='|' read -r slug folder; do
