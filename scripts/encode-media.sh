@@ -40,6 +40,7 @@ SCALE="scale='if(gt(iw,ih),1920,-2)':'if(gt(iw,ih),-2,1920)'"
 
 # slug | source (relative to public/media) | loop start seconds
 read -r -d '' JOBS <<'EOF'
+blazar-mantis-133x|Blazar/MANTIS/Ronin 4D + MANTIS 1.33X | Real-World Test.MOV|111
 blazar-mantis-135|Blazar/MANTIS/Blazar MANTIS 135mm T3.2 First Look.mp4|1
 blazar-mantis-25-100|Blazar/MANTIS/Blazar MANTIS 25mm & 100mm Lens Test _ Classic Car Show_2160p.mp4|0
 nozomio-folk-doordash|Nozomio/V2 Folk DoorDash Credit Giveway Promo.mp4|6
@@ -54,8 +55,16 @@ EOF
 
 mkdir -p "$OUT"
 
-while IFS='|' read -r slug src start; do
-  [ -z "${slug:-}" ] && continue
+# Split on the FIRST and LAST delimiter rather than every one: a master's
+# filename can itself contain a pipe (the Ronin 4D piece does), and splitting on
+# all of them would truncate the path mid-name and report a missing source.
+# The slug and the start time never contain one, so the ends are unambiguous.
+while IFS= read -r line; do
+  [ -z "${line:-}" ] && continue
+  slug="${line%%|*}"
+  rest="${line#*|}"
+  src="${rest%|*}"
+  start="${rest##*|}"
   [ -n "$ONLY" ] && [ "$slug" != "$ONLY" ] && continue
   input="$MEDIA/$src"
   dir="$OUT/$slug"

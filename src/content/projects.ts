@@ -90,19 +90,26 @@ const seeds: ProjectSeed[] = [
     year: 2024,
   },
   {
-    // Named for the client, not a film: the story holds two, and a URL naming
-    // one of them goes stale the moment the lead changes — which it already
-    // has once. /stories/blazar-mantis-135 redirects here (see next.config.ts).
+    // Named for the client, not a film: the story holds three, and a URL naming
+    // one of them goes stale the moment the lead changes — which it has now
+    // done twice. /stories/blazar-mantis-135 redirects here (see next.config.ts).
     slug: "blazar",
     client: "Blazar",
-    title: "MANTIS 25 & 100mm, Classic Car Show",
-    media: "blazar-mantis-25-100",
-    // The stills were encoded under the old folder and stay there.
+    title: "Ronin 4D + MANTIS 1.33X, Real-World Test",
+    media: "blazar-mantis-133x",
+    // The stills were encoded under the first film's folder and stay there.
     stills: "blazar-mantis-135",
     summary:
-      "A night shoot at a classic car show, cut to show the 25mm and 100mm wide open — string-light bokeh, headlight flare, and how the set holds skin at close focus.",
-    filmDuration: 55,
+      "The 1.33x set on a Ronin 4D across a full music video shoot — haze, hard colour and constant handheld movement, which is a harder test of a lens than any chart.",
+    filmDuration: 277,
     moreFilms: [
+      {
+        media: "blazar-mantis-25-100",
+        title: "MANTIS 25 & 100mm, Classic Car Show",
+        summary:
+          "A night shoot at a classic car show, cut to show the 25mm and 100mm wide open — string-light bokeh, headlight flare, and how the set holds skin at close focus.",
+        duration: 55,
+      },
       {
         media: "blazar-mantis-135",
         title: "MANTIS 135mm T3.2 First Look",
