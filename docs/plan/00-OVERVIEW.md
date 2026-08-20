@@ -62,8 +62,14 @@ Working, verified, and not to be rewritten:
 - **Smooth scroll** — `LenisProvider`, wired to GSAP's ticker, disabled under
   reduced motion, resets scroll + refreshes ScrollTrigger per route.
 - **Routes** — `/` (both desktop and mobile trees), `/stories`,
-  `/stories/[slug]` (SSG), `/studio`, `not-found`. There is no `/creators` —
-  see Status above.
+  `/stories/[slug]` (SSG), `/stills`, `/stills/[slug]` (SSG), `/about`
+  (`/studio` redirects to it), `not-found`. There is no `/creators` — see
+  Status above.
+- **Stills** — the photography section. Index of eight sets, a set page with a
+  full-bleed banner and a six-up contact sheet, and a viewer with a lightbox
+  and a true-fullscreen state. Content lives in `src/content/stills.ts`, which
+  documents how to swap a placeholder set for real frames. Half the slate is
+  still stand-in imagery and is badged as such in development.
 - **Home reel** — a pinned, scroll-driven sequence: 1.5 viewport heights per
   film, bubble fill scrubbed to scroll, timed crossfades, release after the
   last film. Measured against the reference; see `docs/audit/motion-system.md`

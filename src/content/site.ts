@@ -40,6 +40,7 @@ export const site = {
 export const primaryNav = [
   { label: "Home", href: "/" },
   { label: "Stories", href: "/stories" },
+  { label: "Stills", href: "/stills" },
   { label: "About", href: "/about" },
 ] as const;
 
@@ -57,6 +58,7 @@ export const socialLinks = [
 export const footerNav = [
   { label: "Home", href: "/" },
   { label: "Stories", href: "/stories" },
+  { label: "Stills", href: "/stills" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/about#contact" },
   { label: "Instagram", href: "https://www.instagram.com/lumenhaul/" },

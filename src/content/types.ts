@@ -118,6 +118,33 @@ export interface Project {
   year: number;
 }
 
+/**
+ * A photography set on /stills.
+ *
+ * Deliberately NOT a `Project`. A story is a film with supporting stills; a
+ * stills set is the photography itself, and it has no loop, no film, no
+ * duration and no reel position. Folding the two together would have put four
+ * always-empty video fields on every photo set and a `gallery` that means
+ * something different on each side of the union.
+ *
+ * The two can still describe the same shoot — /stories/shoreline-f150-raptor
+ * and a Shoreline stills set are the film and the photography from one job.
+ */
+export interface StillsProject {
+  slug: string;
+  /** Brand or client. The primary line under a tile. */
+  client: string;
+  /** The set's name. Rendered in the light weight beneath the client. */
+  title: string;
+  /** One or two sentences, shown under the banner on the set's own page. */
+  description: string;
+  year: number;
+  /** The tile image and the page banner. Usually the set's first frame. */
+  hero: ImageAsset;
+  /** Every frame in the set, in sequence. Drives the gallery and the viewer. */
+  images: ImageAsset[];
+}
+
 export interface Creator {
   slug: string;
   name: string;
