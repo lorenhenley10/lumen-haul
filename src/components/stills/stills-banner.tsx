@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { pendingFramesLabel } from "@/content/stills";
 import type { ImageAsset } from "@/content/types";
 
 /**
@@ -36,19 +35,6 @@ export function StillsBanner({ image }: { image: ImageAsset }) {
         aria-hidden
         className="absolute inset-x-0 top-0 h-40 bg-linear-to-b from-background/70 to-transparent"
       />
-
-      {/* The banner is the largest stand-in surface on the site, so it says
-          what it is. The frames below it do not repeat this — eight copies of
-          the same line is noise, and by then the point is made. */}
-      {image.placeholder && (
-        <span className="absolute inset-0 grid place-items-center">
-          {/* Foreground for the same reason as the tile: the texture behind
-              it is lighter than the page background. */}
-          <span className="text-caption text-foreground/80">
-            {pendingFramesLabel}
-          </span>
-        </span>
-      )}
 
       {image.placeholder && process.env.NODE_ENV !== "production" && (
         // Bottom left, not top: the banner starts under the fixed header, and

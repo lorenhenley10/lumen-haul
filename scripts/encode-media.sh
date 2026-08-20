@@ -39,18 +39,21 @@ ONLY="${2:-}"
 SCALE="scale='if(gt(iw,ih),1920,-2)':'if(gt(iw,ih),-2,1920)'"
 
 # slug | source (relative to public/media) | loop start seconds
+#
+# Sources live under Stories/ since the masters were reorganised into
+# Stories/ and Stills/. Nothing else about the film pipeline changed.
 read -r -d '' JOBS <<'EOF'
-blazar-mantis-133x|Blazar/MANTIS/Ronin 4D + MANTIS 1.33X | Real-World Test.MOV|111
-blazar-mantis-135|Blazar/MANTIS/Blazar MANTIS 135mm T3.2 First Look.mp4|1
-blazar-mantis-25-100|Blazar/MANTIS/Blazar MANTIS 25mm & 100mm Lens Test _ Classic Car Show_2160p.mp4|0
-nozomio-folk-doordash|Nozomio/V2 Folk DoorDash Credit Giveway Promo.mp4|6
-fd-2022-buy-now-japan|Formula Drift 2022 - Buy Now Japan/SLC/FD SLC Final Cut.mp4|8.5
-shoreline-f150-raptor|Shoreline Motoring/F150/Shoreline F150 Raptor R new music edit final.mp4|37
-88-silo|88/88 - Final final final.mp4|18
-los-lamentos|Los Lamentos/Los Lamentos Promo Final.mp4|30
-hotpit-autofest|Hotpit Autofest/Elliot Bright - Driver Showcase.mp4|25
-blaque-diamond-model-s|Blaque Diamond Wheels/Model S Plaid/Tesla_Model_S_Plaid_Blaque_Diamond_Wheels_BD_F29_Gloss_Black YT Vid.mp4|14
-born-to-ride|Born to Ride/Born To Ride - Loren Henley, Gabriel Bendana.mp4|46
+blazar-mantis-133x|Stories/Blazar/MANTIS/Ronin 4D + MANTIS 1.33X | Real-World Test.MOV|111
+blazar-mantis-135|Stories/Blazar/MANTIS/Blazar MANTIS 135mm T3.2 First Look.mp4|1
+blazar-mantis-25-100|Stories/Blazar/MANTIS/Blazar MANTIS 25mm & 100mm Lens Test _ Classic Car Show_2160p.mp4|0
+nozomio-folk-doordash|Stories/Nozomio/V2 Folk DoorDash Credit Giveway Promo.mp4|6
+fd-2022-buy-now-japan|Stories/Formula Drift 2022 - Buy Now Japan/SLC/FD SLC Final Cut.mp4|8.5
+shoreline-f150-raptor|Stories/Shoreline Motoring/F150/Shoreline F150 Raptor R new music edit final.mp4|37
+88-silo|Stories/88/88 - Final final final.mp4|18
+los-lamentos|Stories/Los Lamentos/Los Lamentos Promo Final.mp4|30
+hotpit-autofest|Stories/Hotpit Autofest/Elliot Bright - Driver Showcase.mp4|25
+blaque-diamond-model-s|Stories/Blaque Diamond Wheels/Model S Plaid/Tesla_Model_S_Plaid_Blaque_Diamond_Wheels_BD_F29_Gloss_Black YT Vid.mp4|14
+born-to-ride|Stories/Born to Ride/Born To Ride - Loren Henley, Gabriel Bendana.mp4|46
 EOF
 
 mkdir -p "$OUT"

@@ -75,6 +75,8 @@ const seeds: ProjectSeed[] = [
     slug: "fd-2022-buy-now-japan",
     client: "Formula Drift",
     title: "Buy Now Japan, Salt Lake City",
+    // The Salt Lake City photographs, shared with /stills/formula-drift.
+    stills: "stills-fd-slc",
     summary:
       "The full Salt Lake City round, in-car and aerial, from morning practice through the last smoke-filled battle at night.",
     filmDuration: 890,
@@ -88,8 +90,10 @@ const seeds: ProjectSeed[] = [
     client: "Blazar",
     title: "Ronin 4D + MANTIS 1.33X, Real-World Test",
     media: "blazar-mantis-133x",
-    // The stills were encoded under the first film's folder and stay there.
-    stills: "blazar-mantis-135",
+    // Shares the MANTIS gallery with /stills/blazar. It used to borrow the
+    // APEX-L set because there were no MANTIS stills; there are now, and they
+    // are the same lenses these films are about.
+    stills: "stills-blazar-mantis",
     summary:
       "The 1.33x set on a Ronin 4D across a full music video shoot — haze, hard colour and constant handheld movement, which is a harder test of a lens than any chart.",
     filmDuration: 277,
@@ -115,6 +119,8 @@ const seeds: ProjectSeed[] = [
     slug: "shoreline-f150-raptor",
     client: "Shoreline Motoring",
     title: "Ford F-150 Raptor R",
+    // One shoot, one encode: /stills/shoreline-motoring shows the same frames.
+    stills: "stills-shoreline-f150",
     summary:
       "A build film for a custom Raptor R, shot to sit alongside the studio's stills work for the same client.",
     filmDuration: 76,

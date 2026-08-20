@@ -46,6 +46,39 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       /*
+       * The stills slate was rebuilt around the reorganised masters: seven
+       * clients, each holding one or more galleries, replacing eight sets of
+       * which half were stand-ins. These URLs were live, so they land on the
+       * client that now holds that work rather than 404ing.
+       */
+      {
+        source: "/stills/shoreline-raptor-r",
+        destination: "/stills/shoreline-motoring",
+        permanent: true,
+      },
+      {
+        source: "/stills/blaque-diamond-model-s",
+        destination: "/stills/blaque-diamond",
+        permanent: true,
+      },
+      {
+        source: "/stills/blazar-apex-l",
+        destination: "/stills/blazar",
+        permanent: true,
+      },
+      {
+        source: "/stills/fd-slc-2022",
+        destination: "/stills/formula-drift",
+        permanent: true,
+      },
+      /*
+       * These three were stand-in sets with no photographs behind them. There
+       * is no equivalent to send them to, so they land on the index.
+       */
+      { source: "/stills/watanabe-wheels", destination: "/stills", permanent: true },
+      { source: "/stills/1886-wheels", destination: "/stills", permanent: true },
+      { source: "/stills/eufymake-product", destination: "/stills", permanent: true },
+      /*
        * JOBY was pulled from the slate. The page was live, so its URL lands on
        * the index rather than a dead end — a visitor following an old link gets
        * the rest of the work instead of a 404.

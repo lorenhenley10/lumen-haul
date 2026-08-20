@@ -119,6 +119,28 @@ export interface Project {
 }
 
 /**
+ * One body of work inside a stills project.
+ *
+ * Most clients here are not one shoot. Shoreline Motoring is three cars,
+ * Blaque Diamond is four fitments, Blazar is four lens lines — one page each,
+ * one sheet per body of work, because a single sheet mixing an AMG GT with an
+ * F-150 reads as a folder rather than as a portfolio.
+ *
+ * The viewer treats a gallery as the unit: arrows walk the frames of the sheet
+ * you opened and stop at its ends, rather than running on into the next car.
+ */
+export interface StillsGallery {
+  /** Unique within the project; also the deep-link hash on the page. */
+  id: string;
+  /**
+   * Shown above the sheet. Omitted when the project has only one gallery,
+   * where it would just repeat the title at the top of the page.
+   */
+  title?: string;
+  images: ImageAsset[];
+}
+
+/**
  * A photography set on /stills.
  *
  * Deliberately NOT a `Project`. A story is a film with supporting stills; a
@@ -128,7 +150,8 @@ export interface Project {
  * something different on each side of the union.
  *
  * The two can still describe the same shoot — /stories/shoreline-f150-raptor
- * and a Shoreline stills set are the film and the photography from one job.
+ * and the Shoreline stills set are the film and the photography from one job,
+ * and they share the encoded frames rather than each holding a copy.
  */
 export interface StillsProject {
   slug: string;
@@ -139,10 +162,10 @@ export interface StillsProject {
   /** One or two sentences, shown under the banner on the set's own page. */
   description: string;
   year: number;
-  /** The tile image and the page banner. Usually the set's first frame. */
+  /** The tile image and the page banner. The first frame of the first gallery. */
   hero: ImageAsset;
-  /** Every frame in the set, in sequence. Drives the gallery and the viewer. */
-  images: ImageAsset[];
+  /** One or more sheets, in page order. */
+  galleries: StillsGallery[];
 }
 
 export interface Creator {

@@ -53,7 +53,11 @@ export default async function StillsProjectPage({
   if (!project) notFound();
 
   const next = getNextStillsProject(slug);
-  const frames = project.images.length;
+  const frames = project.galleries.reduce(
+    (total, gallery) => total + gallery.images.length,
+    0,
+  );
+  const galleryCount = project.galleries.length;
 
   return (
     <PageShell padded={false}>
@@ -77,16 +81,42 @@ export default async function StillsProjectPage({
 
           <p className="mt-6 text-caption text-muted-foreground">
             {project.year} — {frames} {frames === 1 ? "frame" : "frames"}
+            {galleryCount > 1 && ` across ${galleryCount} sets`}
           </p>
         </Reveal>
 
-        {/* The sheet gets the page's standing section gap above it: the intro
-            is a caption for the banner, and the frames are a new movement. */}
+        {/*
+          One sheet per body of work. The first gets the page's standing
+          section gap — the intro is a caption for the banner and the frames
+          are a new movement — and the rest are separated from each other
+          rather than from the text, so a four-gallery page reads as four
+          sheets instead of four pages.
+
+          A single-gallery project shows no heading: it would only repeat the
+          title already set at the top of the page.
+        */}
         <div className="pt-16 pb-16 md:pt-24">
-          <StillsGallery
-            images={project.images}
-            label={`${project.client} — ${project.title}`}
-          />
+          {project.galleries.map((gallery, index) => (
+            <section
+              key={gallery.id}
+              id={gallery.id}
+              className={index > 0 ? "mt-24 scroll-mt-32" : "scroll-mt-32"}
+            >
+              {gallery.title && (
+                <Reveal y={16}>
+                  <h2 className="text-heading mb-8">{gallery.title}</h2>
+                </Reveal>
+              )}
+              <StillsGallery
+                images={gallery.images}
+                label={
+                  gallery.title
+                    ? `${project.client} — ${gallery.title}`
+                    : `${project.client} — ${project.title}`
+                }
+              />
+            </section>
+          ))}
         </div>
 
         <section className="pb-16">

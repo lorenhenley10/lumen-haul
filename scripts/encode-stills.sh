@@ -51,24 +51,56 @@ export PATH="/opt/homebrew/bin:$PATH"
 MEDIA="$(cd "$(dirname "$0")/.." && pwd)/public/media"
 OUT="$MEDIA/derived"
 ONLY="${1:-}"
-COUNT=6
+COUNT=8
 
 # Cap the long side at 2560 while preserving aspect ratio, keeping dims even.
 SCALE="scale='if(gt(iw,ih),2560,-2)':'if(gt(iw,ih),-2,2560)'"
 
-# Each still folder must belong to the SAME shoot as that project's main video.
-# An earlier pass pulled Shoreline's stills from the AMG GT shoot and Blaque
-# Diamond's from the F-150 Raptor shoot, which mislabels both — each of those
-# clients has several vehicle shoots in one folder tree.
+# ONE JOB PER GALLERY. The masters were reorganised into Stills/ and Stories/,
+# and the Stills tree carries the structure the section renders: a project
+# folder, and inside it one folder per body of work. Shoreline Motoring is
+# three cars, Blaque Diamond is four, Blazar is four lens lines. Each of those
+# is a gallery on the project's page, so each gets its own output folder.
 #
-# Blazar is the one deliberate exception: its main video is the MANTIS 135mm
-# piece and there are no MANTIS stills, so the APEX-L lifestyle set stands in
-# as same-brand supporting material.
+# Output folders are prefixed `stills-` because they share the derived/
+# namespace with the story slugs, and without it the Hotpit gallery and the
+# Hotpit film would both want `derived/hotpit-autofest`.
+#
+# A project whose folder holds loose files rather than sub-folders is one
+# gallery: the find below is maxdepth 1, so Formula Drift's top level is the
+# Buy Now Japan gallery and its SLC Photos sub-folder is a second one.
+#
+# Seven of these point one level deeper than the gallery folder, because the
+# delivery splits by resolution — "High Res" beside a "WEB VERSION" or a "Low
+# Res". The full-res side is always the one named here: those files are
+# 5584-5760px against 1920 for the web sets, and the page opens on a full-bleed
+# banner that wants 2560. One folder ("Mantis photos ") has a trailing space in
+# its name. That is real, and it has to stay.
+#
+# THE STORY PAGES SHARE THESE FOLDERS rather than encoding the same shoot
+# twice — projects.ts `stills:` points at a `stills-*` folder for Shoreline,
+# Formula Drift and Blazar. Blaque Diamond is the exception: its story is the
+# Model S Plaid, which has no gallery in the Stills tree, so it keeps its own
+# job and its own folder.
 read -r -d '' JOBS <<'EOF'
-blazar-mantis-135|Blazar/APEX-L
-fd-2022-buy-now-japan|Formula Drift 2022 - Buy Now Japan/SLC/Photos
-shoreline-f150-raptor|Shoreline Motoring/F150/Final Photos
-blaque-diamond-model-s|Blaque Diamond Wheels/Model S Plaid/Final Photo Set/High Res
+stills-shoreline-amg-gt|Stills/Shoreline Motoring/Shoreline AMG GT High Res
+stills-shoreline-f150|Stills/Shoreline Motoring/Shoreline F150 Photos/Final Photos
+stills-shoreline-rs6|Stills/Shoreline Motoring/Shoreline Motoring Audi RS6 Avant 1886 Wheels
+stills-blaque-diamond-q50|Stills/Blaque Diamond/2017_Infiniti_Q50_Blaque_Diamond_Wheels_BD_F25_DDT
+stills-blaque-diamond-raptor|Stills/Blaque Diamond/2018_Ford_F150_Raptor_Blaque_Diamond_Wheels_BD_O728_Textured_Black/High Res 2
+stills-blaque-diamond-model-3|Stills/Blaque Diamond/2022 Tesla Model 3 BD F29/High Res
+stills-blaque-diamond-a5|Stills/Blaque Diamond/Audi A5 BD F25/A5 High Res
+stills-joby-lifestyle|Stills/JOBY/JOBY Lifestyle Mounted Product Shots/High Res
+stills-joby-joshua-tree|Stills/JOBY/Joshua Tree Product Showcase
+stills-blazar-apex-l|Stills/Blazar/APEX-L
+stills-blazar-beetle|Stills/Blazar/BEETLE/Photos
+stills-blazar-mantis|Stills/Blazar/MANTIS/Mantis photos 
+stills-blazar-remus-m|Stills/Blazar/REMUS-M
+stills-fd-buy-now-japan|Stills/Formula Drift Buy Now Japan Photography
+stills-fd-slc|Stills/Formula Drift Buy Now Japan Photography/SLC Photos
+stills-hotpit-autofest|Stills/Hotpit Autofest Top 40 Edit
+stills-cf-moto|Stills/CF Moto Final Photos
+blaque-diamond-model-s|Stories/Blaque Diamond Wheels/Model S Plaid/Final Photo Set/High Res
 EOF
 
 while IFS='|' read -r slug folder; do

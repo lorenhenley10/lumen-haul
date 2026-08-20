@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/cn";
 import { MediaFrame } from "@/components/media/media-frame";
-import { pendingFramesLabel } from "@/content/stills";
 import type { StillsProject } from "@/content/types";
 
 /**
@@ -55,22 +54,6 @@ export function StillsTile({ project }: { project: StillsProject }) {
               "brightness-[0.85] group-hover/tile:brightness-100",
           )}
         />
-
-        {/* A set with no photographs yet says so, in HTML rather than baked
-            into the stand-in artwork — so it is set in the site's own typeface
-            and stays legible at every tile size. The frame behind it carries
-            the texture; this carries the one useful sentence. */}
-        {project.hero.placeholder && (
-          <span className="pointer-events-none absolute inset-0 grid place-items-center rounded-[var(--radius-card)] border border-border">
-            {/* Foreground, not muted. This sits on the stand-in texture,
-                which is lighter than the page — muted measures 3.9:1 there
-                against 12.2:1 for this. Contrast is a property of the pair,
-                not of the token. */}
-            <span className="text-caption text-foreground/80">
-              {pendingFramesLabel}
-            </span>
-          </span>
-        )}
       </MediaFrame>
 
       <div className="mt-4">
