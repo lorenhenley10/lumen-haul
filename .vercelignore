@@ -10,3 +10,9 @@
 # Keep in sync with the matching block in .gitignore.
 public/media/*
 !public/media/placeholder
+
+# Logo masters: 16667px square, ~1.2MB each, and never served. The site points
+# at the derived public/brand/lumen-haul-mark.png and the icons in src/app,
+# both cut by scripts/encode-brand.mjs. The masters stay in git as the source
+# to re-cut from; they have no business in a deploy.
+public/brand/Lumen Haul Logo Design*

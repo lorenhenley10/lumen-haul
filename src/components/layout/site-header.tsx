@@ -1,10 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { cn } from "@/lib/cn";
-import { primaryNav, socialLinks } from "@/content/site";
+import { brand, primaryNav, site, socialLinks } from "@/content/site";
 import { TabNav } from "./tab-nav";
 import { MobileMenu } from "./mobile-menu";
 
@@ -30,12 +31,20 @@ export function SiteHeader() {
     <>
       <header className="fixed inset-x-0 top-0 z-[var(--z-header)] flex justify-center bg-linear-to-b from-background/20 to-transparent pt-container">
         <div className="relative z-[var(--z-content)] container flex items-center justify-between lg:grid lg:grid-cols-6">
-          {/* Desktop: wordmark home link (col 1) */}
+          {/* Desktop: mark + wordmark home link (col 1) */}
           <Link
             href="/"
-            className="text-caption uppercase transition-opacity hover:opacity-60 max-lg:hidden"
+            className="flex items-center gap-2 text-caption uppercase transition-opacity hover:opacity-60 max-lg:hidden"
           >
-            Lumen Haul
+            <Image
+              src={brand.mark}
+              alt=""
+              aria-hidden
+              width={brand.markWidth}
+              height={brand.markHeight}
+              className="h-5 w-auto object-contain"
+            />
+            {site.name}
           </Link>
 
           <TabNav
@@ -57,9 +66,17 @@ export function SiteHeader() {
           <Link
             href="/"
             aria-label="Home"
-            className="text-caption uppercase lg:hidden"
+            className="flex items-center gap-2 text-caption uppercase lg:hidden"
           >
-            Lumen Haul
+            <Image
+              src={brand.mark}
+              alt=""
+              aria-hidden
+              width={brand.markWidth}
+              height={brand.markHeight}
+              className="h-5 w-auto object-contain"
+            />
+            {site.name}
           </Link>
           <div className="flex items-center justify-end gap-1 lg:hidden">
             <button

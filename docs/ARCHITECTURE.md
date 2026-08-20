@@ -133,10 +133,15 @@ steps, fluid display), spacing (`--spacing-container: 1rem`,
 faces. Swap via `next/font/local` in `layout.tsx`, keeping the same CSS
 variable names — nothing else names a family.
 
-**Brand assets are a square mark only** (4167×4167), with no wordmark lockup.
-The full-bleed wordmark in the hero and footer is therefore **set as type**,
-not placed as an image. If a real wordmark asset arrives, replace those two
-type blocks.
+**Brand assets are a square mark only** (16667×16667 masters), with no wordmark
+lockup. The full-bleed wordmark in the hero and footer is therefore **set as
+type**, not placed as an image. If a real wordmark asset arrives, replace those
+two type blocks.
+
+Three masters ship: white on transparency, black on transparency, and a flat
+JPEG. The white one is the site's — this interface is dark only — and
+`node scripts/encode-brand.mjs` cuts it down into the page mark and the whole
+favicon set. Nothing renders a master directly.
 
 ---
 

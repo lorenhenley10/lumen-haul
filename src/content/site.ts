@@ -66,22 +66,28 @@ export const footerNav = [
 
 export const brand = {
   /**
-   * The studio mark, used above the set wordmark in the hero and footer.
+   * The studio mark: in the header, above the set wordmark in the hero, and
+   * again in the footer.
    *
-   * Derived from `Lumen Haul Logo.png`, which ships as RGB on solid black. The
-   * mark sits over video, so it needs real transparency — the derived file
-   * carries the glow in its alpha channel and is trimmed to the artwork, with
-   * none of the source's surrounding dead space.
+   * THREE MASTERS ship in public/brand/, and this is derived from the white
+   * one on transparency. That is not a preference — this interface is dark
+   * only (docs/audit/visual-system.md), so white is the variant that belongs
+   * on it. The black-on-transparent master and the flat JPEG are here for
+   * light surfaces off the site; nothing in the app should reach for them.
    *
-   * It is PORTRAIT (roughly 3:5). Size it by height and let the width follow;
-   * a square box would leave it floating in its own padding.
+   * Regenerate with `node scripts/encode-brand.mjs`, which also cuts the
+   * favicon set. The masters are 16667px square — around 278 megapixels — so
+   * nothing renders them directly.
+   *
+   * The derived file is TRIMMED to the artwork: the master centres the mark in
+   * a square canvas with a wide transparent margin, and left in, every render
+   * would be mostly empty space. Size it by height and let the width follow.
    *
    * The intrinsic size is deliberately close to the largest on-screen render
-   * (80px tall) rather than the source artwork's. Declaring the full 512×860
-   * makes next/image generate a 1080px variant of a 48px logo — a slow encode
-   * for a payload nothing can see.
+   * (112px in the home hero) rather than the master's. Declaring the full
+   * 16667px makes next/image generate variants nothing can see.
    */
   mark: "/brand/lumen-haul-mark.png",
-  markWidth: 384,
-  markHeight: 645,
+  markWidth: 433,
+  markHeight: 512,
 } as const;
