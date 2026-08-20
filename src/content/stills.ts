@@ -163,6 +163,16 @@ export const stillsProjects: StillsProject[] = seeds.map((seed) => {
   };
 });
 
+/**
+ * Shown on a set whose photographs have not been published yet.
+ *
+ * Lives here rather than in the tile because it is copy, and because it is the
+ * one honest thing to say about a stand-in frame: these are real sets on the
+ * studio's slate — the pictures are what is missing, not the work. Delete this
+ * and the tile's use of it once every set has frames.
+ */
+export const pendingFramesLabel = "Frames to follow";
+
 export function getStillsProject(slug: string): StillsProject | undefined {
   return stillsProjects.find((project) => project.slug === slug);
 }

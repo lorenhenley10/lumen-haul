@@ -1,11 +1,12 @@
 import Image from "next/image";
+import { pendingFramesLabel } from "@/content/stills";
 import type { ImageAsset } from "@/content/types";
 
 /**
  * The banner at the top of a set's page.
  *
- * Full-bleed, and with NOTHING set over it. Every other hero on this site
- * carries its title on a scrim over the media, because there the media is
+ * Full-bleed, and with nothing set over a PHOTOGRAPH. Every other hero on this
+ * site carries its title on a scrim over the media, because there the media is
  * footage and the frame is arbitrary. Here the media is the work: the title
  * and the description sit underneath, where they caption the photograph
  * instead of covering it.
@@ -36,8 +37,21 @@ export function StillsBanner({ image }: { image: ImageAsset }) {
         className="absolute inset-x-0 top-0 h-40 bg-linear-to-b from-background/70 to-transparent"
       />
 
+      {/* The banner is the largest stand-in surface on the site, so it says
+          what it is. The frames below it do not repeat this — eight copies of
+          the same line is noise, and by then the point is made. */}
+      {image.placeholder && (
+        <span className="absolute inset-0 grid place-items-center">
+          <span className="text-caption text-muted-foreground">
+            {pendingFramesLabel}
+          </span>
+        </span>
+      )}
+
       {image.placeholder && process.env.NODE_ENV !== "production" && (
-        <span className="pointer-events-none absolute top-container left-container rounded-full bg-black/70 px-2 py-0.5 text-[10px] tracking-normal text-white/70">
+        // Bottom left, not top: the banner starts under the fixed header, and
+        // at the top this badge lands on top of the wordmark.
+        <span className="pointer-events-none absolute bottom-container left-container rounded-full bg-black/70 px-2 py-0.5 text-[10px] tracking-normal text-white/70">
           Placeholder
         </span>
       )}

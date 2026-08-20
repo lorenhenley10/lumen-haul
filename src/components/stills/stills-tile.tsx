@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
+import { cn } from "@/lib/cn";
 import { MediaFrame } from "@/components/media/media-frame";
+import { pendingFramesLabel } from "@/content/stills";
 import type { StillsProject } from "@/content/types";
 
 /**
@@ -44,8 +46,27 @@ export function StillsTile({ project }: { project: StillsProject }) {
           // set, and the stand-in frame IS an SVG — so a placeholder set would
           // 400 on every tile. Real photographs still go through the optimiser.
           unoptimized={project.hero.placeholder}
-          className="object-cover brightness-[0.85] transition-[scale,filter] duration-[var(--duration-slow)] ease-[var(--ease-out-expo)] group-hover/tile:scale-[1.06] group-hover/tile:brightness-100"
+          className={cn(
+            "object-cover transition-[scale,filter] duration-[var(--duration-slow)] ease-[var(--ease-out-expo)] group-hover/tile:scale-[1.06]",
+            // The resting dim is there so a photograph has somewhere to come UP
+            // from on hover. A stand-in frame has no photograph in it, and
+            // dimming a texture only makes it muddy.
+            !project.hero.placeholder &&
+              "brightness-[0.85] group-hover/tile:brightness-100",
+          )}
         />
+
+        {/* A set with no photographs yet says so, in HTML rather than baked
+            into the stand-in artwork — so it is set in the site's own typeface
+            and stays legible at every tile size. The frame behind it carries
+            the texture; this carries the one useful sentence. */}
+        {project.hero.placeholder && (
+          <span className="pointer-events-none absolute inset-0 grid place-items-center rounded-[var(--radius-card)] border border-border">
+            <span className="text-caption text-muted-foreground transition-colors duration-[var(--duration-base)] group-hover/tile:text-foreground">
+              {pendingFramesLabel}
+            </span>
+          </span>
+        )}
       </MediaFrame>
 
       <div className="mt-4">
