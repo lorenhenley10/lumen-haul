@@ -42,7 +42,9 @@ export function StillsBanner({ image }: { image: ImageAsset }) {
           the same line is noise, and by then the point is made. */}
       {image.placeholder && (
         <span className="absolute inset-0 grid place-items-center">
-          <span className="text-caption text-muted-foreground">
+          {/* Foreground for the same reason as the tile: the texture behind
+              it is lighter than the page background. */}
+          <span className="text-caption text-foreground/80">
             {pendingFramesLabel}
           </span>
         </span>

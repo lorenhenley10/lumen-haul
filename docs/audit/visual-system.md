@@ -16,9 +16,22 @@ This is a deliberate and load-bearing decision; do not introduce an accent hue.
 | foreground | `oklch(94.3% 0 0)` | Body text — off-white, not pure white |
 | primary | `oklch(100% 0 0)` | Pure white: active pill, scrubber fill |
 | primary-foreground | `oklch(15.43% 0 0)` | Text on the white pill |
-| muted-foreground | `oklch(55.6% 0 0)` | Secondary text, captions, indices |
+| muted-foreground | `oklch(55.6% 0 0)` † | Secondary text, captions, indices |
 | border | `oklch(100% 0 0 / 0.15)` | All hairlines |
 | ring | `oklch(70.8% 0 0)` | Focus ring |
+
+† **We ship 62%, not the reference's 55.6%.** This is the one measured value
+this build deliberately does not reproduce. 55.6% gives **4.13:1** against the
+background, and the token carries body copy here — project summaries, service
+descriptions, set captions — so it has to clear 4.5:1. 62% gives **5.37:1**.
+
+The threshold is derivable rather than guessed: chroma is 0, so relative
+luminance is the OKLCH lightness cubed and contrast against the background is
+`(L³ + 0.05) / 0.05367`. AA lands at L = 0.577 exactly.
+
+Text on a surface LIGHTER than the page background is a separate problem that
+this token cannot solve — on the stand-in frame's texture even 62% measures
+3.9:1. Those captions use `foreground` at 80%.
 
 Recurring surface treatments, used far more than the colour tokens themselves:
 

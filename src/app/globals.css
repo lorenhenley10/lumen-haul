@@ -15,7 +15,25 @@
   --color-primary: oklch(100% 0 0);
   --color-primary-foreground: oklch(15.43% 0 0);
   --color-muted: oklch(24% 0 0);
-  --color-muted-foreground: oklch(55.6% 0 0);
+  /*
+     Secondary text: captions, summaries, indices, field labels.
+
+     62%, NOT the reference's 55.6%. That value measures 4.13:1 against the
+     background and secondary text here is body copy, not decoration — every
+     project summary and service description is set in it — so it has to clear
+     4.5:1 rather than sit just under.
+
+     The number is derived, not picked. Chroma is 0 across this palette, and
+     for a grey the relative luminance is the OKLCH lightness cubed, so the
+     contrast against the background works out as (L³ + 0.05) / 0.05367. AA
+     lands at L = 0.577 exactly; 62% gives 5.37:1, which leaves headroom for
+     the 12px caption step without lifting secondary text so far that it stops
+     reading as secondary — it is still 32 points below the foreground.
+
+     Anything set on a surface LIGHTER than the background needs its own
+     answer: on the stand-in frame's texture even this fails, and that copy
+     uses the foreground token instead. */
+  --color-muted-foreground: oklch(62% 0 0);
   --color-border: oklch(100% 0 0 / 0.15);
   --color-ring: oklch(70.8% 0 0);
   --color-destructive: oklch(57.7% 0.245 27.325);

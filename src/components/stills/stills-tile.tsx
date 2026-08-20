@@ -62,7 +62,11 @@ export function StillsTile({ project }: { project: StillsProject }) {
             the texture; this carries the one useful sentence. */}
         {project.hero.placeholder && (
           <span className="pointer-events-none absolute inset-0 grid place-items-center rounded-[var(--radius-card)] border border-border">
-            <span className="text-caption text-muted-foreground transition-colors duration-[var(--duration-base)] group-hover/tile:text-foreground">
+            {/* Foreground, not muted. This sits on the stand-in texture,
+                which is lighter than the page — muted measures 3.9:1 there
+                against 12.2:1 for this. Contrast is a property of the pair,
+                not of the token. */}
+            <span className="text-caption text-foreground/80">
               {pendingFramesLabel}
             </span>
           </span>
