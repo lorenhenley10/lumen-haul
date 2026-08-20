@@ -24,9 +24,11 @@ interface StillsGalleryProps {
  * the grid steps 2 → 3 → 6 so a frame is never smaller than a thumbnail needs
  * to be to be worth tapping.
  *
- * Thumbnails are uniformly cropped to 3/4 and the crop is not a compromise: it
- * is what makes a set of mixed orientations read as one sheet. The viewer
- * shows every frame whole, at its own ratio, so nothing is actually lost.
+ * Thumbnails are uniformly boxed at 3/2, matching the index and the ratio the
+ * frames are encoded at. A landscape frame therefore fills its box untouched;
+ * only the portrait ones in a mixed set are cropped, which is what makes the
+ * sheet read as one grid. The viewer shows every frame whole, at its own ratio,
+ * so nothing is actually lost.
  */
 export function StillsGallery({ images, label }: StillsGalleryProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -45,7 +47,7 @@ export function StillsGallery({ images, label }: StillsGalleryProps) {
               className="group/frame block w-full cursor-zoom-in"
             >
               <MediaFrame
-                aspect="3/4"
+                aspect="3/2"
                 rounded
                 placeholder={image.placeholder}
                 className="transition-transform duration-[var(--duration-slow)] ease-[var(--ease-out-expo)] group-hover/frame:scale-[1.02]"

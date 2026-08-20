@@ -6,7 +6,7 @@
  * for final masters is a one-file change and never a hunt through JSX.
  */
 
-export type AspectRatio = "16/9" | "3/4" | "1/1" | "9/16";
+export type AspectRatio = "16/9" | "3/2" | "3/4" | "1/1" | "9/16";
 
 export interface VideoSource {
   /** Path under /public, or an absolute CDN URL. */

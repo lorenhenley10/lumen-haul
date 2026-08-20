@@ -59,6 +59,20 @@
   --spacing-top-section: 16rem;
   --spacing-section: 4rem;
 
+  /* --- Fit-to-viewport widths ---------------------------------------------
+     The /stills index holds eight tiles on one screen with no scroll, so on a
+     short window the GRID has to give way, not the page.
+
+     This is the widest that grid can be and still fit: two rows of 3/2 tiles
+     plus their labels inside the viewport. Four columns at a 1rem gap make a
+     tile (C - 3rem) / 4 wide and two-thirds of that tall, so two rows of image
+     come to (C - 3rem) / 3; 21.5rem is the rest — header clearance, both label
+     blocks, the row gap and the bottom margin. Solving for C gives this.
+
+     On a normal desktop window the page's own width is the smaller number and
+     this never binds, which is what keeps the grid full-bleed. */
+  --width-stills-grid: calc(3 * (100dvh - 21.5rem) + 3rem);
+
   /* --- Radii & shadow ----------------------------------------------------- */
   --radius: 0.625rem;
   --radius-card: 0.5rem;
@@ -79,6 +93,7 @@
 
   /* --- Media aspect ratios ------------------------------------------------ */
   --aspect-video: 16 / 9;
+  --aspect-landscape: 3 / 2;
   --aspect-portrait: 3 / 4;
   --aspect-still: 1 / 1;
 }

@@ -4,6 +4,9 @@ import type { AspectRatio } from "@/content/types";
 
 const aspectClass: Record<AspectRatio, string> = {
   "16/9": "aspect-video",
+  // The photographic ratio: what a full-frame sensor gives you, and what the
+  // stills encode out at (1600x1066). Film is 16/9, photography is 3/2.
+  "3/2": "aspect-[3/2]",
   "3/4": "aspect-[3/4]",
   "1/1": "aspect-square",
   "9/16": "aspect-[9/16]",

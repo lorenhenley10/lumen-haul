@@ -19,12 +19,15 @@ import type { StillsProject } from "@/content/types";
  *
  * 1.5% of a 350px tile is 5px, against a 16px gutter — a hovered tile never
  * touches its neighbour.
+ *
+ * The frame is 3/2: the ratio the photographs are actually shot and encoded at,
+ * so a landscape hero fills its tile rather than surviving a centre-crop.
  */
 export function StillsTile({ project }: { project: StillsProject }) {
   return (
     <Link href={`/stills/${project.slug}`} className="group/tile block">
       <MediaFrame
-        aspect="3/4"
+        aspect="3/2"
         rounded
         placeholder={project.hero.placeholder}
         className="transition-transform duration-[var(--duration-slow)] ease-[var(--ease-out-expo)] group-hover/tile:scale-[1.015]"
