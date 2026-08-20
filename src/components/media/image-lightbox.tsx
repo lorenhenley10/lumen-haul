@@ -21,7 +21,12 @@ interface ImageLightboxProps {
 }
 
 /**
- * The stills viewer.
+ * The image viewer.
+ *
+ * Shared: the stills contact sheet opens it, and so does the behind-the-scenes
+ * drag gallery on a story page. It lives in `media/` rather than `stills/`
+ * because it is a media primitive like the film player, not a feature of one
+ * section — anything holding a list of `ImageAsset`s can hand it an index.
  *
  * Two states, not one. The LIGHTBOX floats the frame over a blurred page with
  * its controls; FULLSCREEN drops the controls, blacks the surround and hands

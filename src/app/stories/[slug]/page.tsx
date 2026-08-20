@@ -76,7 +76,10 @@ export default async function ProjectPage({
                   />
                 </section>
 
-                <DragGallery stills={project.gallery} />
+                <DragGallery
+                  stills={project.gallery}
+                  label={`${project.client} — ${project.title}`}
+                />
               </>
             )}
 

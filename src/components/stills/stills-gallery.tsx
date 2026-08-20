@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import { MediaFrame } from "@/components/media/media-frame";
-import { ImageLightbox } from "./image-lightbox";
+import { ImageLightbox } from "@/components/media/image-lightbox";
 import type { ImageAsset } from "@/content/types";
 
 interface StillsGalleryProps {
