@@ -29,7 +29,7 @@ The bucket's layout mirrors `public/media/derived/` exactly:
 <slug>/loop.mp4        10s silent ambient loop
 <slug>/film.mp4        full piece with audio
 <slug>/poster.jpg      poster frame
-<slug>/stills/NN.jpg   supporting photography
+<slug>/stills/NN.<hash>.jpg   supporting photography
 ```
 
 So a local path `/media/derived/blazar-mantis-135/loop.mp4` becomes

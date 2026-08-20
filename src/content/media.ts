@@ -13,7 +13,11 @@ import { stillsManifest } from "./stills.generated";
  *      loop.mp4    ~10s silent excerpt, long side 1920 — home reel + card hover
  *      film.mp4    full piece with audio      — the fullscreen player
  *      poster.jpg  a frame from the loop's start point
- *      stills/NN.jpg  supporting photography
+ *      stills/NN.<hash>.jpg  supporting photography — the hash is of the
+ *                            encoded bytes, so a re-encode lands on a new URL
+ *                            and the one-year immutable cache cannot serve a
+ *                            stale frame. Filenames come from the manifest;
+ *                            nothing here constructs them.
  *
  * 2. PLACEHOLDER assets, for anything without media yet. These carry an empty
  *    `sources` array on purpose: AutoVideo then renders the poster and issues
@@ -35,7 +39,7 @@ export const PLACEHOLDER_STILL = "/media/placeholder/still.svg";
  *           the Cloudflare R2 bucket.
  *
  * The bucket's layout mirrors public/media/derived/ exactly (<slug>/loop.mp4,
- * <slug>/poster.jpg, <slug>/stills/NN.jpg), so switching between the two is a
+ * <slug>/poster.jpg, <slug>/stills/NN.<hash>.jpg), so switching between them is a
  * single environment variable and nothing else in the codebase changes.
  *
  * NEXT_PUBLIC_ is required: these URLs are needed during render, both on the
