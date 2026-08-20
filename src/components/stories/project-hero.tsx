@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { AutoVideo } from "@/components/media/auto-video";
 import { MediaFrame } from "@/components/media/media-frame";
 import { useVideo } from "@/components/media/video-provider";
@@ -58,6 +59,32 @@ export function ProjectHero({ project }: { project: Project }) {
       <div className="pointer-events-none absolute inset-0 z-[var(--z-content)] grid place-items-center bg-background/40 py-24 container">
         <div className="max-w-prose">
           <Reveal immediate staggerChildren className="flex flex-col items-start gap-8">
+            {/*
+              The counterpart to the "next story" card at the foot of the page,
+              and the twin of the one on a stills set — above the title in both.
+              `pointer-events-auto` is required: the panel around it is
+              deliberately transparent to clicks so the media button underneath
+              stays hittable, and without this the link would be unclickable.
+
+              Set at foreground rather than the muted step the stills link
+              uses. That is the same decision, not a different one: muted is
+              contrast-checked against the page background, and there is no
+              page background here — this sits over moving footage, where the
+              house rule is full-strength type.
+            */}
+            <Link
+              href="/stories"
+              className="group/back pointer-events-auto inline-flex items-center gap-2 text-caption text-foreground/80 transition-colors hover:text-foreground"
+            >
+              <span
+                aria-hidden
+                className="inline-block transition-transform duration-[var(--duration-base)] ease-[var(--ease-out-expo)] group-hover/back:-translate-x-1"
+              >
+                ←
+              </span>
+              All stories
+            </Link>
+
             <div>
               <h1 className="text-display">
                 <span className="font-medium">{project.client}</span>
