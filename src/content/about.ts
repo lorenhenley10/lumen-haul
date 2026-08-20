@@ -35,14 +35,27 @@ import type { Service } from "./types";
  */
 
 /**
- * The opening statement, set in display type.
+ * The opening statement, in two parts.
  *
  * The original was tuned to fill eight lines at 1440x900 to match a reference
- * layout. This one is sized by what is true rather than to a line count, so
- * expect a shorter block than the old page had.
+ * layout. This one is sized by what is true rather than to a line count.
+ *
+ * IT IS SPLIT BECAUSE OF TYPE, NOT MEANING — the words are unchanged. Set as
+ * one paragraph at the display step it ran five lines of roughly ninety
+ * characters, which is past twice a readable measure: a slab rather than a
+ * statement. The first sentence is what the studio IS and carries the page at
+ * display size; the rest qualifies it and belongs at reading size, in a column
+ * narrow enough to read.
+ *
+ * Keep that division if you rewrite: `lead` is a claim, `support` is how it
+ * works. Anything explaining or justifying belongs in neither — see the tone
+ * note above.
  */
-export const aboutStatement =
-  "Lumen Haul is a film and photography studio working in automotive, motorsport and brand. I direct and shoot every project, and build the crew around it — a lean unit where that serves the work, a full commercial team where it does not. Brief, shoot and edit stay in the same hands.";
+export const aboutLead =
+  "Lumen Haul is a film and photography studio working in automotive, motorsport and brand.";
+
+export const aboutSupport =
+  "I direct and shoot every project, and build the crew around it — a lean unit where that serves the work, a full commercial team where it does not. Brief, shoot and edit stay in the same hands.";
 
 export const services: Service[] = [
   {
