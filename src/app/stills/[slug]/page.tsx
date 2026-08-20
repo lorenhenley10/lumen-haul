@@ -65,11 +65,33 @@ export default async function StillsProjectPage({
 
       <div className="container">
         <Reveal as="header" y={24} className="pt-16 md:pt-24">
+          {/*
+            The counterpart to the "next set" card at the foot of the page: you
+            leave forward at the bottom and back at the top. It sits in the
+            intro rather than floating over the banner, where a pill would land
+            on the header wordmark in the same corner.
+
+            The arrow slides on hover — a CSS transition, which is where the
+            animation boundary puts hover state.
+          */}
+          <Link
+            href="/stills"
+            className="group/back inline-flex items-center gap-2 text-caption text-muted-foreground transition-colors hover:text-foreground"
+          >
+            <span
+              aria-hidden
+              className="inline-block transition-transform duration-[var(--duration-base)] ease-[var(--ease-out-expo)] group-hover/back:-translate-x-1"
+            >
+              ←
+            </span>
+            All stills
+          </Link>
+
           {/* The title runs at container width and the copy under it does not.
               Boxing both into one reading column wrapped a 56px display face
               at three lines with half the page empty beside it — the caption
               needs the narrow measure, the name does not. */}
-          <h1 className="text-display">
+          <h1 className="text-display mt-6">
             <span className="font-medium">{project.client}</span>
             <br />
             <span className="font-light tracking-tight">{project.title}</span>
