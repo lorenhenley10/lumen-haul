@@ -81,15 +81,6 @@ const seeds: ProjectSeed[] = [
     year: 2022,
   },
   {
-    slug: "shoreline-f150-raptor",
-    client: "Shoreline Motoring",
-    title: "Ford F-150 Raptor R",
-    summary:
-      "A build film for a custom Raptor R, shot to sit alongside the studio's stills work for the same client.",
-    filmDuration: 76,
-    year: 2024,
-  },
-  {
     // Named for the client, not a film: the story holds three, and a URL naming
     // one of them goes stale the moment the lead changes — which it has now
     // done twice. /stories/blazar-mantis-135 redirects here (see next.config.ts).
@@ -119,6 +110,15 @@ const seeds: ProjectSeed[] = [
       },
     ],
     year: 2025,
+  },
+  {
+    slug: "shoreline-f150-raptor",
+    client: "Shoreline Motoring",
+    title: "Ford F-150 Raptor R",
+    summary:
+      "A build film for a custom Raptor R, shot to sit alongside the studio's stills work for the same client.",
+    filmDuration: 76,
+    year: 2024,
   },
   {
     slug: "nozomio-folk-doordash",
