@@ -68,7 +68,7 @@ export function HomeHero() {
             width={brand.markWidth}
             height={brand.markHeight}
             priority
-            className="mb-6 h-28 w-auto object-contain"
+            className="mb-6 h-22 w-auto object-contain"
           />
           {/*
             The brand assets are a square mark only — there is no wordmark

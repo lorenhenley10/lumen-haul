@@ -42,7 +42,7 @@ export function SiteHeader() {
               aria-hidden
               width={brand.markWidth}
               height={brand.markHeight}
-              className="h-5 w-auto object-contain"
+              className="h-4 w-auto object-contain"
             />
             {site.name}
           </Link>
@@ -74,7 +74,7 @@ export function SiteHeader() {
               aria-hidden
               width={brand.markWidth}
               height={brand.markHeight}
-              className="h-5 w-auto object-contain"
+              className="h-4 w-auto object-contain"
             />
             {site.name}
           </Link>

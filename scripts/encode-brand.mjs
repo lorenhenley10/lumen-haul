@@ -14,8 +14,15 @@
 //   src/app/favicon.ico                legacy tab icon, 16/32/48
 //
 // WHITE ON TRANSPARENT is the site's variant: this is a dark-only interface
-// (see docs/audit/visual-system.md) and the black master is here for light
-// surfaces off-site — decks, invoices, a light email signature.
+// (see docs/audit/visual-system.md). master-black.png and master-flat.jpg are
+// here for light surfaces off-site — decks, invoices, an email signature — and
+// nothing in the app should reach for them.
+//
+// NOTE THAT THIS TRIMS, so where the artwork sits inside the master's canvas,
+// and how much of it the artwork fills, make NO difference to what ships. Two
+// revisions in a row changed only those two things and produced byte-identical
+// output. If the mark should render smaller or sit differently on the page,
+// that is an `h-*` in the components that draw it, not an export setting.
 //
 // Usage: node scripts/encode-brand.mjs
 //
@@ -28,7 +35,14 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const WHITE_MASTER = join(root, "public/brand/Lumen Haul Logo Design white transp.png");
+/**
+ * STABLE FILENAME, on purpose. The exports arrive named for whichever revision
+ * they are — "Logo Design final", "Logo Design7", "Logo Design centered" — and
+ * pointing this script at one of those means every new logo silently breaks it,
+ * which is exactly what happened once already. Updating the logo is now:
+ * overwrite this file, re-run this script.
+ */
+const WHITE_MASTER = join(root, "public/brand/master-white.png");
 
 /**
  * `--color-background`, converted from the token rather than eyeballed.

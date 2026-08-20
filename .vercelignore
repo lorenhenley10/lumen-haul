@@ -15,4 +15,8 @@ public/media/*
 # at the derived public/brand/lumen-haul-mark.png and the icons in src/app,
 # both cut by scripts/encode-brand.mjs. The masters stay in git as the source
 # to re-cut from; they have no business in a deploy.
-public/brand/Lumen Haul Logo Design*
+#
+# Matched by the stable master-* prefix rather than by the exports' own names,
+# which change with every logo revision — this rule silently stopped matching
+# once already when the files were renamed.
+public/brand/master-*
