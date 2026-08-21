@@ -14,9 +14,10 @@
 //   src/app/apple-icon.png             iOS home screen
 //   src/app/favicon.ico                legacy tab icon, 16/32/48
 //
-// The two tab icons put the mark on a BLACK DISC. The mark is white, and white
-// on transparency is invisible against a light tab strip; the disc gives it a
-// ground of its own so it reads the same in either browser theme.
+// The two tab icons are the WHITE MARK AT FULL SIZE ON TRANSPARENCY, with no
+// ground behind it. That is a deliberate choice and it has a known cost: white
+// on transparency is faint against a light tab strip. A black disc was tried
+// and taken back out. `disc` below still works if it is ever wanted again.
 //
 // WHITE ON TRANSPARENT is the site's variant: this is a dark-only interface
 // (see docs/audit/visual-system.md). master-black.png and master-flat.jpg are
@@ -92,15 +93,12 @@ async function trimmedMark() {
  * against a light tab strip. A black disc gives it its own ground, so the icon
  * reads the same whatever the browser paints behind it.
  *
- * The scale has to come DOWN when a disc is on, because a circle's usable area
- * is smaller than its box. The ceiling is calculable rather than a matter of
- * taste: the mark is 430x512, so fitted to `scale` its bounding-box corners sit
- * at `scale * 0.653` from the centre, and they leave the disc at scale 0.765.
- * Anything at or past that touches the edge.
- *
- * 0.66 leaves 14% of the radius as margin and 0.70 leaves 9%. The smaller sizes
- * take the larger of the two: at 16px there is no room to be precious, and the
- * disc's own anti-aliased edge is doing most of the work by then.
+ * Nothing uses `disc` today — the tab icons went back to a bare white mark —
+ * but it is kept because it is the one fix for the white-on-light-chrome
+ * problem. If it is turned back on, the scale has to come DOWN with it: the
+ * mark is 430x512, so fitted to `scale` its bounding-box corners sit at
+ * `scale * 0.653` from the centre and leave the disc entirely at scale 0.765.
+ * 0.66 leaves 14% of the radius as margin; 0.70 leaves 9%.
  */
 async function squareIcon(mark, size, scale, { background, disc } = {}) {
   const inner = Math.round(size * scale);
@@ -184,13 +182,10 @@ const pageMark = await sharp(mark)
   .toBuffer();
 await writeFile(join(root, "public/brand/lumen-haul-mark.png"), pageMark);
 
-// Tab icon. The mark sits on a black disc rather than on transparency: white
-// on transparency disappears against a light tab strip, and this is the icon
-// most browsers actually draw.
-await writeFile(
-  join(root, "src/app/icon.png"),
-  await squareIcon(mark, 256, 0.66, { disc: BACKGROUND }),
-);
+// Tab icon: the white mark at full size on transparency, no ground behind it.
+// It fills the box — `fit: inside` on a portrait mark means it touches top and
+// bottom — and takes the colour of whatever the browser paints behind it.
+await writeFile(join(root, "src/app/icon.png"), await squareIcon(mark, 256, 1));
 
 // iOS. A full-bleed plate rather than a disc: the OS masks home-screen icons
 // into its own rounded square, so a circle inside that would only shrink the
@@ -201,16 +196,14 @@ await writeFile(
   await squareIcon(mark, 180, 0.6, { background: BACKGROUND }),
 );
 
-// Legacy tab icon, on the same disc, and a little larger inside it than
-// icon.png: at 16px every pixel counts, and the disc's edge is what carries the
-// shape at that size anyway.
+// Legacy tab icon, the same way: full size, transparent.
 await writeFile(
   join(root, "src/app/favicon.ico"),
   buildIco(
     await Promise.all(
       [16, 32, 48].map(async (size) => ({
         size,
-        data: await squareIcon(mark, size, 0.7, { disc: BACKGROUND }),
+        data: await squareIcon(mark, size, 1),
       })),
     ),
   ),
