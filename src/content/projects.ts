@@ -53,11 +53,22 @@ interface ProjectSeed {
    */
   media?: string;
   /**
-   * Folder the behind-the-scenes stills were encoded into. Defaults to `slug`.
+   * Folder of BEHIND-THE-SCENES photographs for the drag gallery.
    *
-   * Needed once a story's URL stops matching its folders: encode-stills.sh
-   * writes to a media folder, so renaming a slug would otherwise empty the
-   * gallery silently — the page still builds, there is just nothing in it.
+   * BTS ONLY — pictures of the shoot, not the shoot's pictures. NO STORY HAS
+   * ONE YET, which is why every seed below omits this and no story page
+   * currently renders a gallery.
+   *
+   * It used to point at the client's stills sets, so a story showed the same
+   * frames as its /stills page under a "(Behind the Scenes)" heading they were
+   * never behind the scenes of. Photography belongs in the Stills tab; this is
+   * for the other thing, when it exists.
+   *
+   * There is deliberately NO FALLBACK to `slug`. The fallback is how the
+   * Blaque Diamond story picked up a gallery nobody had asked it to show —
+   * `encode-stills.sh` had written frames into a folder named after the story —
+   * and a silent default is the wrong behaviour for a section that should
+   * appear only when someone has decided it should.
    */
   stills?: string;
   /** Duration of the full film in seconds, measured from the encode. */
@@ -75,8 +86,6 @@ const seeds: ProjectSeed[] = [
     slug: "fd-2022-buy-now-japan",
     client: "Formula Drift",
     title: "Buy Now Japan, Salt Lake City",
-    // The Salt Lake City photographs, shared with /stills/formula-drift.
-    stills: "stills-fd-slc",
     summary:
       "The full Salt Lake City round, in-car and aerial, from morning practice through the last smoke-filled battle at night.",
     filmDuration: 890,
@@ -90,10 +99,6 @@ const seeds: ProjectSeed[] = [
     client: "Blazar",
     title: "Ronin 4D + MANTIS 1.33X, Real-World Test",
     media: "blazar-mantis-133x",
-    // Shares the MANTIS gallery with /stills/blazar. It used to borrow the
-    // APEX-L set because there were no MANTIS stills; there are now, and they
-    // are the same lenses these films are about.
-    stills: "stills-blazar-mantis",
     summary:
       "The 1.33x set on a Ronin 4D across a full music video shoot — haze, hard colour and constant handheld movement, which is a harder test of a lens than any chart.",
     filmDuration: 277,
@@ -126,8 +131,6 @@ const seeds: ProjectSeed[] = [
     slug: "shoreline-f150-raptor",
     client: "Shoreline Motoring",
     title: "Ford F-150 Raptor R",
-    // One shoot, one encode: /stills/shoreline-motoring shows the same frames.
-    stills: "stills-shoreline-f150",
     summary:
       "A build film for a custom Raptor R, shot to sit alongside the studio's stills work for the same client.",
     filmDuration: 76,
@@ -226,8 +229,8 @@ const seeds: ProjectSeed[] = [
      * JOBY was on the site as photographs only — /stills/joby has carried the
      * Joshua Tree and mounted-product sets since launch — while the films from
      * the same shoot were in the masters and nowhere else. This is the story
-     * they belong to, and it shares that shoot's gallery rather than starting a
-     * second copy of it.
+     * they belong to. The photographs stay where they are: they are the Stills
+     * tab's, not this page's.
      *
      * It is the shortest piece on the slate by a distance: nine seconds, cut
      * for a product page rather than a screen. The Telepod cut that goes with
@@ -237,7 +240,6 @@ const seeds: ProjectSeed[] = [
     client: "JOBY",
     title: "Website Reel, Two Products",
     media: "joby-website-reel",
-    stills: "stills-joby-joshua-tree",
     summary:
       "A short product reel cut for the JOBY site — two mounts, shown in use rather than on a plinth.",
     filmDuration: 9,
@@ -300,9 +302,9 @@ export const projects: Project[] = seeds.map((seed, i) => {
     }),
     loop: derivedLoop(heroMedia, { alt: `${label}, silent loop`, aspect }),
     // A story has one behind-the-scenes set regardless of how many films sit in
-    // it, so this is a single folder — but not necessarily the slug's, once a
-    // story's URL and its folders have diverged.
-    gallery: derivedStills(seed.stills ?? seed.slug, label),
+    // it, so this is a single folder. Absent means absent: the story page drops
+    // the whole section, heading included, when this is empty.
+    gallery: seed.stills ? derivedStills(seed.stills, label) : [],
     credits: (seed.credits ?? []).map(([role, name]) => ({ role, name })),
     moreFilms,
     year: seed.year,
