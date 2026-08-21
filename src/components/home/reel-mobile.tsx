@@ -152,7 +152,7 @@ export function ReelMobile({ projects }: { projects: Project[] }) {
           className="relative h-svh w-full snap-start bg-scrim p-12"
         >
           <Link href={`/stories/${project.slug}`} className="block h-full w-full">
-            <div className="flex h-full w-full flex-col items-center justify-center gap-4">
+            <div className="flex h-full w-full flex-col items-center justify-end gap-4">
               <h2 className="text-display text-center tracking-tighter">
                 <span className="font-medium">{project.client}</span>
                 <br />

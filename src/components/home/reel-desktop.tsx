@@ -408,7 +408,7 @@ export function ReelDesktop({ projects }: { projects: Project[] }) {
                 {/* Inside the counter, so the title is revealed by the same
                     wipe as the film — but outside the media layer, so the
                     parallax scale never touches the type. */}
-                <div className="absolute inset-0 z-[var(--z-content)] flex flex-col items-center justify-center gap-4 bg-scrim p-12">
+                <div className="absolute inset-0 z-[var(--z-content)] flex flex-col items-center justify-end gap-4 bg-scrim p-12">
                   <h2 className="text-display text-center tracking-tighter">
                     <span className="font-medium">{project.client}</span>
                     <br />
