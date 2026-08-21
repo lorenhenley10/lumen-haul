@@ -14,6 +14,10 @@
 //   src/app/apple-icon.png             iOS home screen
 //   src/app/favicon.ico                legacy tab icon, 16/32/48
 //
+// The two tab icons put the mark on a BLACK DISC. The mark is white, and white
+// on transparency is invisible against a light tab strip; the disc gives it a
+// ground of its own so it reads the same in either browser theme.
+//
 // WHITE ON TRANSPARENT is the site's variant: this is a dark-only interface
 // (see docs/audit/visual-system.md). master-black.png and master-flat.jpg are
 // here for light surfaces off-site — decks, invoices, an email signature — and
@@ -51,9 +55,10 @@ const WHITE_MASTER = join(root, "public/brand/master-white.png");
 /**
  * `--color-background`, converted from the token rather than eyeballed.
  *
- * Only apple-icon needs it: iOS ignores alpha and composites an icon onto
- * WHITE, so a white mark on transparency would arrive invisible. Every other
- * icon here keeps its transparency.
+ * Every icon that has a ground uses it: the disc behind the two tab icons, and
+ * the full-bleed plate behind apple-icon, which needs one because iOS ignores
+ * alpha and composites onto WHITE. Deriving it from the token means the icons
+ * stay the same near-black as the site if that token ever moves.
  */
 function oklchToHex(lightness) {
   // Achromatic, so a = b = 0 and the LMS terms collapse to L cubed.
@@ -79,13 +84,40 @@ async function trimmedMark() {
     .toBuffer();
 }
 
-/** The mark centred in a square box, at `scale` of the box's shorter side. */
-async function squareIcon(mark, size, scale, background) {
+/**
+ * The mark centred in a square box, at `scale` of the box's shorter side.
+ *
+ * `disc` fills a circle behind it. That is what makes a tab icon work on a
+ * light browser: the mark is white, and white on transparency is invisible
+ * against a light tab strip. A black disc gives it its own ground, so the icon
+ * reads the same whatever the browser paints behind it.
+ *
+ * The scale has to come DOWN when a disc is on, because a circle's usable area
+ * is smaller than its box — the largest square inside a circle is 0.707 of the
+ * diameter, and the mark needs margin inside that again.
+ */
+async function squareIcon(mark, size, scale, { background, disc } = {}) {
   const inner = Math.round(size * scale);
   const resized = await sharp(mark)
     .resize(inner, inner, { fit: "inside" })
     .png()
     .toBuffer();
+
+  const layers = [];
+  if (disc) {
+    // Drawn as SVG so the edge is anti-aliased. A composited raster circle at
+    // 16px would have a visibly stepped edge.
+    layers.push({
+      input: Buffer.from(
+        `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}">` +
+          `<circle cx="${size / 2}" cy="${size / 2}" r="${size / 2}" fill="${disc}"/>` +
+          `</svg>`,
+      ),
+      top: 0,
+      left: 0,
+    });
+  }
+  layers.push({ input: resized, gravity: "centre" });
 
   return sharp({
     create: {
@@ -95,7 +127,7 @@ async function squareIcon(mark, size, scale, background) {
       background: background ?? { r: 0, g: 0, b: 0, alpha: 0 },
     },
   })
-    .composite([{ input: resized, gravity: "centre" }])
+    .composite(layers)
     .png()
     .toBuffer();
 }
@@ -146,28 +178,33 @@ const pageMark = await sharp(mark)
   .toBuffer();
 await writeFile(join(root, "public/brand/lumen-haul-mark.png"), pageMark);
 
-// Tab icon. Keeps its transparency, so it takes the colour of whatever the
-// browser paints behind it.
+// Tab icon. The mark sits on a black disc rather than on transparency: white
+// on transparency disappears against a light tab strip, and this is the icon
+// most browsers actually draw.
 await writeFile(
   join(root, "src/app/icon.png"),
-  await squareIcon(mark, 256, 0.72),
+  await squareIcon(mark, 256, 0.58, { disc: BACKGROUND }),
 );
 
-// iOS. The one asset that gets a plate, because alpha is not honoured there.
+// iOS. A full-bleed plate rather than a disc: the OS masks home-screen icons
+// into its own rounded square, so a circle inside that would only shrink the
+// mark inside a shape nobody sees. Alpha is not honoured here either, which is
+// why this one has always had a background.
 await writeFile(
   join(root, "src/app/apple-icon.png"),
-  await squareIcon(mark, 180, 0.6, BACKGROUND),
+  await squareIcon(mark, 180, 0.6, { background: BACKGROUND }),
 );
 
-// Legacy tab icon. Small sizes get proportionally more of the box: at 16px
-// there is no room for margin and the mark still has to be recognisable.
+// Legacy tab icon, on the same disc. Slightly more of the box than icon.png
+// gets: at 16px every pixel counts, and the disc's edge is what carries the
+// shape at that size anyway.
 await writeFile(
   join(root, "src/app/favicon.ico"),
   buildIco(
     await Promise.all(
       [16, 32, 48].map(async (size) => ({
         size,
-        data: await squareIcon(mark, size, 0.88),
+        data: await squareIcon(mark, size, 0.62, { disc: BACKGROUND }),
       })),
     ),
   ),
