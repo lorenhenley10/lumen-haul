@@ -102,6 +102,18 @@ async function trimmedMark() {
  * 0.66 leaves 14% of the radius as margin; 0.70 leaves 9%.
  */
 async function squareIcon(mark, size, scale, { background, disc } = {}) {
+  return plate(mark, size, size, scale, { background, disc });
+}
+
+/**
+ * The mark centred on a plate of any shape, at `scale` of the SHORTER side.
+ *
+ * Scaling off the shorter side is what makes one number safe on both a square
+ * and a landscape card: on anything wider than it is tall, height is what runs
+ * out first, and height is what every crop eats into.
+ */
+async function plate(mark, width, height, scale, { background, disc } = {}) {
+  const size = Math.min(width, height);
   const inner = Math.round(size * scale);
   const resized = await sharp(mark)
     .resize(inner, inner, { fit: "inside" })
@@ -114,8 +126,8 @@ async function squareIcon(mark, size, scale, { background, disc } = {}) {
     // 16px would have a visibly stepped edge.
     layers.push({
       input: Buffer.from(
-        `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}">` +
-          `<circle cx="${size / 2}" cy="${size / 2}" r="${size / 2}" fill="${disc}"/>` +
+        `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">` +
+          `<circle cx="${width / 2}" cy="${height / 2}" r="${size / 2}" fill="${disc}"/>` +
           `</svg>`,
       ),
       top: 0,
@@ -126,8 +138,8 @@ async function squareIcon(mark, size, scale, { background, disc } = {}) {
 
   return sharp({
     create: {
-      width: size,
-      height: size,
+      width,
+      height,
       channels: 4,
       background: background ?? { r: 0, g: 0, b: 0, alpha: 0 },
     },
@@ -205,15 +217,27 @@ await writeFile(
 // unfurled a white mark on transparency — invisible in every light-themed
 // client that renders a link.
 //
-// 1200x1200 because the request was a square. The scale is what makes a square
-// survive contact with the feeds that will not show one: Facebook, LinkedIn
-// and Slack crop to 1.91:1, which keeps the middle 628px, and X's large card
-// crops to 2:1, which keeps the middle 600. A mark at 0.48 of the box stands
-// 576px tall and sits inside both bands with room to spare — anything above
-// 0.5 starts losing its top and bottom to the wider crop.
+// 1200x630 — 1.91:1, the shape every surface that unfurls a link is built
+// around. Facebook, LinkedIn and Slack ask for it outright; X's large card and
+// iMessage crop to 2:1, which takes 15px off each end of this and nothing off
+// the mark; Discord shows it whole.
+//
+// It was square for a day, on request, and a square is the one shape none of
+// them show as sent — each crops it, so the framing exported is not the
+// framing anyone sees. Cutting to the target shape is the difference between
+// choosing the composition and letting six scrapers each choose their own. The
+// other way out, a square with `twitter:card` set to `summary`, buys the same
+// safety by demoting the card to a thumbnail beside the text.
+//
+// The mark takes 0.6 of the short side — 378px tall on a 630px card. Smaller
+// was tried first and reads as an afterthought once a client draws the card at
+// 500px wide, which is the size that matters; this is the largest that still
+// keeps its margins under every crop. The 2:1 pass leaves 111px of clear plate
+// above and below it, and the square WhatsApp takes out of the middle keeps
+// the mark whole with 156px to spare on each side.
 await writeFile(
   join(root, "src/app/opengraph-image.png"),
-  await squareIcon(mark, 1200, 0.48, { background: BACKGROUND }),
+  await plate(mark, 1200, 630, 0.6, { background: BACKGROUND }),
 );
 
 // Legacy tab icon, the same way: full size, transparent.
