@@ -112,6 +112,13 @@ const seeds: ProjectSeed[] = [
           "The long end on its own, shot wide open on location — flare behaviour and focus falloff at 135mm.",
         duration: 290,
       },
+      {
+        media: "blazar-mantis-5-lens",
+        title: "MANTIS 25 & 100mm, Full Five-Lens Comparison",
+        summary:
+          "The set measured against itself: the same setups walked through all five focal lengths, with the focal length and stop on screen throughout.",
+        duration: 317,
+      },
     ],
     year: 2025,
   },
@@ -124,6 +131,15 @@ const seeds: ProjectSeed[] = [
     summary:
       "A build film for a custom Raptor R, shot to sit alongside the studio's stills work for the same client.",
     filmDuration: 76,
+    moreFilms: [
+      {
+        media: "shoreline-amg-gt",
+        title: "Mercedes-AMG GT S, BD-F25",
+        summary:
+          "The same treatment on a brushed-black AMG GT S — shot tight on the fitment, then let out to the whole car.",
+        duration: 77,
+      },
+    ],
     year: 2024,
   },
   {
@@ -160,6 +176,15 @@ const seeds: ProjectSeed[] = [
     summary:
       "A driver showcase built around one competitor across a full event weekend, cut to the rhythm of the runs rather than a music bed.",
     filmDuration: 143,
+    moreFilms: [
+      {
+        media: "hotpit-irw-r1",
+        title: "Irwindale, Round One",
+        summary:
+          "The whole of round one at Irwindale, over fifteen minutes of it — every run rather than the highlights, which is what the showcase was cut down from.",
+        duration: 931,
+      },
+    ],
     year: 2023,
   },
   {
@@ -169,7 +194,54 @@ const seeds: ProjectSeed[] = [
     summary:
       "Product film for a wheel fitment on a Model S Plaid, shot ultrawide to keep the full stance of the car in frame.",
     filmDuration: 70,
+    // The client is four fitments, not one, and /stills/blaque-diamond has
+    // always shown them that way. These are the films that go with them.
+    moreFilms: [
+      {
+        media: "blaque-diamond-raptor",
+        title: "Ford F-150 Raptor, BD-O728",
+        summary:
+          "The truck taken out to open desert rather than shot in a bay — a textured black wheel against dust and low sun.",
+        duration: 60,
+      },
+      {
+        media: "blaque-diamond-model-3",
+        title: "Tesla Model 3, BD-F29",
+        summary:
+          "A brushed silver fitment on a Model 3, shot in a garage where the light could be kept hard and directional.",
+        duration: 55,
+      },
+      {
+        media: "blaque-diamond-q50",
+        title: "Infiniti Q50, BD-F25",
+        summary:
+          "The Q50 against glass and concrete, cut to hold the whole stance of the car in ultrawide before moving in on the wheel.",
+        duration: 76,
+      },
+    ],
     year: 2023,
+  },
+  {
+    /*
+     * JOBY was on the site as photographs only — /stills/joby has carried the
+     * Joshua Tree and mounted-product sets since launch — while the films from
+     * the same shoot were in the masters and nowhere else. This is the story
+     * they belong to, and it shares that shoot's gallery rather than starting a
+     * second copy of it.
+     *
+     * It is the shortest piece on the slate by a distance: nine seconds, cut
+     * for a product page rather than a screen. The Telepod cut that goes with
+     * it is vertical and is waiting on a 9:16 format (see encode-media.sh).
+     */
+    slug: "joby",
+    client: "JOBY",
+    title: "Website Reel, Two Products",
+    media: "joby-website-reel",
+    stills: "stills-joby-joshua-tree",
+    summary:
+      "A short product reel cut for the JOBY site — two mounts, shown in use rather than on a plinth.",
+    filmDuration: 9,
+    year: 2024,
   },
   {
     slug: "born-to-ride",

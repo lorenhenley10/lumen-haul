@@ -40,6 +40,12 @@ SCALE="scale='if(gt(iw,ih),1920,-2)':'if(gt(iw,ih),-2,1920)'"
 
 # slug | source (relative to public/media) | loop start seconds
 #
+# COMMENTED LINES ARE HELD BACK, NOT DEAD. Every one of them is a vertical cut —
+# social edits at 9:16 — and the site has no format for them yet: story films
+# render in a landscape frame and the home reel is full-bleed, so a 9:16 piece
+# either pillarboxes or gets cropped to its middle third. They are encoded the
+# moment there is somewhere to put them; uncomment and re-run.
+#
 # Sources live under Stories/ since the masters were reorganised into
 # Stories/ and Stills/. Nothing else about the film pipeline changed.
 read -r -d '' JOBS <<'EOF'
@@ -54,6 +60,21 @@ los-lamentos|Stories/Los Lamentos/Los Lamentos Promo Final.mp4|30
 hotpit-autofest|Stories/Hotpit Autofest/Elliot Bright - Driver Showcase.mp4|25
 blaque-diamond-model-s|Stories/Blaque Diamond Wheels/Model S Plaid/Tesla_Model_S_Plaid_Blaque_Diamond_Wheels_BD_F29_Gloss_Black YT Vid.mp4|14
 born-to-ride|Stories/Born to Ride/Born To Ride - Loren Henley, Gabriel Bendana.mp4|46
+#fd-slc-promo|Stories/Formula Drift 2022 - Buy Now Japan/SLC/FD SLC Promo Reel.mp4|11
+#fd-slc-follow-e46|Stories/Formula Drift 2022 - Buy Now Japan/SLC/Follow e46.mov|8
+#fd-slc-follow-hurst|Stories/Formula Drift 2022 - Buy Now Japan/SLC/Wat Follow Hurst Multicam.mov|8
+blazar-mantis-5-lens|Stories/Blazar/MANTIS/Blazar Mantis 25mm and 100mm Test + Full 5-Lens Set Comparison.mp4|150
+#blazar-apex-l|Stories/Blazar/APEX-L/APEX L AF Test Final2.mp4|6
+#blazar-beetle|Stories/Blazar/BEETLE/Cine Gear Blazar Beetle Impressions Pt. 1 Brady Bessette and Marcus Gram.mp4|20
+#blazar-app|Stories/Blazar/Socials Content/Blazar App Video final12.mp4|8
+shoreline-amg-gt|Stories/Shoreline Motoring/AMG GT/2016_Mercedes_AMG_GT_S_Brushed_Black_Blaque_Diamond_Wheels_BD_F25_Gloss_Black_YT_VIDEO.mov|20
+blaque-diamond-raptor|Stories/Blaque Diamond Wheels/2018 Ford F150 Raptor BDO728/Exports/2018_Ford_F150_Raptor_Blaque_Diamond_Wheels_BD_O728_Textured_Black_YT.mp4|15
+blaque-diamond-model-3|Stories/Blaque Diamond Wheels/3/2022_Tesla_Model_3_BD_F29_20in_Brushed_Silver_Flyaway_Garage.mov|15
+blaque-diamond-q50|Stories/Blaque Diamond Wheels/Q/Q Edit Final Cut 2.mov|20
+hotpit-irw-r1|Stories/Hotpit Autofest/HotPit IRW R1 Final Updated End Card.mp4|120
+#88-silo-promo|Stories/88/Silo 88 final promo.mp4|4
+joby-website-reel|Stories/JOBY/JOBY Joshua Tree Shoot/Joshua Tree Video Content/JOBY WEBSITE REEL 2 products.mp4|1
+#joby-telepod|Stories/JOBY/JOBY Joshua Tree Shoot/Joshua Tree Video Content/JOBY Telepod - Mobile REEL.mp4|4
 EOF
 
 mkdir -p "$OUT"
@@ -64,6 +85,10 @@ mkdir -p "$OUT"
 # The slug and the start time never contain one, so the ends are unambiguous.
 while IFS= read -r line; do
   [ -z "${line:-}" ] && continue
+  # A commented job is one that is deliberately not on the site yet. Leaving it
+  # in place, in order, beats deleting it and rediscovering the source path and
+  # loop point later.
+  case "$line" in \#*) continue ;; esac
   slug="${line%%|*}"
   rest="${line#*|}"
   src="${rest%|*}"
