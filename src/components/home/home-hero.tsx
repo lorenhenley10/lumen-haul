@@ -59,7 +59,23 @@ export function HomeHero() {
         </MediaFrame>
       </div>
 
-      <div className="absolute inset-0 z-[var(--z-media)] flex flex-col items-center justify-between bg-scrim pt-24">
+      <div className="absolute inset-0 z-[var(--z-media)] flex flex-col items-center justify-end bg-scrim pt-24 pb-frame-foot">
+        {/*
+          The blur band is anchored to the FRAME, not carried in the flow.
+
+          It used to take its height from 18rem of padding stacked above the
+          scroll cue, which was free while the lockup sat at the top of the
+          hero. With the lockup bottom-aligned that padding would shove it a
+          third of a viewport off its footing, so the band is the same 21rem
+          measured off the bottom edge instead. The type still sinks into
+          softened footage exactly as it did before; nothing above it moves.
+        */}
+        <ProgressiveBlur
+          className="top-auto bottom-0 h-84 z-[var(--z-below)]"
+          layers={7}
+          maxBlur={20}
+        />
+
         <div className="container flex w-full flex-col items-center">
           <Image
             src={brand.mark}
@@ -98,12 +114,12 @@ export function HomeHero() {
           </p>
         </div>
 
-        <div className="relative container w-full pt-72 pb-8 text-center">
-          <ProgressiveBlur className="z-[var(--z-below)]" layers={7} maxBlur={20} />
-          <p data-hero-scroll className="text-caption">
-            Scroll to explore
-          </p>
-        </div>
+        {/* Last line of the same bottom-aligned block, rather than a separate
+            thing pinned to the edge — the cue reads as the foot of the lockup
+            and shares its footing. */}
+        <p data-hero-scroll className="mt-section text-caption">
+          Scroll to explore
+        </p>
       </div>
     </section>
   );

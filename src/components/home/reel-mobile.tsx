@@ -124,7 +124,7 @@ export function ReelMobile({ projects }: { projects: Project[] }) {
             <AutoVideo asset={heroFilm} priority audible />
           </MediaFrame>
         </div>
-        <div className="absolute inset-0 z-[var(--z-media)] flex flex-col items-center justify-center gap-8 bg-scrim px-container pt-24">
+        <div className="absolute inset-0 z-[var(--z-media)] flex flex-col items-center justify-end gap-8 bg-scrim px-container pt-24 pb-frame-foot">
           <Image
             src={brand.mark}
             alt=""
@@ -149,7 +149,7 @@ export function ReelMobile({ projects }: { projects: Project[] }) {
         <div
           key={project.slug}
           data-panel-index={index}
-          className="relative h-svh w-full snap-start bg-scrim px-12 pt-12 pb-reel-foot"
+          className="relative h-svh w-full snap-start bg-scrim px-12 pt-12 pb-frame-foot"
         >
           <Link href={`/stories/${project.slug}`} className="block h-full w-full">
             <div className="flex h-full w-full flex-col items-center justify-end gap-4">
