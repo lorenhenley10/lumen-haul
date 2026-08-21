@@ -69,37 +69,41 @@ export const brand = {
    * The studio mark: in the header, above the set wordmark in the hero, and
    * again in the footer.
    *
-   * THREE MASTERS ship in public/brand/ under stable names — master-white.png,
-   * master-black.png, master-flat.jpg — and this is derived from the white one.
-   * That is not a preference: this interface is dark only
-   * (docs/audit/visual-system.md), so white is the variant that belongs on it.
-   * The other two are for light surfaces off the site and nothing in the app
-   * should reach for them.
+   * FOUR MASTERS ship in public/brand/ under stable names — master-white.png,
+   * master-black.png, master-flat.jpg and master-flat-black.jpg — and this is
+   * derived from the white one. That is not a preference: this interface is
+   * dark only (docs/audit/visual-system.md), so white is the variant that
+   * belongs on it. The other three are for surfaces off the site and nothing
+   * in the app should reach for them.
    *
    * The names are stable BECAUSE the exports' own names are not. Updating the
    * logo means overwriting master-white.png and re-running
    * `node scripts/encode-brand.mjs`, which also cuts the favicon set — not
    * repointing the script at whatever the new export was called. The masters
-   * are 16667px square, around 278 megapixels, so nothing renders them
-   * directly.
+   * are square and large — 4167px in the current set, 16667px in the one
+   * before — so nothing renders them directly.
    *
    * The derived file is TRIMMED to the artwork: the master centres the mark in
    * a square canvas with a wide transparent margin, and left in, every render
    * would be mostly empty space. Size it by height and let the width follow.
    *
-   * WHICH MEANS SCALING THE MARK INSIDE THE MASTER CHANGES NOTHING HERE. The
-   * trim removes the margin either way, so a master whose artwork fills 45% of
-   * its canvas and one that fills 36% produce the same derived file — checked,
-   * and they came out identical to within resampling noise. To make the mark
-   * render smaller, change the `h-*` at the places that draw it: the home hero,
-   * the mobile reel, the footer and the header. The favicon set is separate
-   * again — those ratios are icon composition, not the site's sizing.
+   * WHICH MEANS SCALING OR MOVING THE MARK INSIDE THE MASTER CHANGES NOTHING
+   * HERE. The trim removes the margin either way: two revisions in a row
+   * altered only the artwork's size and position in its canvas and produced a
+   * derived file identical to within resampling noise. To make the mark render
+   * smaller, change the `h-*` at the places that draw it — the home hero, the
+   * mobile reel, the footer and the header. The favicon set is separate again;
+   * those ratios are icon composition, not the site's sizing.
+   *
+   * A revision that changes the DRAWING does come through, and the width above
+   * is the tell: the current mark is a lighter-stroked cut of the same shape
+   * and trims to 430x512 where its predecessor trimmed to 433x512.
    *
    * The intrinsic size is deliberately close to the largest on-screen render
-   * (112px in the home hero) rather than the master's. Declaring the full
-   * 16667px makes next/image generate variants nothing can see.
+   * (88px in the home hero) rather than the master's. Declaring the master's
+   * full size makes next/image generate variants nothing can see.
    */
   mark: "/brand/lumen-haul-mark.png",
-  markWidth: 433,
+  markWidth: 430,
   markHeight: 512,
 } as const;

@@ -2,11 +2,12 @@
 //
 // Derive every brand asset the site serves from the logo masters.
 //
-// The masters in public/brand/ are 16667x16667 PNGs — around 278 megapixels
-// each. Nothing renders those directly: next/image would have to decode a
-// quarter-billion pixels to draw a 112px mark, and ffmpeg refuses the size
-// outright. This writes the small, purpose-cut files the app actually points
-// at, so re-cutting them later is a re-run rather than a hunt.
+// The masters in public/brand/ are big square PNGs — 4167px in the current set,
+// 16667px in the one before it. Nothing renders those directly: next/image
+// would have to decode the whole thing to draw a 112px mark, and at the larger
+// size ffmpeg refuses it outright. This writes the small, purpose-cut files the
+// app actually points at, so re-cutting them later is a re-run rather than a
+// hunt.
 //
 //   public/brand/lumen-haul-mark.png   the mark in the page — hero, footer, header
 //   src/app/icon.png                   browser tab icon (Next's file convention)
@@ -23,6 +24,9 @@
 // revisions in a row changed only those two things and produced byte-identical
 // output. If the mark should render smaller or sit differently on the page,
 // that is an `h-*` in the components that draw it, not an export setting.
+//
+// A revision that changes the DRAWING does come through. Check the trimmed
+// dimensions this prints: they move when the artwork does.
 //
 // Usage: node scripts/encode-brand.mjs
 //
