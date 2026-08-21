@@ -77,6 +77,22 @@
   --spacing-top-section: 16rem;
   --spacing-section: 4rem;
 
+  /*
+     Standing room under a reel title, which is bottom-aligned in its frame.
+
+     Tracks viewport height because a fixed value cannot be right at both ends:
+     the 96px this replaces is an eighth of a 800px window but a sixteenth of a
+     tall display, so it read as a footer on one and as a crop on the other.
+
+     11svh reproduces that 96px at the ~850px height both reel trees were tuned
+     at, and the clamp holds the ends: 3.5rem keeps two lines of display type
+     off the edge on a short laptop window, 8rem stops the block drifting back
+     toward the middle of the frame on anything very tall.
+
+     svh, not vh — the mobile panels are sized in svh, so a vh-based inset
+     would breathe against its own panel as the browser chrome collapses. */
+  --spacing-reel-foot: clamp(3.5rem, 11svh, 8rem);
+
   /* --- Fit-to-viewport widths ---------------------------------------------
      The /stills index holds eight tiles on one screen with no scroll, so on a
      short window the GRID has to give way, not the page.

@@ -149,7 +149,7 @@ export function ReelMobile({ projects }: { projects: Project[] }) {
         <div
           key={project.slug}
           data-panel-index={index}
-          className="relative h-svh w-full snap-start bg-scrim px-12 pt-12 pb-24"
+          className="relative h-svh w-full snap-start bg-scrim px-12 pt-12 pb-reel-foot"
         >
           <Link href={`/stories/${project.slug}`} className="block h-full w-full">
             <div className="flex h-full w-full flex-col items-center justify-end gap-4">
