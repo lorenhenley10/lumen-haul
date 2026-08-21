@@ -1,11 +1,24 @@
 #!/usr/bin/env bash
 #
-# Pick a handful of supporting stills per project and downscale them for web.
+# Downscale a project's delivered photographs for the web.
+#
+# EVERY FRAME OF THE DELIVERED SET, not a selection. This used to take eight
+# per gallery, sampled evenly, from when these were supporting stills under a
+# story — a handful of frames as texture beside a film. They are not that any
+# more: /stills is the photography, the story pages no longer borrow it, and a
+# set page is a contact sheet that should hold the set.
+#
+# The boundary is the DELIVERED folder, which is what the job list already
+# points at. The raw passes beside them are not the work — the Raptor's "1st
+# Pass Photos" holds 116 frames against 17 in its Final Photo Set — and none of
+# them are named below.
+#
+# `COUNT` still samples if it is ever wanted back: set it above 0 for that many
+# frames spread across the take.
 #
 # Sources, in order of preference:
 #
-#   1. The delivered full-resolution set, sampled evenly across the whole take
-#      so the selection is not six near-identical frames of one setup.
+#   1. The delivered full-resolution set.
 #   2. A client-supplied web set, only where no full-res folder exists.
 #
 # THIS ORDER USED TO BE THE OTHER WAY ROUND, on the reasoning that the web sets
@@ -51,7 +64,8 @@ export PATH="/opt/homebrew/bin:$PATH"
 MEDIA="$(cd "$(dirname "$0")/.." && pwd)/public/media"
 OUT="$MEDIA/derived"
 ONLY="${1:-}"
-COUNT=8
+# 0 = every frame in the folder. Any other value samples that many, evenly.
+COUNT=0
 
 # Cap the long side at 2560 while preserving aspect ratio, keeping dims even.
 SCALE="scale='if(gt(iw,ih),2560,-2)':'if(gt(iw,ih),-2,2560)'"
@@ -77,11 +91,13 @@ SCALE="scale='if(gt(iw,ih),2560,-2)':'if(gt(iw,ih),-2,2560)'"
 # banner that wants 2560. One folder ("Mantis photos ") has a trailing space in
 # its name. That is real, and it has to stay.
 #
-# THE STORY PAGES SHARE THESE FOLDERS rather than encoding the same shoot
-# twice — projects.ts `stills:` points at a `stills-*` folder for Shoreline,
-# Formula Drift and Blazar. Blaque Diamond is the exception: its story is the
-# Model S Plaid, which has no gallery in the Stills tree, so it keeps its own
-# job and its own folder.
+# THE MODEL S IS THE ONE SET WHOSE MASTERS LIVE UNDER Stories/. It was shot for
+# the film, so the reorganisation left it there, and it used to be encoded into
+# `derived/blaque-diamond-model-s` — the FILM's folder — because its only job
+# was to be that story's gallery. It is a Blaque Diamond fitment like the other
+# four and now sits with them on /stills/blaque-diamond, so it takes a
+# `stills-` folder of its own like everything else here. The source path is the
+# only thing about it that is still unusual.
 read -r -d '' JOBS <<'EOF'
 stills-shoreline-amg-gt|Stills/Shoreline Motoring/Shoreline AMG GT High Res
 stills-shoreline-f150|Stills/Shoreline Motoring/Shoreline F150 Photos/Final Photos
@@ -100,7 +116,7 @@ stills-fd-buy-now-japan|Stills/Formula Drift Buy Now Japan Photography
 stills-fd-slc|Stills/Formula Drift Buy Now Japan Photography/SLC Photos
 stills-hotpit-autofest|Stills/Hotpit Autofest Top 40 Edit
 stills-cf-moto|Stills/CF Moto Final Photos
-blaque-diamond-model-s|Stories/Blaque Diamond Wheels/Model S Plaid/Final Photo Set/High Res
+stills-blaque-diamond-model-s|Stories/Blaque Diamond Wheels/Model S Plaid/Final Photo Set/High Res
 EOF
 
 while IFS='|' read -r slug folder; do
@@ -130,9 +146,16 @@ while IFS='|' read -r slug folder; do
   total=${#all[@]}
   [ "$total" -eq 0 ] && { echo "!! no photos in $folder"; continue; }
 
-  step=$(( total / COUNT )); [ "$step" -lt 1 ] && step=1
+  # take = how many frames this gallery ships; step = how far apart they sit in
+  # the take. COUNT=0 is take everything, one after another.
+  if [ "$COUNT" -le 0 ]; then
+    take=$total; step=1
+  else
+    take=$COUNT
+    step=$(( total / COUNT )); [ "$step" -lt 1 ] && step=1
+  fi
   i=0; n=1
-  while [ "$i" -lt "$total" ] && [ "$n" -le "$COUNT" ]; do
+  while [ "$i" -lt "$total" ] && [ "$n" -le "$take" ]; do
     # Encode to a temp name first: the hash has to be taken from the finished
     # bytes, and the leading dot keeps it out of the manifest's glob if a run
     # is interrupted here.

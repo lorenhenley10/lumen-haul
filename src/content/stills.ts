@@ -86,6 +86,12 @@ const seeds: StillsSeed[] = [
       { media: "stills-blaque-diamond-raptor", title: "Ford F-150 Raptor, BD-O728" },
       { media: "stills-blaque-diamond-q50", title: "Infiniti Q50, BD-F25" },
       { media: "stills-blaque-diamond-a5", title: "Audi A5, BD-F25" },
+      // The fifth fitment, and the only one whose masters sit under Stories/ —
+      // it was shot alongside the Model S film. It reached the site once, as
+      // that story's "behind the scenes" gallery, which is not what it is;
+      // when the story galleries went it had nowhere else to be. Here is
+      // where it belongs, with the other four.
+      { media: "stills-blaque-diamond-model-s", title: "Tesla Model S Plaid, BD-F29" },
     ],
   },
   {
