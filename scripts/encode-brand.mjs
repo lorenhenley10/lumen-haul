@@ -93,8 +93,14 @@ async function trimmedMark() {
  * reads the same whatever the browser paints behind it.
  *
  * The scale has to come DOWN when a disc is on, because a circle's usable area
- * is smaller than its box — the largest square inside a circle is 0.707 of the
- * diameter, and the mark needs margin inside that again.
+ * is smaller than its box. The ceiling is calculable rather than a matter of
+ * taste: the mark is 430x512, so fitted to `scale` its bounding-box corners sit
+ * at `scale * 0.653` from the centre, and they leave the disc at scale 0.765.
+ * Anything at or past that touches the edge.
+ *
+ * 0.66 leaves 14% of the radius as margin and 0.70 leaves 9%. The smaller sizes
+ * take the larger of the two: at 16px there is no room to be precious, and the
+ * disc's own anti-aliased edge is doing most of the work by then.
  */
 async function squareIcon(mark, size, scale, { background, disc } = {}) {
   const inner = Math.round(size * scale);
@@ -183,7 +189,7 @@ await writeFile(join(root, "public/brand/lumen-haul-mark.png"), pageMark);
 // most browsers actually draw.
 await writeFile(
   join(root, "src/app/icon.png"),
-  await squareIcon(mark, 256, 0.58, { disc: BACKGROUND }),
+  await squareIcon(mark, 256, 0.66, { disc: BACKGROUND }),
 );
 
 // iOS. A full-bleed plate rather than a disc: the OS masks home-screen icons
@@ -195,8 +201,8 @@ await writeFile(
   await squareIcon(mark, 180, 0.6, { background: BACKGROUND }),
 );
 
-// Legacy tab icon, on the same disc. Slightly more of the box than icon.png
-// gets: at 16px every pixel counts, and the disc's edge is what carries the
+// Legacy tab icon, on the same disc, and a little larger inside it than
+// icon.png: at 16px every pixel counts, and the disc's edge is what carries the
 // shape at that size anyway.
 await writeFile(
   join(root, "src/app/favicon.ico"),
@@ -204,7 +210,7 @@ await writeFile(
     await Promise.all(
       [16, 32, 48].map(async (size) => ({
         size,
-        data: await squareIcon(mark, size, 0.62, { disc: BACKGROUND }),
+        data: await squareIcon(mark, size, 0.7, { disc: BACKGROUND }),
       })),
     ),
   ),
