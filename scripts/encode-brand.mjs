@@ -13,6 +13,7 @@
 //   src/app/icon.png                   browser tab icon (Next's file convention)
 //   src/app/apple-icon.png             iOS home screen
 //   src/app/favicon.ico                legacy tab icon, 16/32/48
+//   src/app/opengraph-image.png        the card behind a shared link
 //
 // The two tab icons are the WHITE MARK AT FULL SIZE ON TRANSPARENCY, with no
 // ground behind it. That is a deliberate choice and it has a known cost: white
@@ -196,6 +197,25 @@ await writeFile(
   await squareIcon(mark, 180, 0.6, { background: BACKGROUND }),
 );
 
+// The social card. Everything else here is an icon the OS or browser draws at
+// a known size; this one is an image other people's software crops.
+//
+// It needs a ground for the same reason apple-icon does, and more urgently:
+// there was no card at all before this, so scrapers fell back to icon.png and
+// unfurled a white mark on transparency — invisible in every light-themed
+// client that renders a link.
+//
+// 1200x1200 because the request was a square. The scale is what makes a square
+// survive contact with the feeds that will not show one: Facebook, LinkedIn
+// and Slack crop to 1.91:1, which keeps the middle 628px, and X's large card
+// crops to 2:1, which keeps the middle 600. A mark at 0.48 of the box stands
+// 576px tall and sits inside both bands with room to spare — anything above
+// 0.5 starts losing its top and bottom to the wider crop.
+await writeFile(
+  join(root, "src/app/opengraph-image.png"),
+  await squareIcon(mark, 1200, 0.48, { background: BACKGROUND }),
+);
+
 // Legacy tab icon, the same way: full size, transparent.
 await writeFile(
   join(root, "src/app/favicon.ico"),
@@ -212,4 +232,4 @@ await writeFile(
 const marked = await sharp(pageMark).metadata();
 console.log(`page mark:   ${marked.width}x${marked.height}`);
 console.log(`apple plate: ${BACKGROUND}`);
-console.log("wrote icon.png, apple-icon.png, favicon.ico");
+console.log("wrote icon.png, apple-icon.png, favicon.ico, opengraph-image.png");
