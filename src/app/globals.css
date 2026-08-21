@@ -56,6 +56,44 @@
      top of this where a denser setting is wanted. */
   --text-display--letter-spacing: -0.0143em;
 
+  /*
+     The hero wordmark, which is SET rather than placed — see HomeHero.
+
+     Two ceilings, because the lockup is bottom-aligned in its frame with a
+     fixed header above it. 13.5vw is the one that normally applies: it keeps
+     the statement edge-to-edge the way an image would. The svh term only
+     exists to stop the lockup climbing into the header on a short window.
+
+     That second ceiling is derived, not chosen. Everything in the lockup other
+     than the wordmark's own box is fixed height — the mark and its margin
+     above, the tagline, the scroll cue and their gaps below — and measures
+     260px. Under it sits --spacing-frame-foot, 11svh through the range that
+     matters here; above it the header ends at 52px and wants a little air, so
+     call the clearance 64px. Fitting the lot inside the frame means
+
+         64 + 260 + 1.013F + 0.11H <= H
+
+     the 1.013 being the em padding the reveal mask needs around the glyphs.
+     Solving for F gives 0.878H - 320px, and 87svh - 20rem is that rounded to
+     the safe side.
+
+     It binds below roughly 700px of viewport height, and only when the window
+     is wide as well as short. At every normal window size 13.5vw is the
+     smaller number, so the hero is the size it has always been. */
+  --text-hero: clamp(3rem, min(13.5vw, calc(87svh - 20rem)), 15rem);
+  --text-hero--line-height: 0.82;
+  --text-hero--letter-spacing: -0.04em;
+
+  /*
+     The same statement in the mobile tree, which bottom-aligns in its own
+     panel and meets the same wall in landscape. Its stack is lighter — mark,
+     two gaps and the tagline, 177px, and no scroll cue — so the derivation
+     lands at 0.878H - 238px. Rounded the same way, and it only ever binds on a
+     phone turned sideways. */
+  --text-hero-sm: clamp(2.75rem, min(15vw, calc(87svh - 15rem)), 6rem);
+  --text-hero-sm--line-height: 0.82;
+  --text-hero-sm--letter-spacing: -0.04em;
+
   /* Section headings — the "h2" step.
      Measured on the reference: 24px at 390px rising to 32px at >=1280px. */
   --text-heading: clamp(1.5rem, 1rem + 1.25vw, 2rem);

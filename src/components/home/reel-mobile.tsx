@@ -134,10 +134,7 @@ export function ReelMobile({ projects }: { projects: Project[] }) {
             priority
             className="h-19 w-auto object-contain"
           />
-          <h1
-            className="w-full text-center font-display font-medium uppercase leading-[0.82] tracking-[-0.04em]"
-            style={{ fontSize: "clamp(2.75rem, 15vw, 6rem)" }}
-          >
+          <h1 className="w-full text-center font-display font-medium text-hero-sm uppercase">
             {site.name}
           </h1>
           <p className="mx-auto max-w-xs text-center">{site.tagline}</p>

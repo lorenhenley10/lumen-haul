@@ -102,8 +102,7 @@ export function HomeHero() {
               */}
               <span
                 data-hero-mark
-                className="block pt-[0.14em] pb-[0.05em] font-medium uppercase leading-[0.82] tracking-[-0.04em]"
-                style={{ fontSize: "clamp(3rem, 13.5vw, 15rem)" }}
+                className="block pt-[0.14em] pb-[0.05em] font-medium text-hero uppercase"
               >
                 {site.name}
               </span>
