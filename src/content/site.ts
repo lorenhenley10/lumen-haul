@@ -80,8 +80,8 @@ export const brand = {
    * logo means overwriting master-white.png and re-running
    * `node scripts/encode-brand.mjs`, which also cuts the favicon set — not
    * repointing the script at whatever the new export was called. The masters
-   * are square and large — 4167px in the current set, 16667px in the one
-   * before — so nothing renders them directly.
+   * are square and large — 4167px across the last few sets, 16667px in an
+   * earlier one — so nothing renders them directly.
    *
    * The derived file is TRIMMED to the artwork: the master centres the mark in
    * a square canvas with a wide transparent margin, and left in, every render
@@ -96,8 +96,9 @@ export const brand = {
    * those ratios are icon composition, not the site's sizing.
    *
    * A revision that changes the DRAWING does come through, and the width above
-   * is the tell: the current mark is a lighter-stroked cut of the same shape
-   * and trims to 430x512 where its predecessor trimmed to 433x512.
+   * is the tell: each cut of the shape trims to its own width against the same
+   * 512 height. The current one is 433 wide; the lighter-stroked cut before it
+   * was 430, and the one before that 433 again.
    *
    * The intrinsic size is deliberately close to the largest on-screen render
    * (88px in the home hero) rather than the master's. Declaring the master's
@@ -112,6 +113,6 @@ export const brand = {
    * six times a day, on the two pages every visit passes through, forever.
    */
   mark: "/brand/lumen-haul-mark.png",
-  markWidth: 430,
+  markWidth: 433,
   markHeight: 512,
 } as const;

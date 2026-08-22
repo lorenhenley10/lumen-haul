@@ -2,8 +2,8 @@
 //
 // Derive every brand asset the site serves from the logo masters.
 //
-// The masters in public/brand/ are big square PNGs — 4167px in the current set,
-// 16667px in the one before it. Nothing renders those directly: next/image
+// The masters in public/brand/ are big square PNGs — 4167px across the last few
+// sets, 16667px in an earlier one. Nothing renders those directly: next/image
 // would have to decode the whole thing to draw a 112px mark, and at the larger
 // size ffmpeg refuses it outright. This writes the small, purpose-cut files the
 // app actually points at, so re-cutting them later is a re-run rather than a
@@ -97,9 +97,9 @@ async function trimmedMark() {
  * Nothing uses `disc` today — the tab icons went back to a bare white mark —
  * but it is kept because it is the one fix for the white-on-light-chrome
  * problem. If it is turned back on, the scale has to come DOWN with it: the
- * mark is 430x512, so fitted to `scale` its bounding-box corners sit at
- * `scale * 0.653` from the centre and leave the disc entirely at scale 0.765.
- * 0.66 leaves 14% of the radius as margin; 0.70 leaves 9%.
+ * mark is 433x512, so fitted to `scale` its bounding-box corners sit at
+ * `scale * 0.655` from the centre and leave the disc entirely at scale 0.763.
+ * 0.66 leaves 14% of the radius as margin; 0.70 leaves 8%.
  */
 async function squareIcon(mark, size, scale, { background, disc } = {}) {
   return plate(mark, size, size, scale, { background, disc });
