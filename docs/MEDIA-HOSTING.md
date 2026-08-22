@@ -29,7 +29,11 @@ The bucket's layout mirrors `public/media/derived/` exactly:
 <slug>/loop.mp4        10s silent ambient loop
 <slug>/film.mp4        full piece with audio
 <slug>/poster.jpg      poster frame
-<slug>/stills/NN.<hash>.jpg   supporting photography
+<slug>/stills/NN.<hash>.jpg          supporting photography, 2560px
+<slug>/stills/w384/NN.<hash>.jpg     \
+<slug>/stills/w640/NN.<hash>.jpg      | the same frame, narrower
+<slug>/stills/w1080/NN.<hash>.jpg     | (see "Why the width ladder" below)
+<slug>/stills/w1600/NN.<hash>.jpg    /
 ```
 
 So a local path `/media/derived/blazar-mantis-135/loop.mp4` becomes
@@ -95,12 +99,48 @@ two steps. The safe order is:
 
 ```bash
 ./scripts/encode-media.sh      # masters -> loops, films, posters
-./scripts/encode-stills.sh     # masters -> supporting stills
+./scripts/encode-stills.sh     # masters -> stills, then the width ladder
 ./scripts/sync-r2.sh           # push derivatives to R2
 ```
 
+`encode-stills.sh` calls `encode-stills-ladder.sh` on its way out, so the rungs
+never lag the frames they came from. Run the ladder alone (`./scripts/encode-
+stills-ladder.sh [slug]`) only if the 2560px frames are already correct and you
+just need the rungs rebuilt; it is idempotent and skips what already exists.
+
 Then update `src/content/projects.ts` if the slate itself changed. Because the
 sync uses `--checksum`, unchanged files are not re-uploaded.
+
+## Why the width ladder
+
+Every gallery frame exists at 384, 640, 1080 and 1600px alongside its 2560px
+master, and `next/image` is wired to a custom loader
+(`src/lib/r2-image-loader.ts`) that picks a rung by rewriting the URL.
+
+**This is a cost decision.** Vercel bills an Image Transformation for each
+(frame, width) that misses its cache, against 5,000 a month on the free plan.
+When the library grew from 10 frames to 481 in nine days it spent 75% of the
+allowance warming itself, and at 451 gallery stills a single crawl cannot fit
+inside a month's budget. Cloudflare's own transformation product has the SAME
+5,000 ceiling and the same failure mode past it — broken images, not slow ones
+— so moving the resizing there would have bought a different invoice rather
+than a fix.
+
+Cutting the widths once and letting R2 serve them removes the meter entirely.
+R2 charges nothing for egress, so a frame costs the same on its ten-thousandth
+view as its first. The ladder costs ~227MB of storage against a 10GB free tier.
+
+Three things have to agree, or a width the browser asks for is a 404:
+
+| | |
+|---|---|
+| `RUNGS` | `scripts/encode-stills-ladder.sh` |
+| `deviceSizes` / `imageSizes` | `next.config.ts` |
+| `RUNGS` | `src/lib/r2-image-loader.ts` |
+
+There is no rung above 1600 on purpose: the narrowest master is 1706px, so 1600
+is the last width that is a downscale for every frame. Anything wider resolves
+to the master itself, which is the top rung by definition.
 
 ## Cache behaviour
 

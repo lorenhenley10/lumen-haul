@@ -211,3 +211,17 @@ MANIFEST="$(cd "$(dirname "$0")/.." && pwd)/src/content/stills.generated.ts"
 } > "$MANIFEST"
 
 echo "manifest: $(basename "$MANIFEST") written"
+
+# ---------------------------------------------------------------------------
+# Cut the responsive width ladder for whatever was just encoded.
+#
+# Called from here rather than left to the operator because the two outputs
+# have to agree: a frame re-encoded above lands on a new content hash, and its
+# old rungs are then orphaned while the new ones do not exist yet. next/image
+# asks for rung widths by filename, so the gap is a 404 on the live site, not a
+# slower image. Running it here closes the gap in the same pass.
+#
+# Idempotent and incremental — rungs already cut are left alone, so this costs
+# almost nothing when only one gallery changed.
+# ---------------------------------------------------------------------------
+"$(dirname "$0")/encode-stills-ladder.sh" ${ONLY:+"$ONLY"}

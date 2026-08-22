@@ -102,6 +102,14 @@ export const brand = {
    * The intrinsic size is deliberately close to the largest on-screen render
    * (88px in the home hero) rather than the master's. Declaring the master's
    * full size makes next/image generate variants nothing can see.
+   *
+   * DRAWN `unoptimized` AT EVERY CALL SITE — the header (twice), the footer,
+   * the home hero and the mobile reel. The file is a 10KB PNG that never
+   * renders larger than 88px, so an optimised variant saves nothing worth
+   * having, and it lives in /public with no long-lived Cache-Control of its
+   * own. That last part is what made it worth changing: the optimizer's cache
+   * entry expired on the default four-hour TTL, so the mark was re-transformed
+   * six times a day, on the two pages every visit passes through, forever.
    */
   mark: "/brand/lumen-haul-mark.png",
   markWidth: 430,

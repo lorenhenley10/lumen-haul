@@ -185,6 +185,14 @@ export function DragGallery({ stills, label, className }: DragGalleryProps) {
                 alt={still.alt}
                 width={still.width}
                 height={still.height}
+                // The drag branch below carries this and the reduced-motion
+                // branch did not, which inverted the cost: with no `sizes` a
+                // still declares its full 2560px intrinsic width, so the
+                // browser asks for the top of the ladder — the largest and
+                // most expensive variant we produce — to fill a half-width
+                // grid cell about 190px across on a phone. Every visitor who
+                // asks for less motion was served the heaviest possible file.
+                sizes="(min-width: 768px) 33vw, 50vw"
                 className="h-auto w-full rounded-[var(--radius-card)]"
               />
             </button>

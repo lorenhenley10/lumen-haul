@@ -31,6 +31,7 @@ export function SiteFooter({ className }: { className?: string }) {
             aria-hidden
             width={brand.markWidth}
             height={brand.markHeight}
+            unoptimized
             className="h-16 w-auto object-contain"
           />
           <p

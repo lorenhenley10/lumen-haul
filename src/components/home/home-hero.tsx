@@ -83,6 +83,7 @@ export function HomeHero() {
             aria-hidden
             width={brand.markWidth}
             height={brand.markHeight}
+            unoptimized
             priority
             className="mb-6 h-22 w-auto object-contain"
           />

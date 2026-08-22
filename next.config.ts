@@ -24,7 +24,56 @@ if (mediaBase && /^https?:\/\//i.test(mediaBase)) {
 }
 
 const nextConfig: NextConfig = {
-  images: { remotePatterns },
+  images: {
+    /**
+     * THE OPTIMIZER IS OUT OF THE PATH. `loader: "custom"` means next/image
+     * writes whatever src/lib/r2-image-loader.ts returns straight into `src`
+     * and `srcSet`; nothing reaches /_next/image, and no width is generated on
+     * demand by anybody.
+     *
+     * This is a cost decision, not a performance one. Vercel bills an Image
+     * Transformation for every (photograph, width) that misses its cache,
+     * against 5,000 a month. The stills library went from 10 frames to 481 in
+     * nine days and spent 75% of the allowance warming itself; at 451 gallery
+     * stills the site cannot be crawled once inside a month's budget.
+     * Cloudflare's own transformation product has the SAME 5,000 ceiling and
+     * the same failure mode past it, so moving the work there would have
+     * bought a different invoice rather than a fix.
+     *
+     * The widths are cut once by scripts/encode-stills-ladder.sh and live in
+     * R2 beside their masters. R2 charges nothing for egress, so a frame costs
+     * the same on its ten-thousandth view as its first, and there is no
+     * monthly ceiling to run into.
+     */
+    loader: "custom",
+    loaderFile: "./src/lib/r2-image-loader.ts",
+
+    /**
+     * The widths a browser is allowed to ask for. THESE ARE FILENAMES NOW, not
+     * parameters — each one below 2560 has to exist as a `w<N>/` folder in R2
+     * or it is a 404, so this list and `RUNGS` in encode-stills-ladder.sh move
+     * together.
+     *
+     * 2560 has no rung folder on purpose: it IS the master the encoder already
+     * wrote, and the loader returns the original URL for anything that wide.
+     *
+     * 384 is the only entry that needs to be an imageSize rather than a device
+     * size — imageSizes apply solely to images that pass `sizes`, which is
+     * every gallery tile, and a 50vw tile on a phone lands there. Everything
+     * larger is a device size. There is no 3840 tier any more: the masters are
+     * 2560, so it only ever upscaled.
+     */
+    deviceSizes: [640, 1080, 1600, 2560],
+    imageSizes: [384],
+
+    /**
+     * Kept, though a custom loader means Next never consults them: they are
+     * the allowlist the BUILT-IN optimizer would use, and if this project ever
+     * drops the loader, an empty list here would silently refuse every remote
+     * still rather than fail loudly.
+     */
+    remotePatterns,
+  },
 
   /**
    * /studio became /about. The old path was live, is linked from the footer of

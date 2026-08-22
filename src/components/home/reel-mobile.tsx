@@ -131,6 +131,7 @@ export function ReelMobile({ projects }: { projects: Project[] }) {
             aria-hidden
             width={brand.markWidth}
             height={brand.markHeight}
+            unoptimized
             priority
             className="h-19 w-auto object-contain"
           />
