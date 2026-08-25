@@ -52,7 +52,7 @@ import type { Service } from "./types";
  * note above.
  */
 export const aboutLead =
-  "Lumen Haul is a film and photography studio working in automotive, motorsport and brand.";
+  "Lumen Haul is a film and photography studio producing brand films, automotive campaigns and commercial photography.";
 
 export const aboutSupport =
   "I direct and shoot every project, and build the crew around it — a lean unit where that serves the work, a full commercial team where it does not. Brief, shoot and edit stay in the same hands.";
