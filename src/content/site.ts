@@ -25,12 +25,22 @@ export const site = {
     "Lumen Haul is a film and photography studio making work for brands that would rather be remembered than noticed.",
   url: "https://lumenhaul.com",
   /**
-   * Shown in the footer on every page, so it has to be an address that is
-   * actually monitored. It was hello@lumenhaul.com, a placeholder from the
-   * original build — a visitor writing to it would have been writing to nobody.
-   * Kept in step with the address on /about; there is only one inbox.
+   * Shown in the footer on every page, quoted on /about, and published in the
+   * Organization structured data — so it has to be an address that is actually
+   * monitored, and it is now the only one anyone is given.
+   *
+   * THIS HAS GONE WRONG ONCE, in the direction it is going again. The original
+   * build shipped hello@lumenhaul.com, which resolved nowhere: a visitor
+   * writing to it was writing to nobody, and nothing on this side reported the
+   * failure. It was replaced with a Gmail address precisely because that one
+   * was certain to arrive. This is a return to the domain, so whether it works
+   * depends on MX records rather than on anything in this repo — send a live
+   * test to it before trusting it, not after.
+   *
+   * Kept in step with `contact.email` in about.ts; there is only one inbox, and
+   * the two are written out separately.
    */
-  email: "lorenhenley10@gmail.com",
+  email: "loren@lumenhaul.com",
 } as const;
 
 /**
@@ -115,4 +125,74 @@ export const brand = {
   mark: "/brand/lumen-haul-mark.png",
   markWidth: 433,
   markHeight: 512,
+
+  /**
+   * The logo Google is pointed at for the Organization entity — the knowledge
+   * panel, not the favicon beside a result. That is a separate signal from
+   * `mark`, and it MUST NOT be repointed at `mark` to "use the real logo".
+   *
+   * Google renders this against a purely white background and warns that
+   * light-toned logos will not survive it. `mark` is the WHITE mark on
+   * TRANSPARENCY, which on white renders as nothing at all — the failure is
+   * total and invisible from here, because the file loads fine and only
+   * disappears at the far end.
+   *
+   * THE ONLY INVERTED ASSET IN THE BUILD: black mark on white, where the site
+   * and every other derived file is white on dark. That inversion is confined
+   * to this one line and the one file it names. Nothing renders it in the app,
+   * and it is not a second brand variant creeping in — it is the off-site cut
+   * Google needs, kept out of the site's own dark-only system on purpose.
+   *
+   * It is 512x512 against Google's 112x112 minimum, and `encode-brand.mjs`
+   * recuts it from master-black.png alongside everything else, so it tracks
+   * the logo automatically. It sits in /public rather than behind a Next file
+   * convention because those append a content hash to the URL, and structured
+   * data has to name a stable absolute address that Google can recrawl.
+   *
+   * Path only, no host. `organizationSchema` joins it to `site.url`; Google
+   * requires an absolute URL here and a bare path would be dropped.
+   */
+  seoLogo: "/brand/lumen-haul-seo-logo.png",
 } as const;
+
+/**
+ * Organization structured data, rendered as JSON-LD on the home page.
+ *
+ * This is what tells Google WHICH logo belongs to the studio. It is not the
+ * favicon: the icon beside a search result comes from icon.png / favicon.ico
+ * and is already handled by the file conventions in src/app. This one feeds
+ * the knowledge panel, and the two can disagree for weeks without either
+ * being broken, because Google recrawls and recaches them on separate clocks.
+ *
+ * ON THE HOME PAGE, ONCE. Google asks for organization markup on the home page
+ * or a single page describing the organization, so this does not belong in the
+ * layout — rendering it site-wide would put a second, competing Organization
+ * entity on every route.
+ *
+ * Serialised here rather than in the component so the logo path stays out of
+ * the page, and so the verify script can import the same object it checks
+ * against instead of restating it.
+ */
+export const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: site.name,
+  url: site.url,
+  logo: `${site.url}${brand.seoLogo}`,
+  description: site.description,
+  email: site.email,
+  sameAs: socialLinks.map(({ href }) => href),
+} as const;
+
+/**
+ * The same object as a string safe to drop into a <script> tag.
+ *
+ * `<` is escaped because a literal `</script>` anywhere in the serialised data
+ * would close the tag early and spill the rest into the document. Nothing in
+ * the content contains one today; this costs nothing and removes the class of
+ * bug rather than the instance.
+ */
+export const organizationJsonLd = JSON.stringify(organizationSchema).replaceAll(
+  "<",
+  "\\u003c",
+);

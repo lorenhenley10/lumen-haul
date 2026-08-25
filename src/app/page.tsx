@@ -3,6 +3,7 @@ import { ReelDesktop } from "@/components/home/reel-desktop";
 import { ReelMobile } from "@/components/home/reel-mobile";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { featuredProjects } from "@/content/projects";
+import { organizationJsonLd } from "@/content/site";
 
 /**
  * Home.
@@ -21,6 +22,11 @@ import { featuredProjects } from "@/content/projects";
 export default function HomePage() {
   return (
     <main id="main">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: organizationJsonLd }}
+      />
+
       <div className="max-md:hidden">
         <HomeHero />
         <ReelDesktop projects={featuredProjects} />

@@ -43,21 +43,59 @@ export function SiteFooter({ className }: { className?: string }) {
         </div>
 
         <div className="mx-auto mt-8 flex max-w-5xl flex-col items-center">
-          <div className="rounded-t-2xl rounded-b-md bg-white/10 px-4 py-2 backdrop-blur-lg">
-            <p className="text-caption">{site.email}</p>
-          </div>
+          {/*
+            A LINK, not the styled paragraph this was. It sits in a pill with a
+            ground and a radius, directly above a row of buttons that are all
+            clickable — so it reads as one of them, and it was the only thing
+            here that did nothing when tapped. Looking pressable and not being
+            pressable is worse than looking like plain text.
+
+            Inline by default, but it is a flex child, so it blockifies and the
+            padding lands exactly as it did on the div.
+          */}
+          <a
+            href={`mailto:${site.email}`}
+            className="rounded-t-2xl rounded-b-md bg-white/10 px-4 py-2 text-caption backdrop-blur-lg transition-colors hover:bg-white/20"
+          >
+            {site.email}
+          </a>
           {/* Column count tracks the number of links so the row stays full —
               a fixed 6 would leave a hole now that Creators is gone. */}
           <div className="mt-2 grid w-full grid-cols-3 gap-2 lg:grid-cols-5">
-            {footerNav.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                className="rounded-[var(--radius-card)] bg-white/5 px-3 py-2 text-center text-caption uppercase transition-colors hover:bg-white/15"
-              >
-                {item.label}
-              </Link>
-            ))}
+            {footerNav.map((item) => {
+              /*
+                Instagram is the one entry that leaves the site. `next/link`
+                renders a working anchor for it either way, so this is not a
+                broken-link fix — it is that an outbound social link should
+                open in its own tab rather than replacing the page someone is
+                reading, and that routing it through the client router buys
+                prefetch behaviour that means nothing for a foreign origin.
+
+                Detected from the href rather than flagged in content: the
+                distinction is about how the link is rendered, and a second
+                field to keep in step with the URL beside it is a field that
+                will eventually disagree with it.
+              */
+              const external = item.href.startsWith("http");
+              const className =
+                "rounded-[var(--radius-card)] bg-white/5 px-3 py-2 text-center text-caption uppercase transition-colors hover:bg-white/15";
+
+              return external ? (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={className}
+                >
+                  {item.label}
+                </a>
+              ) : (
+                <Link key={item.label} href={item.href} className={className}>
+                  {item.label}
+                </Link>
+              );
+            })}
           </div>
         </div>
 

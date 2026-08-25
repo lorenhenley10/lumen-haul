@@ -14,6 +14,7 @@
 //   src/app/apple-icon.png             iOS home screen
 //   src/app/favicon.ico                legacy tab icon, 16/32/48
 //   src/app/opengraph-image.png        the card behind a shared link
+//   public/brand/lumen-haul-seo-logo.png  Google's Organization logo, and only that
 //
 // The two tab icons are the WHITE MARK AT FULL SIZE ON TRANSPARENCY, with no
 // ground behind it. That is a deliberate choice and it has a known cost: white
@@ -23,7 +24,14 @@
 // WHITE ON TRANSPARENT is the site's variant: this is a dark-only interface
 // (see docs/audit/visual-system.md). master-black.png and master-flat.jpg are
 // here for light surfaces off-site — decks, invoices, an email signature — and
-// nothing in the app should reach for them.
+// nothing IN THE APP should reach for them.
+//
+// The one exception is the last file in that list, which is not drawn in the
+// app at all. It is BLACK ON WHITE, cut from the black master, and it exists
+// because Google draws the Organization logo on its own white ground where the
+// site's white mark would vanish. It is off-site output that happens to be
+// served from /public, which is why it is the one place the black master is
+// read from here.
 //
 // NOTE THAT THIS TRIMS, so where the artwork sits inside the master's canvas,
 // and how much of it the artwork fills, make NO difference to what ships. Two
@@ -55,6 +63,18 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const WHITE_MASTER = join(root, "public/brand/master-white.png");
 
 /**
+ * Read for the SEO logo alone — see the note at the top of this file.
+ *
+ * The black-on-white artwork also ships as master-flat.jpg, and that is the
+ * obvious file to reach for. It is the wrong one: it is a 1000px JPEG, so the
+ * ground inside the mark's enclosed areas carries compression cast instead of
+ * clean white, and it is a quarter the resolution. This master is the same
+ * drawing at 4167px with a real alpha channel, so compositing it onto white
+ * gives the identical result without the artefacts.
+ */
+const BLACK_MASTER = join(root, "public/brand/master-black.png");
+
+/**
  * `--color-background`, converted from the token rather than eyeballed.
  *
  * Every icon that has a ground uses it: the disc behind the two tab icons, and
@@ -75,9 +95,9 @@ function oklchToHex(lightness) {
 
 const BACKGROUND = oklchToHex(0.1543);
 
-/** The master with its transparent margin removed, as raw PNG bytes. */
-async function trimmedMark() {
-  return sharp(WHITE_MASTER, { limitInputPixels: false })
+/** A master with its transparent margin removed, as raw PNG bytes. */
+async function trimmedMark(master = WHITE_MASTER) {
+  return sharp(master, { limitInputPixels: false })
     // The artwork sits in the middle of a square canvas with a wide
     // transparent margin. Left in, every `h-28` render would be mostly empty
     // space and the mark would read half the size it should.
@@ -253,7 +273,33 @@ await writeFile(
   ),
 );
 
+// Google's Organization logo. THE ONE INVERTED ASSET: black mark on white,
+// where every other file here is white on dark.
+//
+// Not a preference, and not to be "corrected" back into line with the others.
+// Google composites this onto a purely white ground and says so in its own
+// guidance, so the site's white mark would render as an empty white square —
+// a failure that is invisible from here, because the file still loads and only
+// disappears at the far end, in a panel nobody on this side can see.
+//
+// 512 rather than the 180 apple-icon uses. Google's floor is 112x112 and both
+// clear it, but this one is drawn at whatever size a knowledge panel wants
+// rather than at a size the OS dictates, so the headroom is free and worth
+// having. 0.6 matches apple-icon's composition so the two read as one family.
+//
+// Served straight from /public rather than through a Next file convention:
+// those append a content hash to the URL, and the logo has to sit at a stable
+// absolute address that structured data can name and Google can recrawl.
+const blackMark = await trimmedMark(BLACK_MASTER);
+await writeFile(
+  join(root, "public/brand/lumen-haul-seo-logo.png"),
+  await squareIcon(blackMark, 512, 0.6, { background: "#ffffff" }),
+);
+
 const marked = await sharp(pageMark).metadata();
 console.log(`page mark:   ${marked.width}x${marked.height}`);
 console.log(`apple plate: ${BACKGROUND}`);
-console.log("wrote icon.png, apple-icon.png, favicon.ico, opengraph-image.png");
+console.log("seo logo:    512x512, black on white");
+console.log(
+  "wrote icon.png, apple-icon.png, favicon.ico, opengraph-image.png, lumen-haul-seo-logo.png",
+);

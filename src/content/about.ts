@@ -115,5 +115,5 @@ export const clients = [
 export const contact = {
   phone: "(970) 689-9617",
   phoneHref: "tel:+19706899617",
-  email: "lorenhenley10@gmail.com",
+  email: "loren@lumenhaul.com",
 } as const;

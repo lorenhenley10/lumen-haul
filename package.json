@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "verify:seo-logo": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/verify-organization-logo.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
