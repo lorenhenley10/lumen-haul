@@ -92,6 +92,15 @@ const seeds: ProjectSeed[] = [
     year: 2022,
   },
   {
+    slug: "nozomio-folk-doordash",
+    client: "Nozomio",
+    title: "Folk × DoorDash Giveaway",
+    summary:
+      "A short promo cut for a credit giveaway campaign — fast, bright, and built to hold attention in a feed rather than a cinema.",
+    filmDuration: 34,
+    year: 2025,
+  },
+  {
     // Named for the client, not a film: the story holds three, and a URL naming
     // one of them goes stale the moment the lead changes — which it has now
     // done twice. /stories/blazar-mantis-135 redirects here (see next.config.ts).
@@ -144,15 +153,6 @@ const seeds: ProjectSeed[] = [
       },
     ],
     year: 2024,
-  },
-  {
-    slug: "nozomio-folk-doordash",
-    client: "Nozomio",
-    title: "Folk × DoorDash Giveaway",
-    summary:
-      "A short promo cut for a credit giveaway campaign — fast, bright, and built to hold attention in a feed rather than a cinema.",
-    filmDuration: 34,
-    year: 2025,
   },
   {
     slug: "88-silo",
