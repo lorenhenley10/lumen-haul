@@ -52,31 +52,31 @@ import type { Service } from "./types";
  * note above.
  */
 export const aboutLead =
-  "Lumen Haul is a film and photography studio producing brand films, automotive campaigns and commercial photography.";
+  "Lumen Haul is a film and photography studio working in brand films, automotive campaigns and commercial stills.";
 
 export const aboutSupport =
-  "I direct and shoot every project, and build the crew around it — a lean unit where that serves the work, a full commercial team where it does not. Brief, shoot and edit stay in the same hands.";
+  "I direct and shoot every project, then scale the production around it: lean when the job calls for a fast turnaround, a full commercial team with department heads when it calls for scale. The size changes to fit the work. The direction behind it doesn't.";
 
 export const services: Service[] = [
   {
-    title: "Direction and cinematography",
-    body: "Every project directed and shot in-house. A lean unit where that serves the work; camera, lighting, grip and sound where it does not.",
-  },
-  {
-    title: "Commercials and brand films",
-    body: "Launches, product rollouts and announcements for startups and established names, from the first conversation through to final delivery.",
+    title: "Launch and growth",
+    body: "Product launches, funding announcements, founder stories and campaign assets for startups and early-stage brands. Multicam interviews, plus coverage for launch events, conferences and demo days.",
   },
   {
     title: "Automotive and motorsport",
-    body: "Branded work for marques, builders and aftermarket brands, alongside race and event coverage.",
+    body: "Work for car brands, shops and aftermarket companies, plus motorsport and automotive event coverage. Rolling shots, studio and on location.",
   },
   {
-    title: "Post production",
-    body: "Offline, colour, sound and finishing. Cut by the person who shot it, so the film delivered is the film that was planned.",
+    title: "Commercials and brand films",
+    body: "Campaigns, brand films and product spots for established companies and agencies. Full crew, full production, handled from the first call through final delivery.",
   },
   {
     title: "Photography",
-    body: "Stills shot alongside the film or commissioned on their own — vehicle, product and event.",
+    body: "Vehicle, product and event stills, shot alongside the film or booked on their own.",
+  },
+  {
+    title: "Post production",
+    body: "Editing, color, sound and finishing, supervised by the person who directed the shoot.",
   },
 ];
 
