@@ -30,8 +30,10 @@ export default function HomePage() {
       <div className="max-md:hidden">
         <HomeHero />
         <ReelDesktop projects={featuredProjects} />
-        {/* Scroll room that uncovers the fixed footer sitting behind the page. */}
-        <div aria-hidden className="h-[70vh]" />
+        {/* Scroll room that uncovers the fixed footer sitting behind the page.
+            `pointer-events-none` because it lies over that footer and would
+            otherwise eat every click meant for it — see PageShell. */}
+        <div aria-hidden className="pointer-events-none h-[70vh]" />
         <SiteFooter />
       </div>
 

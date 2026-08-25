@@ -4,6 +4,14 @@ import { brand, footerNav, site } from "@/content/site";
 import { cn } from "@/lib/cn";
 
 /**
+ * Column count of the link grid on lg+. MUST match `lg:grid-cols-5` below.
+ *
+ * Named because the orphan-centring underneath is arithmetic against it, and
+ * a class string is not something that arithmetic can read.
+ */
+const LG_COLUMNS = 5;
+
+/**
  * Site footer.
  *
  * On desktop it is FIXED to the bottom of the viewport at a layer below the
@@ -18,7 +26,7 @@ export function SiteFooter({ className }: { className?: string }) {
   return (
     <footer
       className={cn(
-        "z-[var(--z-below)] w-full bg-background pt-container lg:fixed lg:bottom-0 lg:left-0",
+        "z-[var(--z-reveal)] w-full bg-background pt-container lg:fixed lg:bottom-0 lg:left-0",
         className,
       )}
     >
@@ -62,7 +70,7 @@ export function SiteFooter({ className }: { className?: string }) {
           {/* Column count tracks the number of links so the row stays full —
               a fixed 6 would leave a hole now that Creators is gone. */}
           <div className="mt-2 grid w-full grid-cols-3 gap-2 lg:grid-cols-5">
-            {footerNav.map((item) => {
+            {footerNav.map((item, index) => {
               /*
                 Instagram is the one entry that leaves the site. `next/link`
                 renders a working anchor for it either way, so this is not a
@@ -77,8 +85,29 @@ export function SiteFooter({ className }: { className?: string }) {
                 will eventually disagree with it.
               */
               const external = item.href.startsWith("http");
-              const className =
-                "rounded-[var(--radius-card)] bg-white/5 px-3 py-2 text-center text-caption uppercase transition-colors hover:bg-white/15";
+
+              /*
+                Six links across five columns drops the last one onto a row of
+                its own, hard against the left edge, reading as a mistake
+                rather than a list. Centre it.
+
+                `lg:col-start-3` is the middle of five and is only right for a
+                SINGLE orphan, which is what six links leave. The remainder
+                check says so: a seventh link makes this false and the button
+                falls back to flowing normally, rather than being centred on a
+                row it no longer sits alone on.
+
+                Three columns on mobile divide six exactly, so there is no
+                orphan there and this never applies.
+              */
+              const centresOwnRow =
+                index === footerNav.length - 1 &&
+                footerNav.length % LG_COLUMNS === 1;
+
+              const className = cn(
+                "rounded-[var(--radius-card)] bg-white/5 px-3 py-2 text-center text-caption uppercase transition-colors hover:bg-white/15",
+                centresOwnRow && "lg:col-start-3",
+              );
 
               return external ? (
                 <a

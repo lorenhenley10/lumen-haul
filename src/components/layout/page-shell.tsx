@@ -58,8 +58,21 @@ export function PageShell({
 
       {/* Reveal space. Only on lg+, where the footer is actually fixed — and
           never on a fit-to-viewport page, where it would be the one thing
-          putting the document over a screen tall. */}
-      {!fitViewport && <div aria-hidden className="h-[70vh] max-lg:hidden" />}
+          putting the document over a screen tall.
+
+          `pointer-events-none` IS LOAD-BEARING. This div is transparent, so
+          the footer is visible through it — but it is still a normal element
+          in the hit-test path, sitting directly over a fixed footer on a
+          NEGATIVE z-index. Without this, every link and the email in the
+          revealed footer looked perfectly normal and did nothing when clicked,
+          on every page that uses this shell. Nothing is ever inside the
+          spacer, so it has no business receiving a click. */}
+      {!fitViewport && (
+        <div
+          aria-hidden
+          className="pointer-events-none h-[70vh] max-lg:hidden"
+        />
+      )}
       <SiteFooter />
     </>
   );

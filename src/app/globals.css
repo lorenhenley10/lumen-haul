@@ -177,6 +177,21 @@
    ========================================================================= */
 :root {
   --z-below: -1;
+  /*
+   * The reveal footer's layer, and the reason it is not `--z-below`.
+   *
+   * At -1 the footer paints above the canvas — so it LOOKED right, revealed
+   * under the page exactly as intended — but it sat below `body` in paint
+   * order, and hit testing follows paint order. Every link in the revealed
+   * footer was unclickable on every desktop page: visible, correctly
+   * addressed, and inert, with `body` swallowing the click.
+   *
+   * 0 is the fix and the ceiling. A positioned element at 0 paints above
+   * ordinary in-flow content — body, and the reveal spacer — which is what
+   * makes it clickable, while still sitting under `--z-content`, so the
+   * opaque page continues to cover it until it is scrolled off.
+   */
+  --z-reveal: 0;
   --z-media: 1;
   --z-content: 10;
   --z-rail: 20;

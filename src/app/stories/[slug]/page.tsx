@@ -123,7 +123,13 @@ export default async function ProjectPage({
         </div>
       </main>
 
-      <div aria-hidden className="h-[70vh] max-lg:hidden" />
+      {/* Reveal space for the fixed footer. `pointer-events-none` because it
+          lies over that footer and would otherwise eat every click meant for
+          it — see PageShell. */}
+      <div
+        aria-hidden
+        className="pointer-events-none h-[70vh] max-lg:hidden"
+      />
       <SiteFooter />
     </>
   );
