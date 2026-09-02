@@ -34,7 +34,7 @@
   --sheet-w: 8.5in;
   --sheet-h: 11in;
   --pad-x:   0.75in;
-  --pad-t:   0.68in;
+  --pad-t:   0.60in;
   --pad-b:   0.62in;
 
   /* The two right-hand money columns. Declared once so the production table,
@@ -183,7 +183,7 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0 40px;
-  margin-top: 24px;
+  margin-top: 16px;
 }
 
 .party .label { margin-bottom: 9px; }
@@ -194,7 +194,10 @@ body {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 0 20px;
-  margin-top: 22px;
+  margin-top: 18px;
+  /* dl carries a 1em bottom margin from the UA sheet. Stated here so the
+     strip's spacing is set in one place rather than half-inherited. */
+  margin-bottom: 10px;
   padding: 12px 0;
   border-top: 1px solid var(--rule);
   border-bottom: 1px solid var(--rule);
@@ -206,7 +209,7 @@ body {
 /* ===========================================================================
    SECTION HEADS
    ======================================================================== */
-.section { margin-top: 25px; }
+.section { margin-top: 18px; }
 
 .section-head {
   display: flex;
@@ -469,7 +472,7 @@ body {
   position: absolute;
   left: var(--pad-x);
   right: var(--pad-x);
-  bottom: calc(var(--pad-b) - 14px);
+  bottom: calc(var(--pad-b) - 26px);
   display: flex;
   justify-content: space-between;
   gap: 16px;
