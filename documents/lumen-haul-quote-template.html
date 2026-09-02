@@ -86,6 +86,8 @@
 
 html { -webkit-text-size-adjust: 100%; }
 
+html { background: #8f8f8f; }
+
 body {
   margin: 0;
   background: #8f8f8f;
@@ -625,9 +627,6 @@ body {
    The sheet keeps its printed proportions and scales down whole, rather than
    reflowing into a layout that would not match the PDF.
    ======================================================================== */
-@media screen and (max-width: 9in) {
-  .sheet-scaler { display: flex; justify-content: center; }
-  .sheet { transform-origin: top center; }
 }
 
 /* ===========================================================================
@@ -646,6 +645,8 @@ body {
     box-shadow: none;
     break-after: page;
     page-break-after: always;
+    /* fit() may have zoomed the sheet to suit the window. Paper is paper. */
+    zoom: 1 !important;
   }
   .sheet:last-of-type { break-after: auto; page-break-after: auto; }
 
@@ -1262,12 +1263,21 @@ body {
 
   /* Fit the sheet to narrow screens without reflowing the printed layout. */
   function fit() {
-    var pad = 24;
     var natural = 8.5 * 96;
-    var scale = Math.min(1, (window.innerWidth - pad) / natural);
+    /* clientWidth, NOT window.innerWidth: once the sheet overflows a narrow
+       viewport, innerWidth reports the overflowed width — 786 on a 375px
+       phone — so the zoom gets computed against a number the overflow itself
+       produced, and the page stays scrollable sideways. */
+    var avail = document.documentElement.clientWidth || window.innerWidth;
+    var scale = Math.min(1, (avail - 32) / natural);
+    /* zoom, NOT transform. A transform is paint-only: the element keeps its
+       full 8.5in layout box, overflows the body, takes a horizontal
+       scrollbar, and shows a white strip down the side where the overflow
+       region paints the html background instead of the body's. It also
+       needed a negative bottom margin to claw back height it had not freed.
+       Zoom scales the box itself, so none of that arises. */
     document.querySelectorAll(".sheet").forEach(function (s) {
-      s.style.transform = scale < 1 ? "scale(" + scale + ")" : "";
-      s.style.marginBottom = scale < 1 ? (24 - (11 * 96) * (1 - scale)) + "px" : "";
+      s.style.zoom = scale < 1 ? scale : "";
     });
   }
   window.addEventListener("resize", fit);

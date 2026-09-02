@@ -190,13 +190,51 @@ html = html.replace(
 }
 
 /* On a phone the sheet is scaled to fit, and the hint truncates to something
-   like "Click the cli...". Better to drop it and keep the button, which is
-   the only control that matters on a screen too small to fill a form on. */
+   like "Click the cli...". Drop it; the pad below carries the instruction. */
+.fillpad { display: none; }
+
 @media screen and (max-width: 640px) {
   .toolbar-hint span { display: none; }
+
+  .fillpad {
+    display: grid;
+    gap: 11px;
+    padding: 15px 16px 19px;
+    background: #1c1c1c;
+    font-family: var(--font-mono);
+  }
+  .fillpad-title {
+    font-size: 10px;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: #a3a3a3;
+  }
+  .fillpad label {
+    display: grid;
+    gap: 5px;
+    font-size: 9.5px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: #a3a3a3;
+  }
+  .fillpad input {
+    min-height: 44px;
+    padding: 0 12px;
+    border: 1px solid #3d3d3d;
+    border-radius: 2px;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    /* 16px exactly: iOS Safari zooms the viewport when a focused input is
+       set smaller, and the zoom does not come back on blur. */
+    font-size: 16px;
+    letter-spacing: 0;
+  }
+  .fillpad input:focus-visible { outline: 2px solid #fff; outline-offset: 1px; }
 }
 
 @media print {
+  .fillpad { display: none !important; }
   .field { border-bottom: 0; background: none; padding: 0; min-width: 0; }
   /* An unfilled client name must NOT print its prompt: "Client / Company" on
      a sent quote reads as a template nobody finished. An unfilled date may,
@@ -252,8 +290,32 @@ html = html.replace(
     } catch (e) { /* nothing to do; the page still works */ }
   }
 
+  /* The phone pad and the blanks on the sheet are two ways into one value,
+     so each writes to the other. Without this, filling the pad and then
+     printing would produce a quote with empty blanks on it. */
+  var pads = [].slice.call(document.querySelectorAll("[data-pad]"));
+  function syncPads() {
+    pads.forEach(function (input) {
+      var target = document.querySelector('[data-fill="' + input.dataset.pad + '"]');
+      if (target) input.value = target.textContent.trim();
+    });
+  }
+  syncPads();
+
+  pads.forEach(function (input) {
+    input.addEventListener("input", function () {
+      var target = document.querySelector('[data-fill="' + input.dataset.pad + '"]');
+      if (!target) return;
+      /* Assigning textContent to "" leaves a text node behind and :empty
+         stops matching, so the prompt never returns. Clear the markup. */
+      if (input.value) target.textContent = input.value;
+      else target.innerHTML = "";
+      save();
+    });
+  });
+
   fields.forEach(function (el) {
-    el.addEventListener("input", save);
+    el.addEventListener("input", function () { syncPads(); save(); });
 
     /* contenteditable leaves a stray <br> behind when you delete the last
        character, and :empty stops matching, so the prompt never comes back. */
@@ -271,6 +333,25 @@ html = html.replace(
 })();
 </script>
 </body>`,
+);
+
+// --- 3c. A tappable way in on a phone ------------------------------------
+// The sheet scales to fit a phone, which lands the blanks at about ten pixels
+// tall. That is not a tap target. Reflowing the document would fix it and
+// break the thing the document is for: what you see has to be what prints.
+// So the sheet is left alone and a set of real inputs is offered above it,
+// writing into the same fields. Screen only, below 640px only.
+html = html.replace(
+  /(<\/div>\s*)(<section class="sheet")/,
+  `$1<div class="fillpad">
+  <div class="fillpad-title">Fill in this quote</div>
+  <label>Client / Company<input type="text" data-pad="company" autocomplete="organization"></label>
+  <label>Contact name<input type="text" data-pad="contact" autocomplete="name"></label>
+  <label>Email<input type="email" data-pad="email" autocomplete="email" inputmode="email"></label>
+  <label>Shoot date<input type="text" data-pad="shootdate"></label>
+</div>
+
+$2`,
 );
 
 // --- 4. noindex, asserted in the page as well as in the header ------------
@@ -291,6 +372,7 @@ html = html.replace(
 );
 
 // --- 6. Refuse to write anything that failed a check ----------------------
+const BLANKS = ["company", "contact", "email", "shootdate"];
 const checks = [
   ["source comments", (h) => !h.includes("<!--")],
   // Not "no editable fields" any more: exactly four, and every one of them
@@ -298,11 +380,17 @@ const checks = [
   // working) and under-stripping (a client can retype a rate).
   ["exactly four blanks", (h) =>
     (h.match(/contenteditable="true"/g) || []).length === 4 &&
-    (h.match(/data-fill="/g) || []).length === 4],
+    BLANKS.every((k) => (h.match(new RegExp('data-fill="' + k + '"', "g")) || []).length === 1)],
   ["robots meta", (h) => /name="robots"/.test(h)],
   // Count each slot by name, not occurrences of `data-date="`. The script
   // block that fills them builds its selector by concatenation, so a loose
   // count sees four and fails a file that is perfectly correct.
+  // Count by NAME, never by bare attribute. The script block builds its
+  // selectors by concatenation, so a loose count of `data-fill="` sees the
+  // markup plus the JavaScript and fails a file that is correct. This is the
+  // third check to get that wrong; naming the keys is the fix that sticks.
+  ["phone pad wired to every blank", (h) =>
+    BLANKS.every((k) => (h.match(new RegExp('data-pad="' + k + '"', "g")) || []).length === 1)],
   ["blanks are labelled", (h) =>
     (h.match(/aria-label="/g) || []).length === 4],
   ["three date slots", (h) =>
