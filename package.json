@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "verify:seo-logo": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/verify-organization-logo.mjs"
+    "verify:seo-logo": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/verify-organization-logo.mjs",
+    "verify:quote-fillpad": "node scripts/verify-quote-fillpad.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

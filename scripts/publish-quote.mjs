@@ -32,6 +32,10 @@ import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { randomBytes } from "node:crypto";
 import { basename } from "node:path";
 
+// The fill-in pad's invariants, shared with scripts/verify-quote-fillpad.mjs
+// so a file published today and a file checked in a year cannot disagree.
+import { BLANKS, fillPadChecks } from "./quote-checks.mjs";
+
 const args = process.argv.slice(2);
 const source = args.find((a) => !a.startsWith("--"));
 
@@ -189,48 +193,141 @@ html = html.replace(
   color: var(--ink-3);
 }
 
-/* On a phone the sheet is scaled to fit, and the hint truncates to something
-   like "Click the cli...". Drop it; the pad below carries the instruction. */
-.fillpad { display: none; }
+/* The fill-in pad — one collapsed bar above the sheet, at every width.
 
+   IT EXISTS BECAUSE fit() SCALES THE SHEET TO THE WINDOW, which on a phone
+   lands the blanks at about ten pixels tall. That is not a tap target, so
+   the pad offers real inputs writing into the same four fields.
+
+   IT IS CLOSED BY DEFAULT AND SHOWN EVERYWHERE, which is one decision and
+   not two. Open, it spent four rows of height above the quote — on a phone
+   that was the whole first screen, and the quote is the thing the link is
+   for. Once it costs a single 44px bar, there is no longer any reason to
+   gate it behind a width: a desktop reader gets a faster way in than
+   hunting four dashed blanks on a scaled sheet, and the interaction is the
+   same one on a monitor, a phone held upright and a phone turned sideways.
+
+   <details>/<summary> RATHER THAN A BUTTON AND A CLASS. The open state, the
+   Enter/Space handling and the expanded/collapsed announcement are all the
+   browser's, and it still opens with scripting off — which matters here,
+   because this file is served static with no framework under it. */
+.fillpad {
+  background: #1c1c1c;
+  font-family: var(--font-mono);
+}
+
+/* Both halves of the pad align to the sheet below rather than to the window,
+   so on a wide screen the bar reads as belonging to the quote and not to the
+   backdrop. Below 8.5in the max-width stops binding and it goes full bleed. */
+.fillpad-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  /* 44px, not the toolbar's ~40: this one is a tap target. */
+  min-height: 44px;
+  max-width: var(--sheet-w);
+  margin: 0 auto;
+  padding: 0 18px;
+  font-size: 10px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: #a3a3a3;
+  cursor: pointer;
+  transition: color 160ms var(--ease);
+  /* TWO MARKERS TO SUPPRESS, NOT ONE. list-style covers Chrome and Firefox;
+     ::-webkit-details-marker is the only one Safari listens to, and Safari
+     is most of the phones this link gets opened on. */
+  list-style: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.fillpad-title::-webkit-details-marker { display: none; }
+.fillpad-title:hover { color: #fff; }
+.fillpad-title:focus-visible { outline: 2px solid #fff; outline-offset: -2px; }
+
+/* The arrow. A chevron off two borders — down when closed, up when open — so
+   the bar says which way it goes, not merely that it does something. */
+.fillpad-title::after {
+  content: "";
+  width: 5px;
+  height: 5px;
+  margin-top: -3px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform 220ms var(--ease);
+}
+.fillpad[open] .fillpad-title::after {
+  margin-top: 2px;
+  transform: rotate(225deg);
+}
+
+.fillpad-fields {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 11px 16px;
+  max-width: var(--sheet-w);
+  margin: 0 auto;
+  padding: 3px 18px 19px;
+}
+/* There are four fields, so they go 1, 2 or 4 across and never 3. Fitting as
+   many as the width allows -- auto-fit with a minmax track -- put three on a
+   row and stranded the fourth under them at every desktop width, which reads
+   as a layout bug rather than a wrap. Four across also rhymes with the
+   project / date / location / validity strip on the sheet below. */
+/* minmax(0, 1fr), NEVER a bare 1fr. A bare 1fr is minmax(auto, 1fr), and the
+   auto floor is the item's own min-content width -- for a text input that is
+   its default size=20, about 233px with the padding. Two of those plus a gap
+   is wider than a 480px phone, so the tracks refused to shrink and the whole
+   DOCUMENT took a horizontal scrollbar at 480, 760 and 844. Zeroing the floor
+   here and on the input below is what lets the tracks divide the width. */
+@media screen and (min-width: 480px) {
+  .fillpad-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media screen and (min-width: 760px) {
+  .fillpad-fields { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+.fillpad label {
+  display: grid;
+  gap: 5px;
+  font-size: 9.5px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #a3a3a3;
+}
+.fillpad input {
+  /* See the grid note above: an input carries an intrinsic width and will not
+     go under it unless told to. width:100% then fills whatever track it lands
+     in, at one column or at four. */
+  min-width: 0;
+  width: 100%;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid #3d3d3d;
+  border-radius: 2px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  /* 16px exactly: iOS Safari zooms the viewport when a focused input is
+     set smaller, and the zoom does not come back on blur. */
+  font-size: 16px;
+  letter-spacing: 0;
+}
+.fillpad input:focus-visible { outline: 2px solid #fff; outline-offset: 1px; }
+
+/* <details> has no open transition of its own. This is decoration only — the
+   fields are laid out and reachable on the first frame either way, and the
+   reduced-motion block above already flattens it to nothing. */
+@keyframes fillpad-open {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: none; }
+}
+.fillpad[open] .fillpad-fields { animation: fillpad-open 220ms var(--ease); }
+
+/* On a phone the toolbar hint truncates to something like "Click the cli...".
+   Drop it; the bar below carries the instruction. */
 @media screen and (max-width: 640px) {
   .toolbar-hint span { display: none; }
-
-  .fillpad {
-    display: grid;
-    gap: 11px;
-    padding: 15px 16px 19px;
-    background: #1c1c1c;
-    font-family: var(--font-mono);
-  }
-  .fillpad-title {
-    font-size: 10px;
-    letter-spacing: 0.13em;
-    text-transform: uppercase;
-    color: #a3a3a3;
-  }
-  .fillpad label {
-    display: grid;
-    gap: 5px;
-    font-size: 9.5px;
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
-    color: #a3a3a3;
-  }
-  .fillpad input {
-    min-height: 44px;
-    padding: 0 12px;
-    border: 1px solid #3d3d3d;
-    border-radius: 2px;
-    background: var(--paper);
-    color: var(--ink);
-    font-family: var(--font-sans);
-    /* 16px exactly: iOS Safari zooms the viewport when a focused input is
-       set smaller, and the zoom does not come back on blur. */
-    font-size: 16px;
-    letter-spacing: 0;
-  }
-  .fillpad input:focus-visible { outline: 2px solid #fff; outline-offset: 1px; }
 }
 
 @media print {
@@ -335,21 +432,34 @@ html = html.replace(
 </body>`,
 );
 
-// --- 3c. A tappable way in on a phone ------------------------------------
+// --- 3c. A tappable way in, at every width --------------------------------
 // The sheet scales to fit a phone, which lands the blanks at about ten pixels
 // tall. That is not a tap target. Reflowing the document would fix it and
 // break the thing the document is for: what you see has to be what prints.
 // So the sheet is left alone and a set of real inputs is offered above it,
-// writing into the same fields. Screen only, below 640px only.
+// writing into the same fields.
+//
+// COLLAPSED BY DEFAULT, AND SHOWN AT EVERY WIDTH. It used to be phone-only
+// and always open, which spent four input rows above the quote — on a phone
+// that was the entire first screen, and the quote is what the link is for.
+// Closed it costs one 44px bar, and at that price there is no reason to hide
+// it from a desktop reader, who otherwise has to find four dashed blanks on
+// a scaled sheet. Screen only either way; @media print drops it.
+//
+// The disclosure is a real <details>, so the open state, Enter/Space and the
+// expanded/collapsed announcement come from the browser and it still opens
+// with scripting off. The CSS is in 3b; the invariants are in quote-checks.mjs.
 html = html.replace(
   /(<\/div>\s*)(<section class="sheet")/,
-  `$1<div class="fillpad">
-  <div class="fillpad-title">Fill in this quote</div>
-  <label>Client / Company<input type="text" data-pad="company" autocomplete="organization"></label>
-  <label>Contact name<input type="text" data-pad="contact" autocomplete="name"></label>
-  <label>Email<input type="email" data-pad="email" autocomplete="email" inputmode="email"></label>
-  <label>Shoot date<input type="text" data-pad="shootdate"></label>
-</div>
+  `$1<details class="fillpad">
+  <summary class="fillpad-title">Fill in this quote</summary>
+  <div class="fillpad-fields">
+    <label>Client / Company<input type="text" data-pad="company" autocomplete="organization"></label>
+    <label>Contact name<input type="text" data-pad="contact" autocomplete="name"></label>
+    <label>Email<input type="email" data-pad="email" autocomplete="email" inputmode="email"></label>
+    <label>Shoot date<input type="text" data-pad="shootdate"></label>
+  </div>
+</details>
 
 $2`,
 );
@@ -372,7 +482,6 @@ html = html.replace(
 );
 
 // --- 6. Refuse to write anything that failed a check ----------------------
-const BLANKS = ["company", "contact", "email", "shootdate"];
 const checks = [
   ["source comments", (h) => !h.includes("<!--")],
   // Not "no editable fields" any more: exactly four, and every one of them
@@ -382,15 +491,13 @@ const checks = [
     (h.match(/contenteditable="true"/g) || []).length === 4 &&
     BLANKS.every((k) => (h.match(new RegExp('data-fill="' + k + '"', "g")) || []).length === 1)],
   ["robots meta", (h) => /name="robots"/.test(h)],
-  // Count each slot by name, not occurrences of `data-date="`. The script
-  // block that fills them builds its selector by concatenation, so a loose
-  // count sees four and fails a file that is perfectly correct.
-  // Count by NAME, never by bare attribute. The script block builds its
-  // selectors by concatenation, so a loose count of `data-fill="` sees the
-  // markup plus the JavaScript and fails a file that is correct. This is the
-  // third check to get that wrong; naming the keys is the fix that sticks.
-  ["phone pad wired to every blank", (h) =>
-    BLANKS.every((k) => (h.match(new RegExp('data-pad="' + k + '"', "g")) || []).length === 1)],
+  // The pad — a details/summary bar, collapsed, at every width, wired to all
+  // four blanks. Counted by NAME inside quote-checks.mjs, never by bare
+  // attribute: the script block builds its selectors by concatenation, so a
+  // loose count of `data-pad="` sees the markup plus the JavaScript and fails
+  // a file that is correct. This is the third check to get that wrong;
+  // naming the keys is the fix that sticks.
+  ...fillPadChecks,
   ["blanks are labelled", (h) =>
     (h.match(/aria-label="/g) || []).length === 4],
   ["three date slots", (h) =>
