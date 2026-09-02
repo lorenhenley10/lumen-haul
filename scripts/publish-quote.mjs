@@ -69,7 +69,7 @@ html = html.replace(
       const value = opts[key] ? escape(opts[key]) : "";
       const classes = ["field", cls].filter(Boolean).join(" ");
       return (
-        `        <span class="${classes}" ` +
+        `        <span class="${classes}" role="textbox" aria-label="${label}" ` +
         `data-fill="${key}" data-placeholder="${label}">${value}</span><br>`
       );
     });
@@ -92,7 +92,8 @@ html = html.replace(
   // data-print: this is the ONE blank whose prompt should still print when
   // it is left empty, because "To be confirmed" is a true thing to say about
   // an unbooked date. An unfilled client name prints nothing instead.
-  '<dd class="field" data-fill="shootdate" data-print ' +
+  '<dd class="field" role="textbox" aria-label="Shoot date" ' +
+    'data-fill="shootdate" data-print ' +
     'data-placeholder="To be confirmed"></dd>',
 );
 
@@ -169,13 +170,30 @@ html = html.replace(
   transition: background 160ms var(--ease), border-color 160ms var(--ease);
 }
 .field:hover { background: var(--fill); }
+/* Focus has to read as MORE active than hover, not less. Setting the
+   background to --paper here made it white, which is the sheet's own color,
+   so clicking a field removed the hover grey and looked like nothing had
+   happened. The grey stays and the rule goes solid instead. */
 .field:focus {
-  background: #fff;
-  border-bottom-color: var(--ink);
+  background: var(--fill);
+  border-bottom: 1px solid var(--ink);
+}
+/* outline:none above removes the browser's ring, so keyboard focus needs one
+   of its own. A background shift alone is not an indicator. */
+.field:focus-visible {
+  box-shadow: 0 0 0 2px var(--ink);
+  border-radius: 1px;
 }
 .field:empty::before {
   content: attr(data-placeholder);
   color: var(--ink-3);
+}
+
+/* On a phone the sheet is scaled to fit, and the hint truncates to something
+   like "Click the cli...". Better to drop it and keep the button, which is
+   the only control that matters on a screen too small to fill a form on. */
+@media screen and (max-width: 640px) {
+  .toolbar-hint span { display: none; }
 }
 
 @media print {
@@ -285,6 +303,8 @@ const checks = [
   // Count each slot by name, not occurrences of `data-date="`. The script
   // block that fills them builds its selector by concatenation, so a loose
   // count sees four and fails a file that is perfectly correct.
+  ["blanks are labelled", (h) =>
+    (h.match(/aria-label="/g) || []).length === 4],
   ["three date slots", (h) =>
     ["quoted", "valid", "valid-long"].every(
       (k) => (h.match(new RegExp('data-date="' + k + '"', "g")) || []).length === 1,

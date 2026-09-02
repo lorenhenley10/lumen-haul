@@ -595,13 +595,30 @@ body {
   transition: background 160ms var(--ease), border-color 160ms var(--ease);
 }
 .field:hover { background: var(--fill); }
+/* Focus has to read as MORE active than hover, not less. Setting the
+   background to --paper here made it white, which is the sheet's own color,
+   so clicking a field removed the hover grey and looked like nothing had
+   happened. The grey stays and the rule goes solid instead. */
 .field:focus {
-  background: #fff;
-  border-bottom-color: var(--ink);
+  background: var(--fill);
+  border-bottom: 1px solid var(--ink);
+}
+/* outline:none above removes the browser's ring, so keyboard focus needs one
+   of its own. A background shift alone is not an indicator. */
+.field:focus-visible {
+  box-shadow: 0 0 0 2px var(--ink);
+  border-radius: 1px;
 }
 .field:empty::before {
   content: attr(data-placeholder);
   color: var(--ink-3);
+}
+
+/* On a phone the sheet is scaled to fit, and the hint truncates to something
+   like "Click the cli...". Better to drop it and keep the button, which is
+   the only control that matters on a screen too small to fill a form on. */
+@media screen and (max-width: 640px) {
+  .toolbar-hint span { display: none; }
 }
 
 @media print {
@@ -660,9 +677,9 @@ body {
     <div class="party">
       <div class="label">Prepared for</div>
       <address>
-        <span class="field party-name" data-fill="company" contenteditable="true" data-placeholder="Client / Company"></span><br>
-        <span class="field" data-fill="contact" contenteditable="true" data-placeholder="Contact name"></span><br>
-        <span class="field" data-fill="email" contenteditable="true" data-placeholder="Email"></span>
+        <span class="field party-name" role="textbox" aria-label="Client / Company" data-fill="company" contenteditable="true" data-placeholder="Client / Company"></span><br>
+        <span class="field" role="textbox" aria-label="Contact name" data-fill="contact" contenteditable="true" data-placeholder="Contact name"></span><br>
+        <span class="field" role="textbox" aria-label="Email" data-fill="email" contenteditable="true" data-placeholder="Email"></span>
       </address>
     </div>
   </div>
@@ -674,7 +691,7 @@ body {
     </div>
     <div>
       <dt class="label">Shoot date</dt>
-      <dd class="field" data-fill="shootdate" contenteditable="true" data-print data-placeholder="To be confirmed"></dd>
+      <dd class="field" role="textbox" aria-label="Shoot date" data-fill="shootdate" contenteditable="true" data-print data-placeholder="To be confirmed"></dd>
     </div>
     <div>
       <dt class="label">Location</dt>
