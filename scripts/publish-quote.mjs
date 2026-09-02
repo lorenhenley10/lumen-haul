@@ -13,10 +13,16 @@
 // to a client who opens View Source. Stripping them is the step that must not
 // be forgotten, so it does not get left to memory.
 //
-// A HOSTED QUOTE IS PERSONALISED AT BUILD TIME, NOT IN THE BROWSER. A file in
-// public/ is static: a recipient typing into it changes nothing for anybody
-// else, and the next visitor still sees the placeholder. So the client's
-// details are baked in here, and a different client means a different build.
+// THE BLANKS ARE FILLED IN THE BROWSER; EVERYTHING ELSE IS LOCKED. A file in
+// public/ is static, so nothing typed into it is saved for the next visitor.
+// That is exactly why it works: open the link, type the client, the contact,
+// the email and the shoot date, print the PDF, send that. One hosted file
+// serves every job and no redeploy is needed per client.
+//
+// Passing --company and friends bakes a value in as the starting text, which
+// is worth doing when a link is going to a named client rather than being
+// used as a pad. Either way the four blanks stay typeable and the rates,
+// totals and tick boxes do not.
 //
 // The output filename carries a random suffix. public/ has no auth in front
 // of it, so the only thing stopping /q/ being enumerated by guessing at
@@ -52,18 +58,20 @@ html = html.replace(/<!--[\s\S]*?-->/g, "").replace(/\n{3,}/g, "\n\n");
 // Anything not supplied keeps its bracketed placeholder, which is visible
 // enough on the page to catch before the link goes out.
 const party = [
-  ["company", "party-name"],
-  ["contact", null],
-  ["email", null],
+  ["company", "party-name", "Client / Company"],
+  ["contact", null, "Contact name"],
+  ["email", null, "Email"],
 ];
 html = html.replace(
   /<div class="label">Prepared for<\/div>\s*<address>[\s\S]*?<\/address>/,
   () => {
-    const lines = party.map(([key, cls]) => {
-      const value = opts[key] ? escape(opts[key]) : `[ ${key} ]`;
-      return cls
-        ? `        <span class="${cls}">${value}</span><br>`
-        : `        ${value}<br>`;
+    const lines = party.map(([key, cls, label]) => {
+      const value = opts[key] ? escape(opts[key]) : "";
+      const classes = ["field", cls].filter(Boolean).join(" ");
+      return (
+        `        <span class="${classes}" ` +
+        `data-fill="${key}" data-placeholder="${label}">${value}</span><br>`
+      );
     });
     // Trim the trailing <br> off the last line.
     lines[lines.length - 1] = lines[lines.length - 1].replace(/<br>$/, "");
@@ -71,7 +79,23 @@ html = html.replace(
   },
 );
 
-// --- 3. A recipient must not be able to type into a quote -----------------
+// --- 3. Lock everything EXCEPT the four fields meant to be filled in ------
+// The rates, the totals and the tick boxes are the quote. The client's name,
+// their contact, their email and the shoot date are the blanks on it, and
+// leaving those typeable is what lets one hosted file serve every job: fill
+// them in the browser, print, send the PDF. Nothing is saved back to the
+// server, so what a recipient types is theirs alone.
+//
+// The shoot date has to be converted before the blanket strip below runs.
+html = html.replace(
+  /<dd class="fill" contenteditable="true">\[ [^\]]*\]<\/dd>/,
+  // data-print: this is the ONE blank whose prompt should still print when
+  // it is left empty, because "To be confirmed" is a true thing to say about
+  // an unbooked date. An unfilled client name prints nothing instead.
+  '<dd class="field" data-fill="shootdate" data-print ' +
+    'data-placeholder="To be confirmed"></dd>',
+);
+
 html = html
   .replace(/ contenteditable="true"/g, "")
   .replace(/class="party-name fill"/g, 'class="party-name"')
@@ -96,6 +120,97 @@ html = html.replace(
   "\n",
 );
 
+// Grant editing back to exactly the elements carrying a data-fill. Doing it
+// positively, after a blanket strip, means the attribute order in the markup
+// does not matter — an earlier version tested with a lookahead and silently
+// locked every blank, because class= comes before contenteditable=.
+html = html.replace(/(<[^>]*\sdata-fill="[^"]*")/g, '$1 contenteditable="true"');
+
+// --- 3b. The blanks need an affordance on screen and none on paper -------
+html = html.replace(
+  "</style>",
+  `
+/* The four blanks on the quote. A dashed rule says "type here" on screen and
+   prints as nothing, so a filled quote looks typeset rather than filled in. */
+.field {
+  display: inline-block;
+  min-width: 9ch;
+  padding: 0 2px;
+  outline: none;
+  border-bottom: 1px dashed var(--rule);
+  transition: background 160ms var(--ease), border-color 160ms var(--ease);
+}
+.field:hover { background: var(--fill); }
+.field:focus {
+  background: #fff;
+  border-bottom-color: var(--ink);
+}
+.field:empty::before {
+  content: attr(data-placeholder);
+  color: var(--ink-3);
+}
+
+@media print {
+  .field { border-bottom: 0; background: none; padding: 0; min-width: 0; }
+  /* An unfilled client name must NOT print its prompt: "Client / Company" on
+     a sent quote reads as a template nobody finished. An unfilled date may,
+     because "To be confirmed" is a true thing to say about a date. */
+  .field:empty::before { content: ""; }
+  .field[data-print]:empty::before {
+    content: attr(data-placeholder);
+    color: var(--ink-2);
+  }
+}
+</style>`,
+);
+
+html = html.replace(
+  "</body>",
+  `<script>
+/* Fill the blanks, print, send the PDF. Nothing is posted anywhere: this only
+   keeps a half-filled quote from being lost to an accidental refresh, and it
+   never leaves the device it was typed on. */
+(function () {
+  var KEY = "lumen-haul-quote:" + location.pathname;
+  var fields = [].slice.call(document.querySelectorAll("[data-fill]"));
+  if (!fields.length) return;
+
+  try {
+    var saved = JSON.parse(localStorage.getItem(KEY) || "{}");
+    fields.forEach(function (el) {
+      if (saved[el.dataset.fill]) el.textContent = saved[el.dataset.fill];
+    });
+  } catch (e) { /* private window, blocked storage: fall through empty */ }
+
+  function save() {
+    try {
+      var out = {};
+      fields.forEach(function (el) { out[el.dataset.fill] = el.textContent.trim(); });
+      localStorage.setItem(KEY, JSON.stringify(out));
+    } catch (e) { /* nothing to do; the page still works */ }
+  }
+
+  fields.forEach(function (el) {
+    el.addEventListener("input", save);
+
+    /* contenteditable leaves a stray <br> behind when you delete the last
+       character, and :empty stops matching, so the prompt never comes back. */
+    el.addEventListener("blur", function () {
+      if (!el.textContent.trim()) el.innerHTML = "";
+      save();
+    });
+
+    el.addEventListener("paste", function (e) {
+      e.preventDefault();
+      var t = (e.clipboardData || window.clipboardData).getData("text/plain");
+      document.execCommand("insertText", false, t.replace(/\\s+/g, " "));
+    });
+  });
+})();
+</script>
+</body>`,
+);
+
 // --- 4. noindex, asserted in the page as well as in the header ------------
 if (!/name="robots"/.test(html)) {
   html = html.replace(
@@ -110,13 +225,18 @@ if (!/name="robots"/.test(html)) {
 html = html.replace(
   /<div class="toolbar-hint">[\s\S]*?<\/div>/,
   `<div class="toolbar-hint">\n    <b>${escape(opts.company || "Quote")}</b>\n` +
-    `    <span>&nbsp;&nbsp;Tick or untick an optional line to see both totals</span>\n  </div>`,
+    `    <span>&nbsp;&nbsp;Click the client details and shoot date to fill them in &middot; tick an optional line to see both totals &middot; then print</span>\n  </div>`,
 );
 
 // --- 6. Refuse to write anything that failed a check ----------------------
 const checks = [
   ["source comments", (h) => !h.includes("<!--")],
-  ["editable fields", (h) => !h.includes("contenteditable")],
+  // Not "no editable fields" any more: exactly four, and every one of them
+  // carrying a data-fill. Catches both over-stripping (the blanks stop
+  // working) and under-stripping (a client can retype a rate).
+  ["exactly four blanks", (h) =>
+    (h.match(/contenteditable="true"/g) || []).length === 4 &&
+    (h.match(/data-fill="/g) || []).length === 4],
   ["robots meta", (h) => /name="robots"/.test(h)],
   ["sheets intact", (h) => (h.match(/class="sheet"/g) || []).length >= 2],
 ];

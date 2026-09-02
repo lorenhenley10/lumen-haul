@@ -5,7 +5,7 @@
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Stereotypes Quote</title>
+<title>Lumen Haul — Stereotypes Quote</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -66,15 +66,9 @@ body {
   font-feature-settings: "kern" 1;
 }
 
-/* Three theme states, not two: an explicit choice stamps data-theme on the
-   root, and the default "system" setting stamps nothing at all. Only the
-   backdrop moves. The sheets stay white in every state because they are
-   paper, and every ink color on them is measured against white. */
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) { --backdrop: #2a2a2a; }
+  :root { --backdrop: #2a2a2a; }
 }
-:root[data-theme="dark"] { --backdrop: #2a2a2a; }
-:root[data-theme="light"] { --backdrop: #8f8f8f; }
 
 /* ===========================================================================
    SHEET
@@ -589,6 +583,38 @@ body {
      mid-animation would put a grey box behind a figure. */
   .num.is-changed { animation: none !important; background: none !important; }
 }
+
+/* The four blanks on the quote. A dashed rule says "type here" on screen and
+   prints as nothing, so a filled quote looks typeset rather than filled in. */
+.field {
+  display: inline-block;
+  min-width: 9ch;
+  padding: 0 2px;
+  outline: none;
+  border-bottom: 1px dashed var(--rule);
+  transition: background 160ms var(--ease), border-color 160ms var(--ease);
+}
+.field:hover { background: var(--fill); }
+.field:focus {
+  background: #fff;
+  border-bottom-color: var(--ink);
+}
+.field:empty::before {
+  content: attr(data-placeholder);
+  color: var(--ink-3);
+}
+
+@media print {
+  .field { border-bottom: 0; background: none; padding: 0; min-width: 0; }
+  /* An unfilled client name must NOT print its prompt: "Client / Company" on
+     a sent quote reads as a template nobody finished. An unfilled date may,
+     because "To be confirmed" is a true thing to say about a date. */
+  .field:empty::before { content: ""; }
+  .field[data-print]:empty::before {
+    content: attr(data-placeholder);
+    color: var(--ink-2);
+  }
+}
 </style>
 </head>
 
@@ -596,8 +622,8 @@ body {
 
 <div class="toolbar">
   <div class="toolbar-hint">
-    <b>Stereotypes &middot; Quote LH&#8209;0003</b>
-    <span>&nbsp;&nbsp;Tick the commercial coverage on page 1 to see both totals</span>
+    <b>Quote</b>
+    <span>&nbsp;&nbsp;Click the client details and shoot date to fill them in &middot; tick an optional line to see both totals &middot; then print</span>
   </div>
   <button type="button" onclick="window.print()">Print / Save as PDF</button>
 </div>
@@ -634,9 +660,9 @@ body {
     <div class="party">
       <div class="label">Prepared for</div>
       <address>
-        <span class="party-name">[ Client / Company ]</span><br>
-        <span>[ Contact name ]</span><br>
-        <span>[ email ]</span>
+        <span class="field party-name" data-fill="company" contenteditable="true" data-placeholder="Client / Company"></span><br>
+        <span class="field" data-fill="contact" contenteditable="true" data-placeholder="Contact name"></span><br>
+        <span class="field" data-fill="email" contenteditable="true" data-placeholder="Email"></span>
       </address>
     </div>
   </div>
@@ -648,7 +674,7 @@ body {
     </div>
     <div>
       <dt class="label">Shoot date</dt>
-      <dd>[ To be confirmed ]</dd>
+      <dd class="field" data-fill="shootdate" contenteditable="true" data-print data-placeholder="To be confirmed"></dd>
     </div>
     <div>
       <dt class="label">Location</dt>
@@ -1090,6 +1116,7 @@ body {
     document.querySelectorAll(".foot-no").forEach(function (el) { el.textContent = no; });
   }
 
+
   document.addEventListener("input",  function () { recalc(); syncQuoteNo(); });
   document.addEventListener("change", function () { recalc(); syncQuoteNo(); });
 
@@ -1117,5 +1144,47 @@ body {
 })();
 </script>
 
+<script>
+/* Fill the blanks, print, send the PDF. Nothing is posted anywhere: this only
+   keeps a half-filled quote from being lost to an accidental refresh, and it
+   never leaves the device it was typed on. */
+(function () {
+  var KEY = "lumen-haul-quote:" + location.pathname;
+  var fields = [].slice.call(document.querySelectorAll("[data-fill]"));
+  if (!fields.length) return;
+
+  try {
+    var saved = JSON.parse(localStorage.getItem(KEY) || "{}");
+    fields.forEach(function (el) {
+      if (saved[el.dataset.fill]) el.textContent = saved[el.dataset.fill];
+    });
+  } catch (e) { /* private window, blocked storage: fall through empty */ }
+
+  function save() {
+    try {
+      var out = {};
+      fields.forEach(function (el) { out[el.dataset.fill] = el.textContent.trim(); });
+      localStorage.setItem(KEY, JSON.stringify(out));
+    } catch (e) { /* nothing to do; the page still works */ }
+  }
+
+  fields.forEach(function (el) {
+    el.addEventListener("input", save);
+
+    /* contenteditable leaves a stray <br> behind when you delete the last
+       character, and :empty stops matching, so the prompt never comes back. */
+    el.addEventListener("blur", function () {
+      if (!el.textContent.trim()) el.innerHTML = "";
+      save();
+    });
+
+    el.addEventListener("paste", function (e) {
+      e.preventDefault();
+      var t = (e.clipboardData || window.clipboardData).getData("text/plain");
+      document.execCommand("insertText", false, t.replace(/\s+/g, " "));
+    });
+  });
+})();
+</script>
 </body>
 </html>
