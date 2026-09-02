@@ -58,11 +58,11 @@ yarn-error.log*
 next-env.d.ts
 .gstack/
 
-# Filled-in client quotes. Each one carries a client's name, their contact
+# Filled-in client estimates. Each one carries a client's name, their contact
 # details and negotiated pricing, so they stay out of the repo. The master
-# they are cut from — documents/lumen-haul-quote-template.html — IS tracked,
+# they are cut from — documents/lumen-haul-estimate-template.html — IS tracked,
 # because that is the thing worth versioning.
 #
 # The PDFs are build output: regenerate with Chrome's print-to-pdf from the
 # HTML beside them.
-documents/quotes/
+documents/estimates/

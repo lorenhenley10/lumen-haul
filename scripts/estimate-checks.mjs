@@ -1,14 +1,14 @@
 //
-// Structural invariants for the fill-in pad on a published quote.
+// Structural invariants for the fill-in pad on a published estimate.
 //
-// These live apart from publish-quote.mjs because they have to run against
+// These live apart from publish-estimate.mjs because they have to run against
 // two different things. The publish script checks its own output before it
 // writes it; the verify script checks files in public/q/ that were published
 // months ago and, being hand-editable static HTML, may have been touched
 // since. One list, imported by both, so the two cannot drift.
 //
 // Every failure here is silent from the inside. The file still renders, the
-// blanks still fill, the quote still prints — the pad is just permanently
+// blanks still fill, the estimate still prints — the pad is just permanently
 // open, or gone above 640px, or no longer wired to a field. Nothing throws
 // and no build goes red.
 //
@@ -33,7 +33,7 @@ export const fillPadChecks = [
   ],
 
   // `open` on the <details> is one word, and it is the difference between a
-  // 44px bar and four input rows shoved between the toolbar and the quote.
+  // 44px bar and four input rows shoved between the toolbar and the estimate.
   [
     "fill pad starts collapsed",
     (h) => !/<details[^>]*\bclass="fillpad"[^>]*\bopen\b/.test(h),

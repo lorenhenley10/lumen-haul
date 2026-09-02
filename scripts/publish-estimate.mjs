@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 //
-// Build a client-facing quote out of a working quote, and drop it in
+// Build a client-facing estimate out of a working estimate, and drop it in
 // public/q/ ready to deploy.
 //
-//   node scripts/publish-quote.mjs documents/quotes/stereotypes.html \
+//   node scripts/publish-estimate.mjs documents/estimates/stereotypes.html \
 //     --company "Acme Studios" --contact "Jane Doe" --email "jane@acme.com"
 //
-// WHY THIS IS A SCRIPT AND NOT A COPY-PASTE. The working quotes carry my
+// WHY THIS IS A SCRIPT AND NOT A COPY-PASTE. The working estimates carry my
 // notes on how each number was arrived at: which figures had been wrong and
 // why, what is a bundle rather than a sum, which line was left unticked on
 // purpose. Every one of those is useful to whoever edits the file and ruinous
@@ -32,9 +32,9 @@ import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { randomBytes } from "node:crypto";
 import { basename } from "node:path";
 
-// The fill-in pad's invariants, shared with scripts/verify-quote-fillpad.mjs
+// The fill-in pad's invariants, shared with scripts/verify-estimate-fillpad.mjs
 // so a file published today and a file checked in a year cannot disagree.
-import { BLANKS, fillPadChecks } from "./quote-checks.mjs";
+import { BLANKS, fillPadChecks } from "./estimate-checks.mjs";
 
 const args = process.argv.slice(2);
 const source = args.find((a) => !a.startsWith("--"));
@@ -46,7 +46,7 @@ for (let i = 0; i < args.length; i++) {
 }
 
 if (!source) {
-  console.error("usage: publish-quote.mjs <quote.html> --company X --contact Y --email Z");
+  console.error("usage: publish-estimate.mjs <estimate.html> --company X --contact Y --email Z");
   process.exit(1);
 }
 
@@ -84,7 +84,7 @@ html = html.replace(
 );
 
 // --- 3. Lock everything EXCEPT the four fields meant to be filled in ------
-// The rates, the totals and the tick boxes are the quote. The client's name,
+// The rates, the totals and the tick boxes are the estimate. The client's name,
 // their contact, their email and the shoot date are the blanks on it, and
 // leaving those typeable is what lets one hosted file serve every job: fill
 // them in the browser, print, send the PDF. Nothing is saved back to the
@@ -131,10 +131,10 @@ html = html.replace(
 // locked every blank, because class= comes before contenteditable=.
 html = html.replace(/(<[^>]*\sdata-fill="[^"]*")/g, '$1 contenteditable="true"');
 
-// --- 3a. The quote dates itself the day it is opened ---------------------
-// A hosted quote is a standing link, so a date baked in at build time is
+// --- 3a. The estimate dates itself the day it is opened ---------------------
+// A hosted estimate is a standing link, so a date baked in at build time is
 // wrong the moment the month turns: open it in November and it still claims
-// to have been quoted in September, against a validity that already lapsed.
+// to have been estimated in September, against a validity that already lapsed.
 // Both dates are therefore computed in the page, and the validity term on
 // the last sheet is driven from the same value so the two cannot disagree.
 //
@@ -150,7 +150,7 @@ const longY = { day: "numeric", month: "long", year: "numeric" };
 
 html = html.replace(
   /<dd>[^<]*&middot; <span id="valid-date">[^<]*<\/span><\/dd>/,
-  `<dd><span data-date="quoted">${fmt(today, shortD)}</span> &middot; ` +
+  `<dd><span data-date="estimated">${fmt(today, shortD)}</span> &middot; ` +
     `<span data-date="valid">${fmt(expires, shortY)}</span></dd>`,
 );
 
@@ -163,8 +163,8 @@ html = html.replace(
 html = html.replace(
   "</style>",
   `
-/* The four blanks on the quote. A dashed rule says "type here" on screen and
-   prints as nothing, so a filled quote looks typeset rather than filled in. */
+/* The four blanks on the estimate. A dashed rule says "type here" on screen and
+   prints as nothing, so a filled estimate looks typeset rather than filled in. */
 .field {
   display: inline-block;
   min-width: 9ch;
@@ -200,8 +200,8 @@ html = html.replace(
    the pad offers real inputs writing into the same four fields.
 
    IT IS CLOSED BY DEFAULT AND SHOWN EVERYWHERE, which is one decision and
-   not two. Open, it spent four rows of height above the quote — on a phone
-   that was the whole first screen, and the quote is the thing the link is
+   not two. Open, it spent four rows of height above the estimate — on a phone
+   that was the whole first screen, and the estimate is the thing the link is
    for. Once it costs a single 44px bar, there is no longer any reason to
    gate it behind a width: a desktop reader gets a faster way in than
    hunting four dashed blanks on a scaled sheet, and the interaction is the
@@ -217,7 +217,7 @@ html = html.replace(
 }
 
 /* Both halves of the pad align to the sheet below rather than to the window,
-   so on a wide screen the bar reads as belonging to the quote and not to the
+   so on a wide screen the bar reads as belonging to the estimate and not to the
    backdrop. Below 8.5in the max-width stops binding and it goes full bleed. */
 .fillpad-title {
   display: flex;
@@ -334,7 +334,7 @@ html = html.replace(
   .fillpad { display: none !important; }
   .field { border-bottom: 0; background: none; padding: 0; min-width: 0; }
   /* An unfilled client name must NOT print its prompt: "Client / Company" on
-     a sent quote reads as a template nobody finished. An unfilled date may,
+     a sent estimate reads as a template nobody finished. An unfilled date may,
      because "To be confirmed" is a true thing to say about a date. */
   .field:empty::before { content: ""; }
   .field[data-print]:empty::before {
@@ -349,16 +349,16 @@ html = html.replace(
   "</body>",
   `<script>
 /* Fill the blanks, print, send the PDF. Nothing is posted anywhere: this only
-   keeps a half-filled quote from being lost to an accidental refresh, and it
+   keeps a half-filled estimate from being lost to an accidental refresh, and it
    never leaves the device it was typed on. */
 (function () {
-  /* Re-date the quote to whenever it is being read. Validity is 30 days out
+  /* Re-date the estimate to whenever it is being read. Validity is 30 days out
      from that, and the term on the last sheet reads from the same value. */
   var now = new Date();
   var until = new Date(now.getTime());
   until.setDate(until.getDate() + 30);
   var stamp = {
-    quoted: now.toLocaleDateString("en-GB", { day: "numeric", month: "short" }),
+    estimated: now.toLocaleDateString("en-GB", { day: "numeric", month: "short" }),
     valid: until.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }),
     "valid-long": until.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }),
   };
@@ -368,6 +368,10 @@ html = html.replace(
     });
   });
 
+  /* NOT "lumen-haul-estimate:", even though everything else was renamed.
+     This is the address of a half-typed draft in someone's browser, not a
+     word anyone reads. Renaming it silently discards whatever is under the
+     old key the moment this deploys. It stays for the same reason /q/ does. */
   var KEY = "lumen-haul-quote:" + location.pathname;
   var fields = [].slice.call(document.querySelectorAll("[data-fill]"));
   if (!fields.length) return;
@@ -389,7 +393,7 @@ html = html.replace(
 
   /* The phone pad and the blanks on the sheet are two ways into one value,
      so each writes to the other. Without this, filling the pad and then
-     printing would produce a quote with empty blanks on it. */
+     printing would produce an estimate with empty blanks on it. */
   var pads = [].slice.call(document.querySelectorAll("[data-pad]"));
   function syncPads() {
     pads.forEach(function (input) {
@@ -440,19 +444,19 @@ html = html.replace(
 // writing into the same fields.
 //
 // COLLAPSED BY DEFAULT, AND SHOWN AT EVERY WIDTH. It used to be phone-only
-// and always open, which spent four input rows above the quote — on a phone
-// that was the entire first screen, and the quote is what the link is for.
+// and always open, which spent four input rows above the estimate — on a phone
+// that was the entire first screen, and the estimate is what the link is for.
 // Closed it costs one 44px bar, and at that price there is no reason to hide
 // it from a desktop reader, who otherwise has to find four dashed blanks on
 // a scaled sheet. Screen only either way; @media print drops it.
 //
 // The disclosure is a real <details>, so the open state, Enter/Space and the
 // expanded/collapsed announcement come from the browser and it still opens
-// with scripting off. The CSS is in 3b; the invariants are in quote-checks.mjs.
+// with scripting off. The CSS is in 3b; the invariants are in estimate-checks.mjs.
 html = html.replace(
   /(<\/div>\s*)(<section class="sheet")/,
   `$1<details class="fillpad">
-  <summary class="fillpad-title">Fill in this quote</summary>
+  <summary class="fillpad-title">Fill in this estimate</summary>
   <div class="fillpad-fields">
     <label>Client / Company<input type="text" data-pad="company" autocomplete="organization"></label>
     <label>Contact name<input type="text" data-pad="contact" autocomplete="name"></label>
@@ -477,7 +481,7 @@ if (!/name="robots"/.test(html)) {
 // --- 5. The toolbar was addressed to whoever was editing the file ---------
 html = html.replace(
   /<div class="toolbar-hint">[\s\S]*?<\/div>/,
-  `<div class="toolbar-hint">\n    <b>${escape(opts.company || "Quote")}</b>\n` +
+  `<div class="toolbar-hint">\n    <b>${escape(opts.company || "Estimate")}</b>\n` +
     `    <span>&nbsp;&nbsp;Click the client details and shoot date to fill them in &middot; tick an optional line to see both totals &middot; then print</span>\n  </div>`,
 );
 
@@ -492,7 +496,7 @@ const checks = [
     BLANKS.every((k) => (h.match(new RegExp('data-fill="' + k + '"', "g")) || []).length === 1)],
   ["robots meta", (h) => /name="robots"/.test(h)],
   // The pad — a details/summary bar, collapsed, at every width, wired to all
-  // four blanks. Counted by NAME inside quote-checks.mjs, never by bare
+  // four blanks. Counted by NAME inside estimate-checks.mjs, never by bare
   // attribute: the script block builds its selectors by concatenation, so a
   // loose count of `data-pad="` sees the markup plus the JavaScript and fails
   // a file that is correct. This is the third check to get that wrong;
@@ -501,7 +505,7 @@ const checks = [
   ["blanks are labelled", (h) =>
     (h.match(/aria-label="/g) || []).length === 4],
   ["three date slots", (h) =>
-    ["quoted", "valid", "valid-long"].every(
+    ["estimated", "valid", "valid-long"].every(
       (k) => (h.match(new RegExp('data-date="' + k + '"', "g")) || []).length === 1,
     )],
   ["sheets intact", (h) => (h.match(/class="sheet"/g) || []).length >= 2],

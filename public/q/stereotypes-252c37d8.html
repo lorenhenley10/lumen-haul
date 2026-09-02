@@ -5,7 +5,7 @@
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Lumen Haul — Stereotypes Quote</title>
+<title>Lumen Haul — Stereotypes Estimate</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -584,8 +584,8 @@ body {
   .num.is-changed { animation: none !important; background: none !important; }
 }
 
-/* The four blanks on the quote. A dashed rule says "type here" on screen and
-   prints as nothing, so a filled quote looks typeset rather than filled in. */
+/* The four blanks on the estimate. A dashed rule says "type here" on screen and
+   prints as nothing, so a filled estimate looks typeset rather than filled in. */
 .field {
   display: inline-block;
   min-width: 9ch;
@@ -621,8 +621,8 @@ body {
    the pad offers real inputs writing into the same four fields.
 
    IT IS CLOSED BY DEFAULT AND SHOWN EVERYWHERE, which is one decision and
-   not two. Open, it spent four rows of height above the quote — on a phone
-   that was the whole first screen, and the quote is the thing the link is
+   not two. Open, it spent four rows of height above the estimate — on a phone
+   that was the whole first screen, and the estimate is the thing the link is
    for. Once it costs a single 44px bar, there is no longer any reason to
    gate it behind a width: a desktop reader gets a faster way in than
    hunting four dashed blanks on a scaled sheet, and the interaction is the
@@ -638,7 +638,7 @@ body {
 }
 
 /* Both halves of the pad align to the sheet below rather than to the window,
-   so on a wide screen the bar reads as belonging to the quote and not to the
+   so on a wide screen the bar reads as belonging to the estimate and not to the
    backdrop. Below 8.5in the max-width stops binding and it goes full bleed. */
 .fillpad-title {
   display: flex;
@@ -755,7 +755,7 @@ body {
   .fillpad { display: none !important; }
   .field { border-bottom: 0; background: none; padding: 0; min-width: 0; }
   /* An unfilled client name must NOT print its prompt: "Client / Company" on
-     a sent quote reads as a template nobody finished. An unfilled date may,
+     a sent estimate reads as a template nobody finished. An unfilled date may,
      because "To be confirmed" is a true thing to say about a date. */
   .field:empty::before { content: ""; }
   .field[data-print]:empty::before {
@@ -770,14 +770,14 @@ body {
 
 <div class="toolbar">
   <div class="toolbar-hint">
-    <b>Quote</b>
+    <b>Estimate</b>
     <span>&nbsp;&nbsp;Click the client details and shoot date to fill them in &middot; tick an optional line to see both totals &middot; then print</span>
   </div>
   <button type="button" onclick="window.print()">Print / Save as PDF</button>
 </div>
 
 <details class="fillpad">
-  <summary class="fillpad-title">Fill in this quote</summary>
+  <summary class="fillpad-title">Fill in this estimate</summary>
   <div class="fillpad-fields">
     <label>Client / Company<input type="text" data-pad="company" autocomplete="organization"></label>
     <label>Contact name<input type="text" data-pad="contact" autocomplete="name"></label>
@@ -797,7 +797,7 @@ body {
       </div>
     </div>
     <div class="doc-id">
-      <div class="doc-kind">Quote</div>
+      <div class="doc-kind">Estimate</div>
       <div class="doc-no">LH&#8209;<span>0003</span></div>
     </div>
   </header>
@@ -839,8 +839,8 @@ body {
       <dd>San Francisco, Los Angeles or Chicago</dd>
     </div>
     <div>
-      <dt class="label">Quoted / valid through</dt>
-      <dd><span data-date="quoted">2 Sept</span> &middot; <span data-date="valid">2 Oct 2026</span></dd>
+      <dt class="label">Issued / valid through</dt>
+      <dd><span data-date="estimated">2 Sept</span> &middot; <span data-date="valid">2 Oct 2026</span></dd>
     </div>
   </dl>
 
@@ -941,7 +941,7 @@ body {
 
   <footer class="sheet-foot">
     <div>Lumen Haul &middot; lumenhaul.com</div>
-    <div>Quote LH&#8209;<span class="foot-no">0003</span></div>
+    <div>Estimate LH&#8209;<span class="foot-no">0003</span></div>
     <div>Page 1 of 3</div>
   </footer>
 </section>
@@ -950,7 +950,7 @@ body {
 
   <header class="masthead masthead--cont">
     <div class="wordmark">Lumen Haul</div>
-    <div class="doc-kind">Quote LH&#8209;<span class="foot-no">0003</span> &middot; Summary</div>
+    <div class="doc-kind">Estimate LH&#8209;<span class="foot-no">0003</span> &middot; Summary</div>
   </header>
 
   
@@ -974,7 +974,7 @@ body {
         <div class="row-index">02</div>
         <div>
           <div class="row-title">Commercial</div>
-          <div class="row-desc">Edit, color, sound design and mix. One 60&#8209;second cut cleared for brand and paid social use. Music licensing and further versions are quoted separately.</div>
+          <div class="row-desc">Edit, color, sound design and mix. One 60&#8209;second cut cleared for brand and paid social use. Music licensing and further versions are estimated separately.</div>
         </div>
         <div class="num">$1,600</div>
         <div class="num amount" data-amount>$1,600</div>
@@ -1055,7 +1055,7 @@ body {
         <p>Gallery within three working days. Edited finals within ten working days of your selection. The commercial within three weeks.</p>
       </div>
       <div class="note">
-        <div class="label">Quoted separately</div>
+        <div class="label">Estimated separately</div>
         <p>Retouching, music licensing, further cuts or aspect ratios, subjects beyond the eighth, and any usage past the terms overleaf.</p>
       </div>
     </div>
@@ -1063,7 +1063,7 @@ body {
 
   <footer class="sheet-foot">
     <div>Lumen Haul &middot; lumenhaul.com</div>
-    <div>Quote LH&#8209;<span class="foot-no">0003</span></div>
+    <div>Estimate LH&#8209;<span class="foot-no">0003</span></div>
     <div>Page 2 of 3</div>
   </footer>
 </section>
@@ -1072,7 +1072,7 @@ body {
 
   <header class="masthead masthead--cont">
     <div class="wordmark">Lumen Haul</div>
-    <div class="doc-kind">Quote LH&#8209;<span class="foot-no">0003</span> &middot; Terms</div>
+    <div class="doc-kind">Estimate LH&#8209;<span class="foot-no">0003</span> &middot; Terms</div>
   </header>
 
   
@@ -1095,7 +1095,7 @@ body {
       </div>
       <div class="term">
         <div class="label">Studio booking</div>
-        <p>The stage is held once this quote is accepted, subject to availability. Rates differ by city, so the line on page 1 is confirmed at booking.</p>
+        <p>The stage is held once this estimate is accepted, subject to availability. Rates differ by city, so the line on page 1 is confirmed at booking.</p>
       </div>
       <div class="term">
         <div class="label">Delivery and turnaround</div>
@@ -1119,7 +1119,7 @@ body {
       </div>
       <div class="term">
         <div class="label">Music</div>
-        <p>Delivered with a licensed track covering the usage above. Swapping the track, or extending the license beyond it, is quoted separately.</p>
+        <p>Delivered with a licensed track covering the usage above. Swapping the track, or extending the license beyond it, is estimated separately.</p>
       </div>
       <div class="term">
         <div class="label">Portfolio</div>
@@ -1157,7 +1157,7 @@ body {
 
   <footer class="sheet-foot">
     <div>Loren Henley &middot; (970) 689&#8209;9617 &middot; <span class="mixed">loren@lumenhaul.com</span></div>
-    <div>Quote LH&#8209;<span class="foot-no">0003</span></div>
+    <div>Estimate LH&#8209;<span class="foot-no">0003</span></div>
     <div>Page 3 of 3</div>
   </footer>
 </section>
@@ -1262,12 +1262,12 @@ body {
 
     put(document.getElementById("grand-total"), money(production + equipment + post + extras));
 
-    /* Every description on this quote is static — there is nothing left to
+    /* Every description on this estimate is static — there is nothing left to
        select, so there is nothing to derive. Only the figures move. */
   }
 
-  /* --- Keep the quote number in the footers in step with the masthead --- */
-  function syncQuoteNo() {
+  /* --- Keep the estimate number in the footers in step with the masthead --- */
+  function syncEstimateNo() {
     var source = document.querySelector(".doc-no .fill");
     if (!source) return;
     var no = source.textContent.trim();
@@ -1275,8 +1275,8 @@ body {
   }
 
 
-  document.addEventListener("input",  function () { recalc(); syncQuoteNo(); });
-  document.addEventListener("change", function () { recalc(); syncQuoteNo(); });
+  document.addEventListener("input",  function () { recalc(); syncEstimateNo(); });
+  document.addEventListener("change", function () { recalc(); syncEstimateNo(); });
 
   /* Fit the sheet to a narrow window without reflowing the printed layout.
 
@@ -1302,23 +1302,23 @@ body {
   window.addEventListener("resize", fit);
 
   recalc();
-  syncQuoteNo();
+  syncEstimateNo();
   fit();
 })();
 </script>
 
 <script>
 /* Fill the blanks, print, send the PDF. Nothing is posted anywhere: this only
-   keeps a half-filled quote from being lost to an accidental refresh, and it
+   keeps a half-filled estimate from being lost to an accidental refresh, and it
    never leaves the device it was typed on. */
 (function () {
-  /* Re-date the quote to whenever it is being read. Validity is 30 days out
+  /* Re-date the estimate to whenever it is being read. Validity is 30 days out
      from that, and the term on the last sheet reads from the same value. */
   var now = new Date();
   var until = new Date(now.getTime());
   until.setDate(until.getDate() + 30);
   var stamp = {
-    quoted: now.toLocaleDateString("en-GB", { day: "numeric", month: "short" }),
+    estimated: now.toLocaleDateString("en-GB", { day: "numeric", month: "short" }),
     valid: until.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }),
     "valid-long": until.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }),
   };
@@ -1328,6 +1328,10 @@ body {
     });
   });
 
+  /* NOT "lumen-haul-estimate:", even though everything else was renamed.
+     This is the address of a half-typed draft in someone's browser, not a
+     word anyone reads. Renaming it silently discards whatever is under the
+     old key the moment this deploys. It stays for the same reason /q/ does. */
   var KEY = "lumen-haul-quote:" + location.pathname;
   var fields = [].slice.call(document.querySelectorAll("[data-fill]"));
   if (!fields.length) return;
@@ -1349,7 +1353,7 @@ body {
 
   /* The phone pad and the blanks on the sheet are two ways into one value,
      so each writes to the other. Without this, filling the pad and then
-     printing would produce a quote with empty blanks on it. */
+     printing would produce an estimate with empty blanks on it. */
   var pads = [].slice.call(document.querySelectorAll("[data-pad]"));
   function syncPads() {
     pads.forEach(function (input) {

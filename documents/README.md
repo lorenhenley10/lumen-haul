@@ -1,18 +1,18 @@
-# Quotes
+# Estimates
 
-## lumen-haul-quote-template.html
+## lumen-haul-estimate-template.html
 
 The master. Standard rates, no client data — every fillable field is still a
 `[ bracketed placeholder ]`.
 
-**Do not fill this one in.** Copy it into `quotes/` and fill in the copy:
+**Do not fill this one in.** Copy it into `estimates/` and fill in the copy:
 
 ```
-mkdir -p quotes
-cp lumen-haul-quote-template.html "quotes/client-name.html"
+mkdir -p estimates
+cp lumen-haul-estimate-template.html "estimates/client-name.html"
 ```
 
-`quotes/` is **gitignored**. Filled quotes carry a client's name, their
+`estimates/` is **gitignored**. Filled estimates carry a client's name, their
 contact details and negotiated pricing, and the PDFs beside them are build
 output. The folder will not exist in a fresh clone, hence the `mkdir`.
 
@@ -21,7 +21,27 @@ packages you want, set the day counts, then Print → Save as PDF
 (Letter, Margins: None).
 
 Only edit the master when a **standing** rate or term changes — a new day
-rate, a new package, revised terms. Then every future quote starts correct.
+rate, a new package, revised terms. Then every future estimate starts correct.
+
+## Publishing one as a link
+
+```
+node scripts/publish-estimate.mjs documents/estimates/stereotypes.html \
+  --company "Acme Studios" --contact "Jane Doe" --email "jane@acme.com"
+```
+
+This strips the working notes, locks every rate and total, leaves the four
+client blanks typeable, and writes the result to `public/q/` with a random
+filename suffix. Check what it wrote before deploying:
+
+```
+npm run verify:estimate-fillpad
+```
+
+**The path is `/q/`, not `/e/`.** It predates the rename to "estimate" and
+the links handed out under it are still live, so it stays. Nothing a
+recipient sees says "quote"; the letter in the URL is not shown to anyone
+and carries no meaning on its own.
 
 ## Standard rates as of 2026-08-27
 
