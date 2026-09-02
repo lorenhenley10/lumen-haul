@@ -682,7 +682,7 @@ body {
     </div>
     <div>
       <dt class="label">Quoted / valid through</dt>
-      <dd>1 Sept &middot; <span id="valid-date">1 Oct 2026</span></dd>
+      <dd><span data-date="quoted">2 Sept</span> &middot; <span data-date="valid">2 Oct 2026</span></dd>
     </div>
   </dl>
 
@@ -925,7 +925,7 @@ body {
     <div class="terms">
       <div class="term">
         <div class="label">Validity and payment</div>
-        <p>Holds until 1 October 2026. 50% on acceptance to hold the date and book the stage, balance net 15 from final delivery.</p>
+        <p>Holds until <span data-date="valid-long">2 October 2026</span>. 50% on acceptance to hold the date and book the stage, balance net 15 from final delivery.</p>
       </div>
       <div class="term">
         <div class="label">Hours and overtime</div>
@@ -1149,6 +1149,22 @@ body {
    keeps a half-filled quote from being lost to an accidental refresh, and it
    never leaves the device it was typed on. */
 (function () {
+  /* Re-date the quote to whenever it is being read. Validity is 30 days out
+     from that, and the term on the last sheet reads from the same value. */
+  var now = new Date();
+  var until = new Date(now.getTime());
+  until.setDate(until.getDate() + 30);
+  var stamp = {
+    quoted: now.toLocaleDateString("en-GB", { day: "numeric", month: "short" }),
+    valid: until.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }),
+    "valid-long": until.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }),
+  };
+  Object.keys(stamp).forEach(function (k) {
+    [].forEach.call(document.querySelectorAll('[data-date="' + k + '"]'), function (el) {
+      el.textContent = stamp[k];
+    });
+  });
+
   var KEY = "lumen-haul-quote:" + location.pathname;
   var fields = [].slice.call(document.querySelectorAll("[data-fill]"));
   if (!fields.length) return;

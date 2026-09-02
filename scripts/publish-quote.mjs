@@ -126,6 +126,34 @@ html = html.replace(
 // locked every blank, because class= comes before contenteditable=.
 html = html.replace(/(<[^>]*\sdata-fill="[^"]*")/g, '$1 contenteditable="true"');
 
+// --- 3a. The quote dates itself the day it is opened ---------------------
+// A hosted quote is a standing link, so a date baked in at build time is
+// wrong the moment the month turns: open it in November and it still claims
+// to have been quoted in September, against a validity that already lapsed.
+// Both dates are therefore computed in the page, and the validity term on
+// the last sheet is driven from the same value so the two cannot disagree.
+//
+// The text written here is the build date, which is the honest fallback if
+// scripting is off: stale eventually, but never a date nobody chose.
+const today = new Date();
+const expires = new Date(today.getTime());
+expires.setDate(expires.getDate() + 30);
+const fmt = (d, o) => d.toLocaleDateString("en-GB", o);
+const shortD = { day: "numeric", month: "short" };
+const shortY = { day: "numeric", month: "short", year: "numeric" };
+const longY = { day: "numeric", month: "long", year: "numeric" };
+
+html = html.replace(
+  /<dd>[^<]*&middot; <span id="valid-date">[^<]*<\/span><\/dd>/,
+  `<dd><span data-date="quoted">${fmt(today, shortD)}</span> &middot; ` +
+    `<span data-date="valid">${fmt(expires, shortY)}</span></dd>`,
+);
+
+html = html.replace(
+  /Holds until [0-9]+ [A-Za-z]+ [0-9]{4}\./,
+  `Holds until <span data-date="valid-long">${fmt(expires, longY)}</span>.`,
+);
+
 // --- 3b. The blanks need an affordance on screen and none on paper -------
 html = html.replace(
   "</style>",
@@ -171,6 +199,22 @@ html = html.replace(
    keeps a half-filled quote from being lost to an accidental refresh, and it
    never leaves the device it was typed on. */
 (function () {
+  /* Re-date the quote to whenever it is being read. Validity is 30 days out
+     from that, and the term on the last sheet reads from the same value. */
+  var now = new Date();
+  var until = new Date(now.getTime());
+  until.setDate(until.getDate() + 30);
+  var stamp = {
+    quoted: now.toLocaleDateString("en-GB", { day: "numeric", month: "short" }),
+    valid: until.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }),
+    "valid-long": until.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }),
+  };
+  Object.keys(stamp).forEach(function (k) {
+    [].forEach.call(document.querySelectorAll('[data-date="' + k + '"]'), function (el) {
+      el.textContent = stamp[k];
+    });
+  });
+
   var KEY = "lumen-haul-quote:" + location.pathname;
   var fields = [].slice.call(document.querySelectorAll("[data-fill]"));
   if (!fields.length) return;
@@ -238,6 +282,13 @@ const checks = [
     (h.match(/contenteditable="true"/g) || []).length === 4 &&
     (h.match(/data-fill="/g) || []).length === 4],
   ["robots meta", (h) => /name="robots"/.test(h)],
+  // Count each slot by name, not occurrences of `data-date="`. The script
+  // block that fills them builds its selector by concatenation, so a loose
+  // count sees four and fails a file that is perfectly correct.
+  ["three date slots", (h) =>
+    ["quoted", "valid", "valid-long"].every(
+      (k) => (h.match(new RegExp('data-date="' + k + '"', "g")) || []).length === 1,
+    )],
   ["sheets intact", (h) => (h.match(/class="sheet"/g) || []).length >= 2],
 ];
 const failed = checks.filter(([, ok]) => !ok(html)).map(([name]) => name);
