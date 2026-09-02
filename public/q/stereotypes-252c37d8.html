@@ -2,51 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Lumen Haul — Quote</title>
+<title>Stereotypes Quote</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-
-<!--
-  ============================================================================
-  LUMEN HAUL — CLIENT QUOTE TEMPLATE
-  ============================================================================
-
-  HOW TO USE THIS FOR ONE JOB (nothing to install, nothing to save)
-
-    1. Open this file in a browser.
-    2. Click any [ bracketed field ] and type over it — client, project,
-       dates, quote number.
-    3. Click a camera package to select it. The selected package is the one
-       marked RECOMMENDED on the printed page.
-    4. Set the day counts. Every total recalculates as you go.
-    5. Print / Save as PDF.  Chrome: Destination "Save as PDF",
-       Paper "Letter", Margins "None", Background graphics ON.
-
-  HOW TO CHANGE THE TEMPLATE ITSELF (permanent edits)
-
-    Rates live in ONE place each — the `data-rate` attribute on the line.
-    Change the attribute AND the printed rate next to it. Search for:
-
-        data-rate="1000"   Director / DP
-        data-rate="850"    Sound Mixer
-        data-rate="500"    1st Assistant Camera
-        data-rate="1500"   ARRI Alexa Mini LF package
-        data-rate="200"    Blackmagic 6K FF indie package
-        data-rate="250"    Triple-camera Blackmagic package
-        data-rate="150"    Lighting package
-        data-rate="100|200|300"  Sound package — standard / expanded / full
-
-    To add a line, copy an existing row wholesale and edit it — the totals
-    pick up any row carrying `data-line`. To change which package is
-    recommended by default, move the `checked` attribute.
-
-    Terms, the address block and the studio footer are plain text near the
-    bottom of the file, under PAGE 3.
-  ============================================================================
--->
 
 <style>
 /* ===========================================================================
@@ -80,15 +43,21 @@
   --col-amount: 104px;
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* The screen backdrop behind the sheets. Painted on html and body both:
+     body's paint stops at body's box, and the strip beyond it is html's. */
+  --backdrop: #8f8f8f;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
 
 html { -webkit-text-size-adjust: 100%; }
 
+html { background: var(--backdrop); }
+
 body {
   margin: 0;
-  background: #8f8f8f;
+  background: var(--backdrop);
   color: var(--ink);
   font-family: var(--font-sans);
   font-size: 13px;
@@ -97,9 +66,15 @@ body {
   font-feature-settings: "kern" 1;
 }
 
+/* Three theme states, not two: an explicit choice stamps data-theme on the
+   root, and the default "system" setting stamps nothing at all. Only the
+   backdrop moves. The sheets stay white in every state because they are
+   paper, and every ink color on them is measured against white. */
 @media (prefers-color-scheme: dark) {
-  body { background: #2a2a2a; }
+  :root:not([data-theme="light"]) { --backdrop: #2a2a2a; }
 }
+:root[data-theme="dark"] { --backdrop: #2a2a2a; }
+:root[data-theme="light"] { --backdrop: #8f8f8f; }
 
 /* ===========================================================================
    SHEET
@@ -204,7 +179,7 @@ body {
 .fill:hover   { background: #ececec; }
 /* .fill is inline-block by default; where it lands on a line that stacks,
    block display has to win it back. */
-.row-title.fill, .row-desc.fill, .opt-body { display: block; }
+.row-title.fill, .row-desc.fill { display: block; }
 .fill:focus   { background: #fff; box-shadow: 0 0 0 1.25px var(--ink); }
 
 /* ===========================================================================
@@ -237,7 +212,7 @@ body {
 /* ===========================================================================
    SECTION HEADS
    ======================================================================== */
-.section { margin-top: 30px; }
+.section { margin-top: 25px; }
 
 .section-head {
   display: flex;
@@ -263,15 +238,6 @@ body {
   text-align: right;
 }
 
-.subhead {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 16px;
-  margin: 22px 0 0;
-}
-.subhead:first-child { margin-top: 0; }
-
 /* ===========================================================================
    LINE ITEM ROWS
    One grid template drives the production table and the equipment options,
@@ -284,7 +250,7 @@ body {
   grid-template-columns: 20px 1fr 52px var(--col-rate) var(--col-amount);
   align-items: baseline;
   gap: 0 8px;
-  padding: 9px 0;
+  padding: 7px 0;
   border-bottom: 1px solid var(--rule-2);
 }
 
@@ -311,7 +277,7 @@ body {
   display: block;
   margin-top: 2px;
   font-size: 11px;
-  line-height: 1.4;
+  line-height: 1.34;
   color: var(--ink-3);
   max-width: 62ch;
 }
@@ -370,16 +336,17 @@ body {
 .subtotal .num { font-size: 14px; font-weight: 500; }
 
 /* ===========================================================================
-   SELECTABLE PACKAGE OPTIONS
-   Selecting a package IS marking it recommended — one act, one mark, so the
-   two can never disagree on the printed page.
+   OPTIONAL LINE ITEM
+   A checkbox sits in the index column, so a numbered row reads as included
+   and a boxed row reads as a choice. That difference IS the meaning; there
+   is no second label explaining it.
    ======================================================================== */
 .opt {
   display: grid;
   grid-template-columns: 20px 1fr 52px var(--col-rate) var(--col-amount);
   align-items: baseline;
   gap: 0 8px;
-  padding: 8px 0;
+  padding: 7px 0;
   border-bottom: 1px solid var(--rule-2);
   cursor: pointer;
 }
@@ -387,10 +354,11 @@ body {
 .opt input {
   position: absolute;
   width: 1px; height: 1px;
-  opacity: 0;
-  margin: 0;
+  opacity: 0; margin: 0;
   pointer-events: none;
 }
+
+.opt-body { display: block; }
 
 .opt-mark {
   position: relative;
@@ -420,56 +388,16 @@ body {
 .opt input:checked ~ .opt-mark { background: var(--ink); }
 .opt input:checked ~ .opt-mark::after { transform: rotate(45deg) scale(1); opacity: 1; }
 .opt input:focus-visible ~ .opt-mark { box-shadow: 0 0 0 2.5px rgb(0 0 0 / 0.22); }
-
-.opt input:checked ~ .opt-body .row-title { font-weight: 600; }
-.opt input:checked ~ .opt-body .row-desc { color: var(--ink-2); }
-.opt input:not(:checked) ~ .num { color: var(--ink-3); }
-
-.opt:hover .opt-mark { border-color: var(--ink); background: var(--rule-2); }
+.opt:hover .opt-mark { background: var(--rule-2); }
 .opt:hover input:checked ~ .opt-mark { background: var(--ink); }
-
-/* The recommendation mark. Rides the checked state, so it moves with the
-   selection instead of being a second thing to remember to update. */
-/* Title line of an option: name on the left, recommendation mark pinned to
-   the right. Pinned rather than inline because the longest package name is
-   wider than the column, and an inline chip wrapped under it — the mark has
-   to sit in the same place on every row to be findable. */
-.opt .row-title {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.opt-flag {
-  display: none;
-  flex: none;
-  padding: 2.5px 5px 2px;
-  background: var(--ink);
-  color: var(--paper);
-  font-family: var(--font-mono);
-  font-size: 7.5px;
-  font-weight: 500;
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-.opt input:checked ~ .opt-body .opt-flag { display: inline-block; }
-
-/* Group caption above a set of options. */
-.opt-group-note {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-}
-
-.subhead h3 {
-  margin: 0;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: -0.012em;
+.opt input:not(:checked) ~ .num { color: var(--ink-3); }
+/* Rows whose quantity is always one — a date is on the schedule or it is
+   not — drop the quantity column entirely. The Rate and Amount columns are
+   fixed width at the end of the grid, so they still line up with the tables
+   that DO carry a count. */
+.rows--fixed .row,
+.rows--fixed .opt {
+  grid-template-columns: 20px 1fr var(--col-rate) var(--col-amount);
 }
 
 /* ===========================================================================
@@ -478,11 +406,11 @@ body {
 .notes {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px 40px;
-  margin-top: 18px;
+  gap: 12px 40px;
+  margin-top: 16px;
 }
 .note .label { margin-bottom: 5px; }
-.note p { margin: 0; font-size: 11.5px; line-height: 1.5; color: var(--ink-2); }
+.note p { margin: 0; font-size: 11.5px; line-height: 1.44; color: var(--ink-2); }
 
 /* ===========================================================================
    TOTAL BAR
@@ -512,11 +440,11 @@ body {
 .terms {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 13px 40px;
-  margin-top: 14px;
+  gap: 10px 40px;
+  margin-top: 12px;
 }
 .term .label { margin-bottom: 4px; }
-.term p { margin: 0; font-size: 11px; line-height: 1.5; color: var(--ink-2); }
+.term p { margin: 0; font-size: 11px; line-height: 1.44; color: var(--ink-2); }
 
 .signature {
   display: grid;
@@ -524,7 +452,7 @@ body {
   gap: 0 40px;
   margin-top: 22px;
 }
-.sign-col .label { margin-bottom: 24px; }
+.sign-col .label { margin-bottom: 18px; }
 .sign-line {
   border-bottom: 1px solid var(--ink);
   height: 0;
@@ -536,7 +464,7 @@ body {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--ink-3);
-  margin-bottom: 22px;
+  margin-bottom: 18px;
 }
 .sign-cap:last-child { margin-bottom: 0; }
 
@@ -562,6 +490,9 @@ body {
 
 /* An email set in small caps reads as decoration rather than an address. */
 .sheet-foot .mixed { text-transform: none; letter-spacing: 0.02em; }
+
+/* A name with internal capitals has to keep them. */
+.label.mixed { text-transform: none; letter-spacing: 0.04em; font-size: 9.5px; }
 
 /* ===========================================================================
    SCREEN-ONLY TOOLBAR
@@ -621,16 +552,6 @@ body {
 }
 
 /* ===========================================================================
-   NARROW SCREENS
-   The sheet keeps its printed proportions and scales down whole, rather than
-   reflowing into a layout that would not match the PDF.
-   ======================================================================== */
-@media screen and (max-width: 9in) {
-  .sheet-scaler { display: flex; justify-content: center; }
-  .sheet { transform-origin: top center; }
-}
-
-/* ===========================================================================
    PRINT
    ======================================================================== */
 @page { size: letter; margin: 0; }
@@ -646,6 +567,8 @@ body {
     box-shadow: none;
     break-after: page;
     page-break-after: always;
+    /* fit() may have zoomed the sheet to suit the window. Paper is paper. */
+    zoom: 1 !important;
   }
   .sheet:last-of-type { break-after: auto; page-break-after: auto; }
 
@@ -653,33 +576,32 @@ body {
   .fill { background: none; box-shadow: none; padding: 0; }
   .days { background: none; border-bottom: 0; }
 
-  /* Solid blacks must survive the print pipeline — the checked package mark
-     and the total bar are the two things the client actually looks for. */
-  .opt-mark, .opt-flag, .total {
+  /* The total bar is solid black and Chrome drops backgrounds unless the
+     print dialog is told otherwise. This makes it survive either way. */
+  .opt-mark, .total {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
 
   .row, .opt, .term, .note { break-inside: avoid; page-break-inside: avoid; }
+
+  /* The changed-value flash is a screen affordance. Printing while it is
+     mid-animation would put a grey box behind a figure. */
+  .num.is-changed { animation: none !important; background: none !important; }
 }
 </style>
 </head>
 
 <body>
 
-<!-- Screen only. Never printed. -->
 <div class="toolbar">
   <div class="toolbar-hint">
-    <b>Lumen Haul Quote</b>
-    <span>&nbsp;&nbsp;Click a package to select it &middot; click any [ field ] to type &middot; edit the file to change rates</span>
+    <b>Stereotypes &middot; Quote LH&#8209;0003</b>
+    <span>&nbsp;&nbsp;Tick the commercial coverage on page 1 to see both totals</span>
   </div>
   <button type="button" onclick="window.print()">Print / Save as PDF</button>
 </div>
 
-
-<!-- ==========================================================================
-     PAGE 1 — QUOTE AND PRODUCTION
-     ======================================================================= -->
 <section class="sheet" id="sheet-1">
 
   <header class="masthead">
@@ -692,11 +614,11 @@ body {
     </div>
     <div class="doc-id">
       <div class="doc-kind">Quote</div>
-      <div class="doc-no">LH&#8209;<span class="fill" contenteditable="true">0001</span></div>
+      <div class="doc-no">LH&#8209;<span>0003</span></div>
     </div>
   </header>
 
-  <!-- EDIT: your address block is the left column; the client fills the right -->
+  
   <div class="parties">
     <div class="party">
       <div class="label">From</div>
@@ -712,11 +634,9 @@ body {
     <div class="party">
       <div class="label">Prepared for</div>
       <address>
-        <span class="party-name fill" contenteditable="true">[ Client / Company ]</span><br>
-        <span class="fill" contenteditable="true">[ Contact name ]</span><br>
-        <span class="fill" contenteditable="true">[ Street address ]</span><br>
-        <span class="fill" contenteditable="true">[ City, State ZIP ]</span><br>
-        <span class="fill" contenteditable="true">[ email ]</span>
+        <span class="party-name">[ Client / Company ]</span><br>
+        <span>[ Contact name ]</span><br>
+        <span>[ email ]</span>
       </address>
     </div>
   </div>
@@ -724,37 +644,33 @@ body {
   <dl class="jobstrip">
     <div>
       <dt class="label">Project</dt>
-      <dd class="fill" contenteditable="true">[ Project name ]</dd>
+      <dd>Stereotypes</dd>
     </div>
     <div>
       <dt class="label">Shoot date</dt>
-      <dd class="fill" contenteditable="true">[ Date ]</dd>
+      <dd>[ To be confirmed ]</dd>
     </div>
     <div>
       <dt class="label">Location</dt>
-      <dd class="fill" contenteditable="true">[ Location ]</dd>
+      <dd>San Francisco, Los Angeles or Chicago</dd>
     </div>
     <div>
       <dt class="label">Quoted / valid through</dt>
-      <dd><span class="fill" id="quote-date" contenteditable="true">[ Date ]</span> &middot; <span class="fill" id="valid-date" contenteditable="true">[ +30 days ]</span></dd>
+      <dd>1 Sept &middot; <span id="valid-date">1 Oct 2026</span></dd>
     </div>
   </dl>
 
-  <!-- ---------------------------------------------------------------------
-       PRODUCTION — crew and labour. One row per person.
-       To add crew: copy a .row block, change the title, desc and data-rate.
-       -------------------------------------------------------------------- -->
+  
   <section class="section">
     <div class="section-head">
       <h2>Production</h2>
-      <div class="section-note" id="crew-note">One production day &middot; crew of three</div>
+      <div class="section-note">One shoot day</div>
     </div>
 
-    <div class="rows" id="production">
+    <div class="rows rows--fixed" id="production">
       <div class="row row--head">
         <div class="row-index">&nbsp;</div>
-        <div class="label">Role</div>
-        <div class="label num">Days</div>
+        <div class="label">Item</div>
         <div class="label num">Rate</div>
         <div class="label num">Amount</div>
       </div>
@@ -762,258 +678,135 @@ body {
       <div class="row" data-line data-rate="1000">
         <div class="row-index">01</div>
         <div>
-          <div class="row-title">Director &amp; Director of Photography</div>
-          <div class="row-desc">Loren Henley. Creative direction, camera operation and on-set supervision, from the pre-production call through wrap.</div>
+          <div class="row-title">Still photography, one day</div>
+          <div class="row-desc">Ten hours from call. Direction, lighting and capture on the cyc, with selects reviewed on set as we go.</div>
         </div>
-        <div><input class="days" type="number" min="0" step="0.5" value="1" aria-label="Days, Director and Director of Photography"></div>
         <div class="num">$1,000</div>
         <div class="num amount" data-amount>$1,000</div>
       </div>
 
-      <div class="row" data-line data-rate="850">
+      <div class="row" data-line data-rate="500">
         <div class="row-index">02</div>
         <div>
-          <div class="row-title">Sound Mixer</div>
-          <div class="row-desc">Location sound. Mixer/recorder, boom operation and wireless lavaliers, monitored and mixed live on set.</div>
+          <div class="row-title">Wardrobe assistant</div>
+          <div class="row-desc">Prepping the next outfit while the current look is still shooting. Four outfits across eight subjects is 32 changes, and this is what keeps them inside the day.</div>
         </div>
-        <div><input class="days" type="number" min="0" step="0.5" value="1" aria-label="Days, Sound Mixer"></div>
-        <div class="num">$850</div>
-        <div class="num amount" data-amount>$850</div>
-      </div>
-
-      <div class="row" data-line data-rate="500">
-        <div class="row-index">03</div>
-        <div>
-          <div class="row-title">1st Assistant Camera</div>
-          <div class="row-desc">Focus pulling, lens changes, camera build and media management through the day.</div>
-        </div>
-        <div><input class="days" type="number" min="0" step="0.5" value="1" aria-label="Days, First Assistant Camera"></div>
         <div class="num">$500</div>
         <div class="num amount" data-amount>$500</div>
       </div>
 
+      <label class="opt" data-line data-addon data-rate="950">
+        <input type="checkbox" checked>
+        <span class="opt-mark" aria-hidden="true"></span>
+        <span class="opt-body">
+          <span class="row-title">Commercial coverage</span>
+          <span class="row-desc">A dedicated operator for the shoot day with their own camera package, shooting alongside the stills without interrupting them. Post is priced separately below.</span>
+        </span>
+        <span class="num">$950</span>
+        <span class="num amount" data-amount>$950</span>
+      </label>
+
       <div class="subtotal">
-        <div class="subtotal-label">Subtotal &mdash; Production</div>
-        <div class="num" id="sub-production">$2,350</div>
+        <div class="subtotal-label">Production subtotal</div>
+        <div class="num" id="sub-production">$2,450</div>
       </div>
     </div>
   </section>
 
+  
   <section class="section">
     <div class="section-head">
-      <h2>What the day covers</h2>
-    </div>
-    <div class="notes">
-      <div class="note">
-        <div class="label">Hours</div>
-        <p>A production day is ten hours from crew call, meal break included. Overtime runs at 1.5&times; the hourly equivalent of each day rate, billed in half&#8209;hour increments.</p>
-      </div>
-      <div class="note">
-        <div class="label">Included at no charge</div>
-        <p>The pre-production call, shot list and schedule, and the on&#8209;set direction of the hired crew. Data is backed up to two drives before anyone leaves the location.</p>
-      </div>
-      <div class="note">
-        <div class="label">Quoted separately</div>
-        <p>Editing, color, sound mix and finishing; scouting days, casting, permits, studio hire, art direction and talent.</p>
-      </div>
-      <div class="note">
-        <div class="label">Crew</div>
-        <p>Crew are hired from a standing roster and booked once this quote is accepted. Rates above are the day rates paid to each position.</p>
-      </div>
-    </div>
-  </section>
-
-  <footer class="sheet-foot">
-    <div>Lumen Haul &middot; lumenhaul.com</div>
-    <div>Quote LH&#8209;<span class="foot-no">0001</span></div>
-    <div>Page 1 of 3</div>
-  </footer>
-</section>
-
-
-<!-- ==========================================================================
-     PAGE 2 — EQUIPMENT RENTAL
-     ======================================================================= -->
-<section class="sheet" id="sheet-2">
-
-  <header class="masthead masthead--cont">
-    <div class="wordmark">Lumen Haul</div>
-    <div class="doc-kind">Quote LH&#8209;<span class="foot-no">0001</span> &middot; Equipment</div>
-  </header>
-
-  <section class="section" style="margin-top:26px">
-    <div class="section-head">
-      <h2>Equipment rental</h2>
-      <div class="section-note">
-        Rental days
-        <input class="days" id="equip-days" type="number" min="0" step="0.5" value="1"
-               style="width:38px;display:inline-block;margin-left:6px" aria-label="Rental days">
-      </div>
+      <h2>Studio and lighting</h2>
+      <div class="section-note">Included in both options</div>
     </div>
 
-    <!-- -------------------------------------------------------------------
-         CAMERA — select one. The selected package is the one printed as
-         RECOMMENDED, so there is only ever one thing to set.
-         -------------------------------------------------------------------->
-    <div class="subhead" style="margin-top:18px">
-      <h3>Camera package</h3>
-      <div class="opt-group-note">Select one</div>
-    </div>
-
-    <div class="rows" id="camera">
+    <div class="rows rows--fixed" id="equipment" data-days="1">
       <div class="row row--head">
         <div class="row-index">&nbsp;</div>
-        <div class="label">Package</div>
-        <div class="label num">Days</div>
+        <div class="label">Item</div>
         <div class="label num">Rate</div>
         <div class="label num">Amount</div>
       </div>
 
-      <label class="opt">
-        <input type="radio" name="camera" data-rate="1500" data-summary="ARRI Alexa Mini LF">
-        <span class="opt-mark" aria-hidden="true"></span>
-        <span class="opt-body">
-          <span class="row-title"><span class="opt-name">ARRI Alexa Mini LF package</span><span class="opt-flag">Recommended</span></span>
-          <span class="row-desc">Large-format body with a prime set, matte box, filtration, monitoring, media and support. The choice when the work finishes at broadcast, agency or theatrical.</span>
-        </span>
-        <span class="num" data-days-cell>&mdash;</span>
-        <span class="num">$1,500</span>
-        <span class="num amount" data-amount>&mdash;</span>
-      </label>
+      <div class="row" data-equip data-rate="1200">
+        <div class="row-index">01</div>
+        <div>
+          <div class="row-title">White cyc studio, one day</div>
+          <div class="row-desc">A full day on a white cyc stage, load in and load out included. Rate shown is for San Francisco; Los Angeles and Chicago are confirmed at booking.</div>
+        </div>
+        <div class="num">$1,200</div>
+        <div class="num amount" data-amount>$1,200</div>
+      </div>
 
-      <label class="opt">
-        <input type="radio" name="camera" data-rate="200" checked data-summary="Blackmagic 6K indie package">
-        <span class="opt-mark" aria-hidden="true"></span>
-        <span class="opt-body">
-          <span class="row-title"><span class="opt-name">Blackmagic Cinema Camera 6K Full Frame &mdash; indie package</span><span class="opt-flag">Recommended</span></span>
-          <span class="row-desc">Full-frame 6K body with lenses, gimbal, tripod, monitoring, media and accessories. The in-house package &mdash; same operator, same eye, a fraction of the rental. Suits brand films, social campaigns and fast turnarounds.</span>
-        </span>
-        <span class="num" data-days-cell>&mdash;</span>
-        <span class="num">$200</span>
-        <span class="num amount" data-amount>&mdash;</span>
-      </label>
-
-      <label class="opt">
-        <input type="radio" name="camera" data-rate="250" data-summary="Triple-camera Blackmagic">
-        <span class="opt-mark" aria-hidden="true"></span>
-        <span class="opt-body">
-          <span class="row-title"><span class="opt-name">Triple-camera Blackmagic package</span><span class="opt-flag">Recommended</span></span>
-          <span class="row-desc">Three bodies on tripods with lenses, for sit-down interviews and live coverage where the moment happens once. Wide, medium and detail angles rolling together.</span>
-        </span>
-        <span class="num" data-days-cell>&mdash;</span>
-        <span class="num">$250</span>
-        <span class="num amount" data-amount>&mdash;</span>
-      </label>
-    </div>
-
-    <!-- -------------------------------------------------------------------
-         LIGHTING
-         -------------------------------------------------------------------->
-    <div class="subhead">
-      <h3>Lighting package</h3>
-      <div class="opt-group-note">Optional</div>
-    </div>
-
-    <div class="rows" id="lighting">
-      <label class="opt">
-        <input type="checkbox" data-rate="150" checked data-summary="Lighting package">
-        <span class="opt-mark" aria-hidden="true"></span>
-        <span class="opt-body">
-          <span class="row-title"><span class="opt-name">Lighting package</span></span>
-          <span class="row-desc">Key, fill and accent units with modifiers, stands, flags and grip. Enough to light an interview set or shape an interior; scaled up on its own line when a location calls for it.</span>
-        </span>
-        <span class="num" data-days-cell>&mdash;</span>
-        <span class="num">$150</span>
-        <span class="num amount" data-amount>&mdash;</span>
-      </label>
-    </div>
-
-    <!-- -------------------------------------------------------------------
-         SOUND — priced by microphone count.
-         -------------------------------------------------------------------->
-    <div class="subhead">
-      <h3>Sound package</h3>
-      <div class="opt-group-note">Select one &middot; priced by channel count</div>
-    </div>
-
-    <div class="rows" id="sound">
-      <label class="opt">
-        <input type="radio" name="sound" data-rate="100" checked data-summary="Standard sound package">
-        <span class="opt-mark" aria-hidden="true"></span>
-        <span class="opt-body">
-          <span class="row-title"><span class="opt-name">Standard</span><span class="opt-flag">Recommended</span></span>
-          <span class="row-desc">Recorder, one boom and up to two wireless lavaliers, monitored on set. Covers a single subject or a two&#8209;hander, which is most of what a shoot day needs.</span>
-        </span>
-        <span class="num" data-days-cell>&mdash;</span>
-        <span class="num">$100</span>
-        <span class="num amount" data-amount>&mdash;</span>
-      </label>
-
-      <label class="opt">
-        <input type="radio" name="sound" data-rate="200" data-summary="Expanded sound package">
-        <span class="opt-mark" aria-hidden="true"></span>
-        <span class="opt-body">
-          <span class="row-title"><span class="opt-name">Expanded</span><span class="opt-flag">Recommended</span></span>
-          <span class="row-desc">Multi-channel recorder, boom and four wireless channels. For a panel, a roundtable or a moderated interview.</span>
-        </span>
-        <span class="num" data-days-cell>&mdash;</span>
-        <span class="num">$200</span>
-        <span class="num amount" data-amount>&mdash;</span>
-      </label>
-
-      <label class="opt">
-        <input type="radio" name="sound" data-rate="300" data-summary="Full production sound">
-        <span class="opt-mark" aria-hidden="true"></span>
-        <span class="opt-body">
-          <span class="row-title"><span class="opt-name">Full production</span><span class="opt-flag">Recommended</span></span>
-          <span class="row-desc">Full bag build with five or more channels, timecode to every camera and a monitoring feed for the client.</span>
-        </span>
-        <span class="num" data-days-cell>&mdash;</span>
-        <span class="num">$300</span>
-        <span class="num amount" data-amount>&mdash;</span>
-      </label>
-
-      <label class="opt">
-        <input type="radio" name="sound" data-rate="0">
-        <span class="opt-mark" aria-hidden="true"></span>
-        <span class="opt-body">
-          <span class="row-title"><span class="opt-name">Not required</span></span>
-          <span class="row-desc">Production carries its own sound, or the piece is cut to music.</span>
-        </span>
-        <span class="num" data-days-cell>&mdash;</span>
-        <span class="num">&mdash;</span>
-        <span class="num amount" data-amount>&mdash;</span>
-      </label>
+      <div class="row" data-equip data-rate="250">
+        <div class="row-index">02</div>
+        <div>
+          <div class="row-title">Lighting package</div>
+          <div class="row-desc">A mix of flash and continuous: strobes and modifiers for the stills, continuous heads so the BTS camera sees the same light. Stands, grip and modifiers throughout.</div>
+        </div>
+        <div class="num">$250</div>
+        <div class="num amount" data-amount>$250</div>
+      </div>
 
       <div class="subtotal">
-        <div class="subtotal-label">Subtotal &mdash; Equipment</div>
-        <div class="num" id="sub-equipment">$450</div>
+        <div class="subtotal-label">Studio and lighting subtotal</div>
+        <div class="num" id="sub-equipment">$1,450</div>
       </div>
     </div>
   </section>
 
   <footer class="sheet-foot">
     <div>Lumen Haul &middot; lumenhaul.com</div>
-    <div>Quote LH&#8209;<span class="foot-no">0001</span></div>
-    <div>Page 2 of 3</div>
+    <div>Quote LH&#8209;<span class="foot-no">0003</span></div>
+    <div>Page 1 of 3</div>
   </footer>
 </section>
 
-
-<!-- ==========================================================================
-     PAGE 3 — SUMMARY, TERMS, ACCEPTANCE
-     ======================================================================= -->
-<section class="sheet" id="sheet-3">
+<section class="sheet" id="sheet-2">
 
   <header class="masthead masthead--cont">
     <div class="wordmark">Lumen Haul</div>
-    <div class="doc-kind">Quote LH&#8209;<span class="foot-no">0001</span> &middot; Summary</div>
+    <div class="doc-kind">Quote LH&#8209;<span class="foot-no">0003</span> &middot; Summary</div>
   </header>
+
+  
+  <section class="section" style="margin-top:26px">
+    <div class="section-head">
+      <h2>Post production</h2>
+    </div>
+
+    <div class="rows rows--fixed" id="post">
+      <div class="row" data-post data-rate="500">
+        <div class="row-index">01</div>
+        <div>
+          <div class="row-title">Still photography</div>
+          <div class="row-desc">Cull, color and export across 33 finals: four per subject plus one group frame, in print and web sizes. Priced at eight subjects; additional subjects at $50 each. Retouching is not included.</div>
+        </div>
+        <div class="num">$500</div>
+        <div class="num amount" data-amount>$500</div>
+      </div>
+
+      <div class="row" data-post data-follows-addon data-rate="1600">
+        <div class="row-index">02</div>
+        <div>
+          <div class="row-title">Commercial</div>
+          <div class="row-desc">Edit, color, sound design and mix. One 60&#8209;second cut cleared for brand and paid social use. Music licensing and further versions are quoted separately.</div>
+        </div>
+        <div class="num">$1,600</div>
+        <div class="num amount" data-amount>$1,600</div>
+      </div>
+
+      <div class="subtotal">
+        <div class="subtotal-label">Post production subtotal</div>
+        <div class="num" id="sub-post">$2,100</div>
+      </div>
+    </div>
+  </section>
 
   <section class="section" style="margin-top:26px">
     <div class="section-head">
       <h2>Summary</h2>
-      <div class="section-note" id="summary-note">One production day</div>
+      <div class="section-note" id="summary-note">One shoot day</div>
     </div>
 
     <div class="rows">
@@ -1021,87 +814,144 @@ body {
         <div class="row-index">01</div>
         <div>
           <div class="row-title">Production</div>
-          <div class="row-desc" id="sum-crew-desc">Director &amp; DP, Sound Mixer, 1st Assistant Camera</div>
+          <div class="row-desc" id="sum-crew-desc">Still photography, wardrobe assistant, and commercial coverage on the day</div>
         </div>
-        <div class="num amount" id="sum-production">$2,350</div>
+        <div class="num amount" id="sum-production">$2,450</div>
       </div>
 
       <div class="row" style="grid-template-columns:20px 1fr var(--col-amount)">
         <div class="row-index">02</div>
         <div>
-          <div class="row-title">Equipment rental</div>
-          <div class="row-desc" id="sum-equip-desc">Camera, lighting and sound packages as selected</div>
+          <div class="row-title">Studio and lighting</div>
+          <div class="row-desc" id="sum-equip-desc">White cyc stage for the day, flash and continuous lighting</div>
         </div>
-        <div class="num amount" id="sum-equipment">$450</div>
+        <div class="num amount" id="sum-equipment">$1,450</div>
       </div>
 
-      <!-- Spare lines. Type over the bracketed text, then type an amount on
-           the right and it folds into the total. Delete the rows you do not
-           need, or copy one to add more. -->
-      <div class="row" data-extra style="grid-template-columns:20px 1fr var(--col-amount)">
+      
+      <div class="row" style="grid-template-columns:20px 1fr var(--col-amount)">
         <div class="row-index">03</div>
-        <div class="row-title fill" contenteditable="true">[ Post production, travel, permits &hellip; ]</div>
-        <div class="num amount fill" contenteditable="true" data-extra-amount>&mdash;</div>
+        <div>
+          <div class="row-title">Post production</div>
+          <div class="row-desc" id="sum-post-desc">Still photography $500, Commercial $1,600</div>
+        </div>
+        <div class="num amount" id="sum-post">$2,100</div>
       </div>
 
       <div class="row" data-extra style="grid-template-columns:20px 1fr var(--col-amount)">
         <div class="row-index">04</div>
-        <div class="row-title fill" contenteditable="true">[ Additional line ]</div>
-        <div class="num amount fill" contenteditable="true" data-extra-amount>&mdash;</div>
+        <div>
+          <div class="row-title">Travel and accommodation</div>
+          <div class="row-desc">Nil for San Francisco. Los Angeles or Chicago are billed at cost, agreed before anything is booked.</div>
+        </div>
+        <div class="num amount" data-extra-amount>&ndash;</div>
       </div>
-    </div>
 
     <div class="total">
-      <div class="total-label">Total &mdash; USD</div>
-      <div class="num" id="grand-total">$2,800</div>
+      <div class="total-label">Total (USD)</div>
+      <div class="num" id="grand-total">$6,000</div>
     </div>
   </section>
 
-  <!-- EDIT: these are the standing terms. Rewrite freely. -->
-  <section class="section" style="margin-top:28px">
+  <section class="section">
+    <div class="section-head">
+      <h2>Deliverables</h2>
+    </div>
+    <div class="notes">
+      <div class="note">
+        <div class="label">Stills</div>
+        <p>Four edited finals per subject plus one group frame, in print and web sizes, with the full gallery to select from.</p>
+      </div>
+      <div class="note">
+        <div class="label">Commercial</div>
+        <p>One 60&#8209;second cut in a single aspect ratio, graded and mixed, cleared for brand and paid social use.</p>
+      </div>
+      <div class="note">
+        <div class="label">Turnaround</div>
+        <p>Gallery within three working days. Edited finals within ten working days of your selection. The commercial within three weeks.</p>
+      </div>
+      <div class="note">
+        <div class="label">Quoted separately</div>
+        <p>Retouching, music licensing, further cuts or aspect ratios, subjects beyond the eighth, and any usage past the terms overleaf.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="sheet-foot">
+    <div>Lumen Haul &middot; lumenhaul.com</div>
+    <div>Quote LH&#8209;<span class="foot-no">0003</span></div>
+    <div>Page 2 of 3</div>
+  </footer>
+</section>
+
+<section class="sheet" id="sheet-3">
+
+  <header class="masthead masthead--cont">
+    <div class="wordmark">Lumen Haul</div>
+    <div class="doc-kind">Quote LH&#8209;<span class="foot-no">0003</span> &middot; Terms</div>
+  </header>
+
+  
+  <section class="section" style="margin-top:26px">
     <div class="section-head">
       <h2>Terms</h2>
     </div>
     <div class="terms">
       <div class="term">
-        <div class="label">Validity</div>
-        <p>This quote holds for 30 days from the date on page one. Crew and equipment are booked against the shoot date once it is accepted.</p>
+        <div class="label">Validity and payment</div>
+        <p>Holds until 1 October 2026. 50% on acceptance to hold the date and book the stage, balance net 15 from final delivery.</p>
       </div>
       <div class="term">
-        <div class="label">Payment</div>
-        <p>50% on acceptance to hold the date and book crew; the balance is due net 15 from delivery. Cheque or bank transfer.</p>
+        <div class="label">Hours and overtime</div>
+        <p>Ten hours from call, meal break included. The day is built around eight subjects at four outfits each; more of either needs a second day rather than overtime. Overtime at 1.5&times; the hourly equivalent, agreed on the day, and stage overtime at the studio&rsquo;s own rate.</p>
       </div>
       <div class="term">
-        <div class="label">Production day</div>
-        <p>Ten hours from crew call, meal break included. Overtime at 1.5&times; the hourly equivalent, agreed on the day before it is run.</p>
+        <div class="label">Location and travel</div>
+        <p>San Francisco, Los Angeles or Chicago. San Francisco carries no travel charge; the other two are billed at cost with receipts, agreed in writing first.</p>
       </div>
       <div class="term">
-        <div class="label">Travel and expenses</div>
-        <p>Mileage beyond 50 miles of Redwood City, parking, permits, lodging and per diem are billed at cost with receipts.</p>
+        <div class="label">Studio booking</div>
+        <p>The stage is held once this quote is accepted, subject to availability. Rates differ by city, so the line on page 1 is confirmed at booking.</p>
+      </div>
+      <div class="term">
+        <div class="label">Delivery and turnaround</div>
+        <p>A gallery for selection within three working days. Edited finals within ten working days of your selection. The commercial follows within three weeks.</p>
       </div>
       <div class="term">
         <div class="label">Cancellation and reschedule</div>
-        <p>Cancelling more than 7 days out is free of charge; inside 7 days, 50% of the production subtotal; inside 48 hours, 100%, since crew and rentals are committed. One weather reschedule is free where the shoot depends on conditions.</p>
+        <p>Free more than 7 days out; inside 7 days, 50% of the production subtotal; inside 48 hours, 100%. Any stage deposit follows the studio&rsquo;s own terms.</p>
       </div>
       <div class="term">
-        <div class="label">Delivery and usage</div>
-        <p>Delivered files are licensed to the client for the agreed use. Raw footage stays with Lumen Haul unless a transfer is quoted.</p>
+        <div class="label">Revisions</div>
+        <p>Two rounds on the stills and two on the commercial are included. Further rounds are billed at $700 a day, in half day increments, agreed before they start.</p>
       </div>
       <div class="term">
-        <div class="label">Equipment and insurance</div>
-        <p>Owned packages are carried on Lumen Haul&rsquo;s policy; sub&#8209;rented gear is insured for the booking. Loss or damage caused by the client or the client&rsquo;s location is billed at replacement cost.</p>
+        <div class="label">Stills usage</div>
+        <p>Unlimited use of the delivered stills for marketing, press and social, worldwide and in perpetuity. Raw files stay with Lumen Haul.</p>
+      </div>
+      <div class="term">
+        <div class="label">Commercial usage</div>
+        <p>The finished commercial is cleared for brand channels and paid social, worldwide, for twelve months from delivery. Broadcast, cinema or out&#8209;of&#8209;home placement is a separate license, as is renewal past the term.</p>
+      </div>
+      <div class="term">
+        <div class="label">Music</div>
+        <p>Delivered with a licensed track covering the usage above. Swapping the track, or extending the license beyond it, is quoted separately.</p>
       </div>
       <div class="term">
         <div class="label">Portfolio</div>
-        <p>Lumen Haul may show the finished work in its portfolio and on its channels. Tell us before signing if the project is under embargo.</p>
+        <p>Lumen Haul may show selected stills and the commercial in its portfolio once the work is public.</p>
+      </div>
+      <div class="term">
+        <div class="label">Equipment and insurance</div>
+        <p>Lighting and camera packages are carried on Lumen Haul&rsquo;s policy. A certificate of insurance is issued to the stage on request.</p>
       </div>
     </div>
   </section>
 
-  <section class="section" style="margin-top:28px">
+  <section class="section" style="margin-top:20px">
     <div class="section-head">
       <h2>Acceptance</h2>
-      <div class="section-note">Sign and return, or reply to confirm by email</div>
+      <div class="section-note">Sign and return, or simply reply to confirm</div>
     </div>
     <div class="signature">
       <div class="sign-col">
@@ -1123,11 +973,10 @@ body {
 
   <footer class="sheet-foot">
     <div>Loren Henley &middot; (970) 689&#8209;9617 &middot; <span class="mixed">loren@lumenhaul.com</span></div>
-    <div>Quote LH&#8209;<span class="foot-no">0001</span></div>
+    <div>Quote LH&#8209;<span class="foot-no">0003</span></div>
     <div>Page 3 of 3</div>
   </footer>
 </section>
-
 
 <script>
 /* ===========================================================================
@@ -1145,16 +994,7 @@ body {
     minimumFractionDigits: 0, maximumFractionDigits: 2
   });
 
-  function money(n) { return n ? usd.format(n) : "—"; }
-
-  /* Counts read as words in a document set like this one — but only where a
-     word exists for them. Half days and anything past ten stay as figures. */
-  var WORDS = ["zero","one","two","three","four","five",
-               "six","seven","eight","nine","ten"];
-  function count(n) {
-    return (Number.isInteger(n) && n >= 0 && n <= 10) ? WORDS[n] : String(n);
-  }
-  function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+  function money(n) { return n ? usd.format(n) : "\u2013"; }
 
   /* Write a value and flash the cell if the number actually moved. */
   function put(el, text) {
@@ -1172,47 +1012,63 @@ body {
 
   function recalc() {
     /* --- Production: each row carries its own day count ---------------- */
+    /* Each production row is a single date: it is on the schedule or it is
+       not, so the only thing to read is the checkbox. */
     var production = 0;
-    var roles = [];
-    var maxDays = 0;
-
     document.querySelectorAll("#production [data-line]").forEach(function (row) {
-      var rate  = num(row.dataset.rate);
-      var days  = num(row.querySelector(".days").value);
-      var total = rate * days;
-      production += total;
-      put(row.querySelector("[data-amount]"), money(total));
-      if (days > 0) {
-        roles.push(row.querySelector(".row-title").textContent.trim());
-        if (days > maxDays) maxDays = days;
-      }
+      var box  = row.querySelector('input[type="checkbox"]');
+      var on   = !box || box.checked;
+      var rate = num(row.dataset.rate);
+      put(row.querySelector("[data-amount]"), on ? money(rate) : "\u2013");
+      if (on) production += rate;
     });
 
     put(document.getElementById("sub-production"), money(production));
     put(document.getElementById("sum-production"), money(production));
 
-    /* --- Equipment: one shared day count across every package ---------- */
-    var equipDays = num(document.getElementById("equip-days").value);
+    /* --- Equipment: a base kit plus one optional add-on ----------------
+       A row with no checkbox is always in. A row with one follows it. The
+       day count is shared, so it is read once rather than per row. */
+    var equipDays = num(document.getElementById("equipment").dataset.days);
     var equipment = 0;
-    var picked = [];
 
-    document.querySelectorAll("#camera .opt, #lighting .opt, #sound .opt").forEach(function (opt) {
-      var input = opt.querySelector("input");
-      var rate  = num(input.dataset.rate);
-      var on    = input.checked;
-      var total = on ? rate * equipDays : 0;
+    document.querySelectorAll("#equipment [data-equip]").forEach(function (row) {
+      var box  = row.querySelector('input[type="checkbox"]');
+      var on   = !box || box.checked;
+      var rate = num(row.dataset.rate);
 
-      put(opt.querySelector("[data-days-cell]"), on && rate ? String(equipDays) : "—");
-      put(opt.querySelector("[data-amount]"), on && rate ? money(total) : "—");
+      put(row.querySelector("[data-days-cell]"), on ? String(equipDays) : "\u2013");
+      put(row.querySelector("[data-amount]"), on ? money(rate * equipDays) : "\u2013");
 
-      if (on && rate) {
-        equipment += total;
-        picked.push(input.dataset.summary || opt.querySelector(".opt-name").textContent.trim());
-      }
+      if (on) { equipment += rate * equipDays; }
     });
 
     put(document.getElementById("sub-equipment"), money(equipment));
     put(document.getElementById("sum-equipment"), money(equipment));
+
+    /* --- Post: two products, and the commercial one only exists if the
+           coverage was shot ------------------------------------------------ */
+    var addOnOn = (function () {
+      var box = document.querySelector('#production [data-addon] input[type="checkbox"]');
+      return !box || box.checked;
+    })();
+
+    var post = 0;
+    var postParts = [];
+    document.querySelectorAll("#post [data-post]").forEach(function (row) {
+      var on   = row.hasAttribute("data-follows-addon") ? addOnOn : true;
+      var rate = num(row.dataset.rate);
+      put(row.querySelector("[data-amount]"), on ? money(rate) : "\u2013");
+      row.style.opacity = on ? "" : "0.45";
+      if (on) {
+        post += rate;
+        postParts.push(row.querySelector(".row-title").textContent.trim() + " " + money(rate));
+      }
+    });
+
+    put(document.getElementById("sub-post"), money(post));
+    put(document.getElementById("sum-post"), money(post));
+    put(document.getElementById("sum-post-desc"), postParts.join(", "));
 
     /* --- Spare summary lines ------------------------------------------- */
     var extras = 0;
@@ -1220,17 +1076,10 @@ body {
       extras += num(cell.textContent);
     });
 
-    put(document.getElementById("grand-total"), money(production + equipment + extras));
+    put(document.getElementById("grand-total"), money(production + equipment + post + extras));
 
-    /* --- Descriptions that follow the selection ------------------------ */
-    var dayWord = !maxDays ? "No production days set"
-                : cap(count(maxDays)) + (maxDays === 1 ? " production day" : " production days");
-    var crewWord = roles.length ? "crew of " + count(roles.length) : "no crew booked";
-
-    put(document.getElementById("crew-note"), dayWord + " · " + crewWord);
-    put(document.getElementById("summary-note"), dayWord);
-    if (roles.length) put(document.getElementById("sum-crew-desc"), roles.join(", "));
-    if (picked.length) put(document.getElementById("sum-equip-desc"), picked.join(" · "));
+    /* Every description on this quote is static — there is nothing left to
+       select, so there is nothing to derive. Only the figures move. */
   }
 
   /* --- Keep the quote number in the footers in step with the masthead --- */
@@ -1241,33 +1090,23 @@ body {
     document.querySelectorAll(".foot-no").forEach(function (el) { el.textContent = no; });
   }
 
-  /* --- Paste into a contenteditable field lands as plain text ---------- */
-  document.querySelectorAll('[contenteditable="true"]').forEach(function (el) {
-    el.addEventListener("paste", function (e) {
-      e.preventDefault();
-      var text = (e.clipboardData || window.clipboardData).getData("text/plain");
-      document.execCommand("insertText", false, text.replace(/\s+/g, " "));
-    });
-    /* Clear the bracketed placeholder on first focus rather than making the
-       user select it. Anything already typed is left alone. */
-    el.addEventListener("focus", function () {
-      if (/^\[.*\]$/.test(el.textContent.trim())) {
-        el.textContent = "";
-      }
-    });
-  });
-
   document.addEventListener("input",  function () { recalc(); syncQuoteNo(); });
   document.addEventListener("change", function () { recalc(); syncQuoteNo(); });
 
-  /* Fit the sheet to narrow screens without reflowing the printed layout. */
+  /* Fit the sheet to a narrow window without reflowing the printed layout.
+
+     ZOOM, NOT `transform: scale`. A transform is paint-only: the element
+     keeps its full 8.5in layout box, so on a narrow window the sheet
+     overflowed the body, took a horizontal scrollbar, and showed a white
+     strip down the side where the overflow region painted the html
+     background instead of the body's. It also needed a negative bottom
+     margin to claw back the height the transform had not actually freed.
+     Zoom scales the box itself, so none of that arises. */
   function fit() {
-    var pad = 24;
     var natural = 8.5 * 96;
-    var scale = Math.min(1, (window.innerWidth - pad) / natural);
+    var scale = Math.min(1, (window.innerWidth - 32) / natural);
     document.querySelectorAll(".sheet").forEach(function (s) {
-      s.style.transform = scale < 1 ? "scale(" + scale + ")" : "";
-      s.style.marginBottom = scale < 1 ? (24 - (11 * 96) * (1 - scale)) + "px" : "";
+      s.style.zoom = scale < 1 ? scale : "";
     });
   }
   window.addEventListener("resize", fit);

@@ -139,6 +139,35 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+
+  /**
+   * Client quotes are served as static files out of public/q/, which means
+   * they are world-readable to anyone holding the URL — there is no auth in
+   * front of a file in public/. The filenames carry a random suffix so the
+   * directory cannot be enumerated by guessing.
+   *
+   * This is the second half of that. Each quote already carries a robots
+   * meta tag; a meta tag only works on something that parses the HTML, so
+   * this header covers the fetches that do not. Between them, a client's
+   * name, the scope of their job and its price stay out of search results.
+   *
+   * NOT robots.txt, deliberately. That file is public, so listing /q/ in it
+   * would advertise the path to exactly the people the random filename is
+   * meant to hide it from.
+   */
+  async headers() {
+    return [
+      {
+        source: "/q/:path*",
+        headers: [
+          {
+            key: "X-Robots-Tag",
+            value: "noindex, nofollow, noarchive, nosnippet",
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;

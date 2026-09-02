@@ -8,8 +8,13 @@ The master. Standard rates, no client data — every fillable field is still a
 **Do not fill this one in.** Copy it into `quotes/` and fill in the copy:
 
 ```
-cp lumen-haul-quote-template.html "quotes/2026-08-client-name.html"
+mkdir -p quotes
+cp lumen-haul-quote-template.html "quotes/client-name.html"
 ```
+
+`quotes/` is **gitignored**. Filled quotes carry a client's name, their
+contact details and negotiated pricing, and the PDFs beside them are build
+output. The folder will not exist in a fresh clone, hence the `mkdir`.
 
 Open the copy in a browser, click the bracketed fields to type, click the
 packages you want, set the day counts, then Print → Save as PDF
