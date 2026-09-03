@@ -394,6 +394,12 @@ footer p + p { margin-top: 12px; }
    localStorage — it is yours alone, it is not sent anywhere, and it survives
    a reload. Existing clients (.chip.own) are deliberately NOT trackable:
    they are proof to cite in an email, not names to pitch.
+
+   THE LAST STATE HAS NO COLOUR, ON PURPOSE. A name that said no is not worth
+   finding again, so it leaves the page rather than sitting in it wearing a
+   fifth hue — four are already at the limit of what can be scanned across a
+   document this long. It is hidden, not deleted: "Declined" in the bar
+   reveals them, and one more click puts a name back in play.
    ======================================================================== */
 
 .chip[data-track] {
@@ -426,14 +432,17 @@ footer p + p { margin-top: 12px; }
 .chip[data-state="3"] { border-color: var(--auto); color: var(--auto); font-weight: 600; }
 .chip[data-state="3"]::before { background: var(--auto); border-color: var(--auto); }
 
-.chip[data-state="4"] { opacity: 0.45; text-decoration: line-through; }
-.chip[data-state="4"]::before { background: var(--warn); border-color: var(--warn); }
+.chip[data-state="4"] { display: none; }
+body.show-declined .chip[data-state="4"] {
+  display: block;
+  opacity: 0.4;
+  text-decoration: line-through;
+}
 
 /* "Hide worked" — anything that is no longer untouched drops out of view. */
 body.hide-worked .chip[data-state="1"],
 body.hide-worked .chip[data-state="2"],
-body.hide-worked .chip[data-state="3"],
-body.hide-worked .chip[data-state="4"] { display: none; }
+body.hide-worked .chip[data-state="3"] { display: none; }
 
 /* ---- The tracker bar, second row of the sticky header ------------------ */
 
@@ -469,7 +478,6 @@ body.hide-worked .chip[data-state="4"] { display: none; }
 .legend .s1 i { background: var(--ink-3); }
 .legend .s2 i { background: var(--tech); }
 .legend .s3 i { background: var(--auto); }
-.legend .s4 i { background: var(--warn); }
 
 .tracker button {
   font-family: var(--font-mono);
@@ -493,6 +501,7 @@ body.hide-worked .chip[data-state="4"] { display: none; }
   .chip[data-track] { padding-left: 8px; }
   .chip[data-track]::before { display: none; }
   body.hide-worked .chip { display: inline-block !important; }
+  .chip[data-state="4"] { display: none !important; }
 }
 
 </style>
@@ -505,7 +514,7 @@ body.hide-worked .chip[data-state="4"] { display: none; }
       <span class="label">Rev. September 2026</span>
     </div>
     <h1>The clients we are looking for</h1>
-    <p class="lede">Two kinds of company are worth your time. <strong>Automotive</strong> is the volume side &mdash; the same buyer, the same job, over and over. <strong>Bay Area tech</strong> is the bigger-invoice side &mdash; fewer jobs, several times the number. Everything here is sorted by how winnable it is with the work already on our reel.</p>
+    <p class="lede"><strong>Automotive</strong> is the volume side &mdash; the same buyer, the same job, over and over. <strong>Bay Area tech</strong> is the bigger-invoice side &mdash; fewer jobs, several times the number. Everything here is sorted by how winnable it is with the work already on our reel.</p>
 
     <div class="job">
       <div><span class="n">STEP 01</span><b>Find them</b><p>Build the list from the sources in section 05.</p></div>
@@ -533,10 +542,10 @@ body.hide-worked .chip[data-state="4"] { display: none; }
       <span class="s1"><i></i>Contacted</span>
       <span class="s2"><i></i>Replied</span>
       <span class="s3"><i></i>Handed over</span>
-      <span class="s4"><i></i>No</span>
     </div>
     <span class="count" id="tk-count"></span>
     <button type="button" id="tk-hide" aria-pressed="false">Hide worked</button>
+    <button type="button" id="tk-declined" aria-pressed="false">Declined</button>
     <button type="button" id="tk-copy">Copy status</button>
     <button type="button" id="tk-reset">Reset</button>
   </div>
@@ -552,7 +561,7 @@ body.hide-worked .chip[data-state="4"] { display: none; }
     <div class="sec-head">
       <span class="label">01 — The model</span>
       <h2>Five marks of a client worth chasing</h2>
-      <p>Hold these five in your head and you can size up almost any company in about a minute. You do not need all five &mdash; three is a good lead and four is a strong one. Mark 01 is the closest thing to mandatory, because we point cameras at real things.</p>
+      <p>Hold these five in your head and you can size up a company in about a minute. Three is a good lead, four is a strong one, and mark 01 is close to mandatory &mdash; we point cameras at real things.</p>
     </div>
 
     <div class="model">
@@ -560,19 +569,19 @@ body.hide-worked .chip[data-state="4"] { display: none; }
         <div class="mark">
           <span class="n">01</span>
           <h4>There is a physical thing to shoot</h4>
-          <p>A car, a wheel, a machine, a product, a stage full of people. Companies selling software with nothing to point a lens at are a harder job and a smaller one.</p>
+          <p>A car, a wheel, a machine, a product, a stage full of people. Software with nothing to point a lens at is a harder job and a smaller one.</p>
           <p class="ask">Could I describe what the camera is looking at?</p>
         </div>
         <div class="mark">
           <span class="n">02</span>
           <h4>They will need it again</h4>
-          <p>A product line, a build calendar, an event series, a roster of customers. A company with one thing to shoot once is worth a single invoice. A company with twelve is worth a year.</p>
+          <p>A product line, a build calendar, an event series, a roster of customers. One thing to shoot once is a single invoice; twelve is a year.</p>
           <p class="ask">What do they launch, build or run on a schedule?</p>
         </div>
         <div class="mark">
           <span class="n">03</span>
           <h4>Someone there owns a budget</h4>
-          <p>A named person with a marketing, brand, events or talent budget. At small shops that is the owner. At bigger companies it is rarely the founder and never the intern.</p>
+          <p>A named person with a marketing, brand, events or talent budget. At small shops that is the owner; at bigger ones it is rarely the founder and never the intern.</p>
           <p class="ask">Can I name the person and their title?</p>
         </div>
       </div>
@@ -580,25 +589,29 @@ body.hide-worked .chip[data-state="4"] { display: none; }
         <div class="mark">
           <span class="n">04</span>
           <h4>They are close, or they will pay travel</h4>
-          <p>San Francisco and San Jose carry no travel charge. Anywhere else is billed on top, which is fine as long as they know it before the estimate goes out &mdash; not after.</p>
+          <p>San Francisco and San Jose carry no travel charge. Anywhere else is billed on top &mdash; fine, as long as they know before the estimate goes out.</p>
           <p class="ask">Inside 90 minutes? If not, will travel be paid?</p>
         </div>
         <div class="mark">
           <span class="n">05</span>
           <h4>Their current content is worse than ours</h4>
-          <p>Look at their Instagram and their website hero. A company posting mediocre work cares enough to publish and not enough to be good at it. That gap is the whole pitch.</p>
+          <p>Look at their Instagram and their website hero. A company posting mediocre work cares enough to publish and not enough to be good at it. That gap is the pitch.</p>
           <p class="ask">Is our reel visibly better than what they have now?</p>
         </div>
         <div class="mark" style="border-bottom:0;">
           <span class="n">&mdash;</span>
           <h4>And one thing that is <em>not</em> a mark</h4>
-          <p>Company size. A twelve-person wheel brand with a launch calendar beats a 400-person company that shoots one video a year. Do not filter by headcount, and do not filter by funding stage either &mdash; the budget question sorts that out for you.</p>
+          <p>Company size. A twelve-person wheel brand with a launch calendar beats a 400-person company that shoots one video a year. Do not filter by headcount or funding stage &mdash; the budget question sorts that out.</p>
         </div>
       </div>
     </div>
 
     <div class="note" style="margin-top:30px;">
-      <strong>What a job is usually worth.</strong> Most single jobs land between <strong>$1,200 and $3,200</strong>. A good one &mdash; two or three days with several deliverables &mdash; runs <strong>$6,000 to $12,000</strong>. The big ones, run as a program across months rather than a single shoot, reach <strong>$25,000 to $50,000</strong>. You are not quoting any of these. They are here so you know whether a budget answer is worth getting excited about.
+      <strong>What a job is usually worth.</strong> Most single jobs land between <strong>$1,200 and $3,200</strong>. A good one &mdash; two or three days with several deliverables &mdash; runs <strong>$6,000 to $12,000</strong>. Run as a program across months rather than one shoot, the big ones reach <strong>$25,000 to $50,000</strong>. You are never quoting these &mdash; they are here so you know whether a budget answer is worth getting excited about.
+    </div>
+
+    <div class="note" style="margin-top:18px;">
+      <strong>Every name in this brief is clickable.</strong> Click to mark it contacted, then replied, then handed over. A fourth click drops it off the list &mdash; use that when they say no, and <strong>Declined</strong> in the bar brings them back if you need one. It saves in your browser, so it is there tomorrow and nobody else sees it. <strong>Copy status</strong> turns the lot into a summary you can paste to Loren.
     </div>
   </div>
 </section>
@@ -617,7 +630,7 @@ body.hide-worked .chip[data-state="4"] { display: none; }
     <div class="pitch">
       <span class="label">How to frame it</span>
       <p class="line">&ldquo;You have a product that only sells when it looks like the reason someone bought the car. We shoot it that way, on a schedule, for a set number per vehicle.&rdquo;</p>
-      <p class="sub">This buyer is not shopping for art direction. They want <strong>a repeatable job at a known price</strong>, because their calendar runs on product launches and event dates. Proof to lead with: Blaque Diamond Wheels, Formula Drift, Shoreline Motoring, Hotpit Autofest.</p>
+      <p class="sub">This buyer is not shopping for art direction. They want <strong>a repeatable job at a known price</strong> &mdash; their calendar runs on product launches and event dates. Proof to lead with: Blaque Diamond Wheels, Formula Drift, Shoreline Motoring, Hotpit Autofest.</p>
     </div>
 
     <div class="segments">
@@ -625,7 +638,7 @@ body.hide-worked .chip[data-state="4"] { display: none; }
       <div class="seg">
         <div class="seg-left">
           <div class="seg-title"><h3>Aftermarket wheel brands</h3><span class="rank">Best fit</span></div>
-          <p>The strongest segment on the page, because three are already clients. A wheel brand carries dozens of designs in several finishes, and each has to be shot on multiple cars &mdash; the same wheel on a Tesla and on a Raptor are two different assets. The need never runs out.</p>
+          <p>Our strongest segment &mdash; three are already clients. Dozens of designs in several finishes, each shot on multiple cars: the same wheel on a Tesla and on a Raptor are two different assets. The need never runs out.</p>
         </div>
         <div class="seg-right">
           <div class="field"><span class="label">Why they buy</span><p>New designs, new finishes, new fitments, and the SEMA show cycle every autumn.</p></div>
@@ -639,7 +652,7 @@ body.hide-worked .chip[data-state="4"] { display: none; }
       <div class="seg">
         <div class="seg-left">
           <div class="seg-title"><h3>Restomod and restoration builders</h3><span class="rank">Biggest money</span></div>
-          <p>The most under-worked opportunity here. A restomod costs the customer somewhere between $300,000 and $1.5 million and takes over a year to build &mdash; and the shop&rsquo;s entire marketing is the documentation of that build, because it is how the next commission gets sold.</p>
+          <p>The most under-worked opportunity here. A restomod costs the customer $300,000 to $1.5 million and takes over a year &mdash; and documenting that build <em>is</em> the shop&rsquo;s marketing, because it is how the next commission gets sold.</p>
         </div>
         <div class="seg-right">
           <div class="field"><span class="label">Why they buy</span><p>They need the build filmed across its whole arc plus a hero piece at the reveal. That is six to ten visits over a year, not one shoot.</p></div>
@@ -653,7 +666,7 @@ body.hide-worked .chip[data-state="4"] { display: none; }
       <div class="seg">
         <div class="seg-left">
           <div class="seg-title"><h3>Performance parts and tuning</h3><span class="rank tier2">Volume</span></div>
-          <p>The same buying pattern as wheels, often with more money behind it. An exhaust or a turbo is not photogenic on its own, so they need someone who can shoot the install, the dyno and the car moving &mdash; a higher bar, which is exactly why fewer people clear it.</p>
+          <p>The same buying pattern as wheels, with more money behind it. An exhaust or a turbo is not photogenic alone, so they need install, dyno and the car moving &mdash; a higher bar, which is why fewer people clear it.</p>
         </div>
         <div class="seg-right">
           <div class="field"><span class="label">Why they buy</span><p>Product launches, the SEMA and PRI shows, sponsored builds, and constant demand for install content.</p></div>
@@ -667,19 +680,19 @@ body.hide-worked .chip[data-state="4"] { display: none; }
       <div class="seg">
         <div class="seg-left">
           <div class="seg-title"><h3>Custom shops, wrap and paint</h3><span class="rank tier2">Local, repeats</span></div>
-          <p>Shoreline Motoring already proves this works. A busy shop turns out a notable car every two or three weeks, and every one is an asset they currently shoot themselves on a phone. Smaller jobs, but dense in the Bay Area and they repeat forever.</p>
+          <p>Shoreline Motoring already proves this works. A busy shop turns out a notable car every two or three weeks, each one currently shot on a phone. Smaller jobs, but dense in the Bay Area and they repeat forever.</p>
         </div>
         <div class="seg-right">
           <div class="field"><span class="label">Why they buy</span><p>Their whole lead flow is Instagram. A shop with a weak feed loses six-figure builds to a shop with a strong one, and they know it.</p></div>
           <div class="field"><span class="label">Typical budget</span><p class="deal">$1,200&ndash;$2,500 <em>/ car</em><br>$3,500&ndash;$6,000 <em>/ month, 2&ndash;3 cars</em></p></div>
-          <div class="field"><span class="label">How to work it</span><p>These sell by proximity and visible work more than by email. Once we shoot at one shop, the shops nearby tend to call &mdash; so prioritize the first one in any given area.</p></div>
+          <div class="field"><span class="label">How to work it</span><p>These sell by proximity more than by email. Shoot at one shop and the ones nearby tend to call &mdash; so prioritize the first in any area.</p></div>
         </div>
       </div>
 
       <div class="seg">
         <div class="seg-left">
           <div class="seg-title"><h3>Exotic, classic and collector dealers</h3><span class="rank tier2">High per car</span></div>
-          <p>Read this one carefully, because it is <strong>not car dealers generally</strong>. A two-million-dollar car justifies a four-thousand-dollar film because the film <em>is</em> the listing. A used Camry does not. The Bay Area and Monterey have unusual density of the first kind.</p>
+          <p>This is <strong>not car dealers generally</strong>. A two-million-dollar car justifies a four-thousand-dollar film because the film <em>is</em> the listing; a used Camry does not. The Bay Area and Monterey are dense with the first kind.</p>
         </div>
         <div class="seg-right">
           <div class="field"><span class="label">Why they buy</span><p>Auction consignments and high-value private listings. Bring a Trailer permanently raised the bar on what a listing has to look like.</p></div>
@@ -693,7 +706,7 @@ body.hide-worked .chip[data-state="4"] { display: none; }
       <div class="seg">
         <div class="seg-left">
           <div class="seg-title"><h3>Motorsport sponsors and teams</h3><span class="rank tier2">Aim one layer out</span></div>
-          <p>Formula Drift is already a client, which opens the door &mdash; but the series itself has its own crew. The money sits one layer out: <strong>the brands sponsoring teams</strong>, who spend heavily and have nothing to show for it internally, and teams needing a deck to justify next season.</p>
+          <p>Formula Drift is already a client, which opens the door &mdash; but the series has its own crew. The money sits one layer out: <strong>the brands sponsoring teams</strong>, and teams needing a deck to justify next season.</p>
         </div>
         <div class="seg-right">
           <div class="field"><span class="label">Why they buy</span><p>A sponsor spends six figures on a livery and cannot show the finance team what it bought. A recap film is how the spend gets renewed &mdash; an easy yes with a hard deadline.</p></div>
@@ -707,7 +720,7 @@ body.hide-worked .chip[data-state="4"] { display: none; }
       <div class="seg">
         <div class="seg-left">
           <div class="seg-title"><h3>Events and car shows</h3><span class="rank tier2">Also a lead source</span></div>
-          <p>Hotpit Autofest is a client already. Treat this as two things at once: a paid job, and the best prospecting ground we have. <strong>Monterey Car Week is 90 minutes away and puts every builder, collector dealer and wheel brand in one place for eight days.</strong></p>
+          <p>Hotpit Autofest is a client already. This is two things at once: a paid job, and our best prospecting ground. <strong>Monterey Car Week is 90 minutes away and puts every builder, collector dealer and wheel brand in one place for eight days.</strong></p>
         </div>
         <div class="seg-right">
           <div class="field"><span class="label">Why they buy</span><p>Organizers need next year&rsquo;s sell sheet. Exhibitors and sponsors need proof of their activation. Two different buyers standing at the same event.</p></div>
@@ -721,7 +734,7 @@ body.hide-worked .chip[data-state="4"] { display: none; }
       <div class="seg">
         <div class="seg-left">
           <div class="seg-title"><h3>EV and mobility companies</h3><span class="rank tier2">Both tracks at once</span></div>
-          <p>Automotive companies with tech-company budgets, sitting in our backyard. They need real vehicle cinematography, and nearly every vendor pitching them is a tech-video shop that has never shot a car in motion. Our reel wins these on sight.</p>
+          <p>Automotive companies with tech-company budgets, in our backyard. They need real vehicle cinematography, and nearly every vendor pitching them has never shot a car in motion. Our reel wins these on sight.</p>
         </div>
         <div class="seg-right">
           <div class="field"><span class="label">Why they buy</span><p>Launches, funding announcements, investor and recruiting material, and endless demand for the vehicle actually moving.</p></div>
@@ -750,7 +763,7 @@ body.hide-worked .chip[data-state="4"] { display: none; }
     <div class="pitch">
       <span class="label">How to frame it</span>
       <p class="line">&ldquo;We shoot machines and hardware the way car commercials shoot cars. Most people filming startups have never had to light metal.&rdquo;</p>
-      <p class="sub">Do not pitch a tech company as a general video vendor &mdash; there are hundreds within ten miles and they all compete on price. Pitch <strong>the automotive craft as the reason to pick us</strong>. The car reel is the asset here, not something to hide. WeAreDevelopers and Stereotypes are proof this side already converts.</p>
+      <p class="sub">Do not pitch a tech company as a general video vendor &mdash; there are hundreds within ten miles, all competing on price. Pitch <strong>the automotive craft as the reason to pick us</strong>: the car reel is the asset here, not something to hide. WeAreDevelopers and Stereotypes prove this side converts.</p>
     </div>
 
     <div class="segments">
@@ -758,7 +771,7 @@ body.hide-worked .chip[data-state="4"] { display: none; }
       <div class="seg">
         <div class="seg-left">
           <div class="seg-title"><h3>Hardware, robotics and deep tech</h3><span class="rank">Best fit</span></div>
-          <p>The closest match between what we do well and what these buyers cannot get anywhere else. They have a <em>physical object</em> &mdash; a robot, a drone, an aircraft, an instrument &mdash; and no idea how to shoot it. Every automotive skill transfers directly.</p>
+          <p>The closest match between what we do well and what these buyers cannot get elsewhere. They have a <em>physical object</em> &mdash; a robot, a drone, an aircraft, an instrument &mdash; and no idea how to shoot it. Every automotive skill transfers directly.</p>
         </div>
         <div class="seg-right">
           <div class="field"><span class="label">Why they buy</span><p>Launch films, investor material, trade show loops, recruiting. Hardware companies raise money on how real the thing looks on video.</p></div>
@@ -772,7 +785,7 @@ body.hide-worked .chip[data-state="4"] { display: none; }
       <div class="seg">
         <div class="seg-left">
           <div class="seg-title"><h3>Funded startups, seed through Series D</h3><span class="rank">Widest pool</span></div>
-          <p>Contact these at any stage &mdash; <strong>the budget question sorts them out for you</strong>, so there is no reason to filter by round before you have asked. What changes with stage is who decides and how much: at seed it is the founder with a few thousand dollars, and past Series B it is a marketing lead with real money.</p>
+          <p>Contact these at any stage &mdash; <strong>the budget question sorts them out for you</strong>, so there is no reason to filter by round first. What changes with stage is who decides and how much: at seed, the founder with a few thousand dollars; past Series B, a marketing lead with real money.</p>
         </div>
         <div class="seg-right">
           <div class="field"><span class="label">The best moment to catch one</span><p>A company that raised in the last 90 days <em>and</em> just hired its first brand or content person. That person has money to spend, no vendor picked yet, and pressure to show work fast.</p></div>
@@ -798,7 +811,7 @@ body.hide-worked .chip[data-state="4"] { display: none; }
       <div class="seg">
         <div class="seg-left">
           <div class="seg-title"><h3>B2B software customer stories</h3><span class="rank tier2">Best repeat work</span></div>
-          <p>The most reliably budgeted video in enterprise software, and almost nobody thinks to sell it. A customer story film needs travel to the customer&rsquo;s site &mdash; billable days &mdash; and a company at scale needs six to twelve a year in the same format.</p>
+          <p>The most reliably budgeted video in enterprise software, and almost nobody thinks to sell it. Each one needs travel to the customer&rsquo;s site &mdash; billable days &mdash; and a company at scale needs six to twelve a year in the same format.</p>
         </div>
         <div class="seg-right">
           <div class="field"><span class="label">Why they buy</span><p>Sales asks for them constantly. Every enterprise deal needs a reference story, and the sales team is loud about it internally.</p></div>
@@ -847,7 +860,7 @@ body.hide-worked .chip[data-state="4"] { display: none; }
     <div class="sec-head">
       <span class="label">04 — When to reach out</span>
       <h2>Catch them at the moment they have to spend</h2>
-      <p>A company that fits the model but has no reason to act this month will not answer. A company hitting one of these answers at several times the normal rate &mdash; so build the list around triggers, not just names.</p>
+      <p>A company that fits the model but has no reason to act this month will not answer. One hitting a trigger below answers at several times the rate &mdash; so build the list around triggers, not just names.</p>
     </div>
 
     <div class="signals">
@@ -878,7 +891,7 @@ body.hide-worked .chip[data-state="4"] { display: none; }
       </div>
       <div>
         <b>A build reveal on the calendar</b>
-        <p>A restomod or vehicle debut is a hard deadline with a real audience already waiting for it.</p>
+        <p>A restomod or vehicle debut is a hard deadline with an audience already waiting.</p>
         <span class="where">Shop Instagram, event entry lists, auction catalogs</span>
       </div>
       <div>
@@ -1081,7 +1094,7 @@ to Loren, who directs and shoots everything.</pre>
 
     <div class="skip-lead">
       <span class="amt">$500 / day</span>
-      <p>That is the floor, and it is the only hard rule here. Anything working out below it &mdash; a $400 car shoot, forty walkarounds at $150 each, a day of coverage for $300 &mdash; is not a small job, it is a loss. Close those out politely and move on. Everything below is a soft steer rather than a ban: if one of them turns out to have real budget behind it, bring it anyway.</p>
+      <p>The floor, and the only hard rule here. Anything below it &mdash; a $400 car shoot, forty walkarounds at $150 each, a day of coverage for $300 &mdash; is not a small job, it is a loss. Everything under it is a soft steer rather than a ban: if one turns out to have real budget behind it, bring it anyway.</p>
     </div>
 
     <div class="skip-list">
@@ -1101,8 +1114,8 @@ to Loren, who directs and shoots everything.</pre>
 
 <footer>
   <div class="wrap">
-    <p><strong>About the company names.</strong> Every name here is a research lead, not a vetted prospect. The ones marked with a check are existing Lumen Haul clients &mdash; use them as proof in an email and as a way in through people they know, but do not pitch them. Everything else needs a quick check that they still exist and have not just hired someone in-house.</p>
-    <p><strong>About the numbers.</strong> Budget ranges are what these kinds of clients typically pay, not our price list. You are never quoting &mdash; they are here so you can tell a promising answer from a weak one when you ask. Loren sets every actual number.</p>
+    <p><strong>The company names</strong> are research leads, not vetted prospects &mdash; check each still exists and has not just hired in-house. The ones marked with a check are existing clients: cite them as proof and use them as a way in, but do not pitch them.</p>
+    <p><strong>The budget ranges</strong> are what these clients typically pay, not our price list. They are here so you can tell a promising answer from a weak one. Loren sets every actual number.</p>
     <p style="margin-top:20px;"><span class="label">Lumen Haul &middot; loren@lumenhaul.com &middot; (970) 689-9617</span></p>
   </div>
 </footer>
@@ -1126,7 +1139,7 @@ to Loren, who directs and shoots everything.</pre>
   "use strict";
 
   var KEY = "lh-brief-targets-v1";
-  var STATES = ["", "Contacted", "Replied", "Handed to Loren", "No"];
+  var STATES = ["", "Contacted", "Replied", "Handed to Loren", "Declined"];
 
   /* localStorage throws outright in some privacy modes rather than returning
      null, so every access is guarded and a failure degrades to a page that
@@ -1182,9 +1195,30 @@ to Loren, who directs and shoots everything.</pre>
   /* ---- The bar ---------------------------------------------------------- */
 
   var readout = document.getElementById("tk-count");
+
+  /* Declined names are hidden, so this toggle is the only way back to one.
+     The count rides on the button because a name vanishing on the fourth
+     click needs somewhere visible to have gone.
+
+     DECLARED BEFORE count(), which reads it. `var` hoists the binding but not
+     the assignment, so declaring this below the first count() call left it
+     undefined at that moment — the throw took the rest of this function with
+     it and silently unbound every other control in the bar. */
+  var declinedBtn = document.getElementById("tk-declined");
+  declinedBtn.addEventListener("click", function () {
+    var on = document.body.classList.toggle("show-declined");
+    declinedBtn.setAttribute("aria-pressed", on ? "true" : "false");
+  });
+
   function count() {
-    var worked = chips.filter(function (c) { return c.hasAttribute("data-state"); }).length;
+    var worked = 0, declined = 0;
+    chips.forEach(function (c) {
+      var v = Number(c.getAttribute("data-state") || 0);
+      if (v) worked++;
+      if (v === 4) declined++;
+    });
     readout.innerHTML = "<b>" + worked + "</b> of <b>" + chips.length + "</b> worked";
+    declinedBtn.textContent = declined ? "Declined (" + declined + ")" : "Declined";
   }
   count();
 
