@@ -52,10 +52,10 @@ import type { Service } from "./types";
  * note above.
  */
 export const aboutLead =
-  "Lumen Haul is a film and photography studio working in brand films, automotive campaigns and commercial stills.";
+  "A commercial production company for automotive, mobility, technology, and ambitious consumer brands.";
 
 export const aboutSupport =
-  "I direct and shoot every project, then scale the production around it: lean when the job calls for a fast turnaround, a full commercial team with department heads when it calls for scale. The size changes to fit the work. The direction behind it doesn't.";
+  "High-end commercial production shaped by story, movement, and design.";
 
 export const services: Service[] = [
   {
