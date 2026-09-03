@@ -74,13 +74,12 @@ export default function AboutPage() {
           className="md:col-span-4 md:col-start-9 md:self-end"
         >
           {/*
-            `text-left` overrides the prose step's justification. Justified
-            monospace needs a wide measure to work: every glyph is the same
-            width, so word spacing is the only elastic in the line, and in a
-            column this narrow it opens rivers. The step's size, leading and
-            tracking are what is wanted here — the alignment is not.
+            The short support statement uses the lead step rather than the
+            long-form prose treatment. Left alignment keeps the narrow column
+            readable, while the foreground colour gives it more presence
+            without approaching the headline's display scale.
           */}
-          <p className="text-prose text-left text-muted-foreground">
+          <p className="text-lead text-left text-foreground">
             {aboutSupport}
           </p>
         </Reveal>
