@@ -52,7 +52,7 @@ import type { Service } from "./types";
  * note above.
  */
 export const aboutLead =
-  "A commercial production company for automotive, mobility, technology, and ambitious consumer brands.";
+  "Lumen Haul is a commercial production company for automotive, mobility, technology, and ambitious consumer brands.";
 
 export const aboutSupport =
   "High-end commercial production shaped by story, movement, and design.";
