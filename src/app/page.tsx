@@ -28,12 +28,31 @@ export default function HomePage() {
       />
 
       <div className="max-md:hidden">
-        <HomeHero />
-        <ReelDesktop projects={featuredProjects} />
+        {/*
+          THIS WRAPPER IS LOAD-BEARING — it is the hero's sticky containing
+          block, and it ends where the reel does.
+
+          A sticky element sticks for the height of its PARENT. With the hero
+          parented to the whole page it stayed stuck at the top through the
+          footer's reveal space too: an opaque, full-viewport hero parked over
+          the footer at the bottom of the document, so the reveal uncovered
+          nothing but black. Bounding it to hero + reel lets the hero scroll
+          away with the reel it was holding still for, and leaves the spacer
+          below genuinely empty.
+        */}
+        <div>
+          <HomeHero />
+          <ReelDesktop projects={featuredProjects} />
+        </div>
         {/* Scroll room that uncovers the fixed footer sitting behind the page.
             `pointer-events-none` because it lies over that footer and would
-            otherwise eat every click meant for it — see PageShell. */}
-        <div aria-hidden className="pointer-events-none h-[70vh]" />
+            otherwise eat every click meant for it — see PageShell.
+
+            `max-lg:hidden` for the same reason PageShell's spacer carries it:
+            the footer is only `lg:fixed`. Between md and lg this tree still
+            renders but the footer is a normal block, so the spacer reserved a
+            screenful of empty ground above a footer that needed none. */}
+        <div aria-hidden className="pointer-events-none h-[70vh] max-lg:hidden" />
         <SiteFooter />
       </div>
 

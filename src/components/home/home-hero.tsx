@@ -52,7 +52,20 @@ export function HomeHero() {
   );
 
   return (
-    <section ref={root} className="sticky top-0 h-dvh overflow-hidden">
+    <section
+      ref={root}
+      /*
+        `z-[var(--z-content)] bg-background` is the reveal-footer contract, the
+        same pair ReelDesktop carries. The footer is fixed at `--z-reveal` and
+        comes LATER in the document than this hero, so a hero left on the
+        default layer loses the tie and the footer paints over its bottom half
+        — the giant wordmark sitting across the film at the top of the page.
+        The ground matters for the same reason: film is the only thing making
+        this section opaque, and a poster that has not decoded yet is a hole
+        straight through to the footer.
+      */
+      className="sticky top-0 z-[var(--z-content)] h-dvh overflow-hidden bg-background"
+    >
       <div className="h-full w-full brightness-[0.8]">
         <MediaFrame placeholder={heroFilm.placeholder}>
           <AutoVideo asset={heroFilm} priority audible />
