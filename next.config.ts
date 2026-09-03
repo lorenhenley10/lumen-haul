@@ -141,31 +141,33 @@ const nextConfig: NextConfig = {
   },
 
   /**
-   * Client estimates are served as static files out of public/q/, which means
-   * they are world-readable to anyone holding the URL — there is no auth in
-   * front of a file in public/. The filenames carry a random suffix so the
-   * directory cannot be enumerated by guessing.
+   * Two families of standing link are served as static files out of public/:
+   * client estimates in /q/, and internal briefs in /brief/. Both are
+   * world-readable to anyone holding the URL — there is no auth in front of a
+   * file in public/. The filenames carry a random suffix so neither directory
+   * can be enumerated by guessing.
    *
-   * This is the second half of that. Each estimate already carries a robots
-   * meta tag; a meta tag only works on something that parses the HTML, so
-   * this header covers the fetches that do not. Between them, a client's
-   * name, the scope of their job and its price stay out of search results.
+   * This is the second half of that. Each of those pages already carries a
+   * robots meta tag; a meta tag only works on something that parses the HTML,
+   * so this header covers the fetches that do not. Between them, a client's
+   * name, the scope of their job and its price — and, under /brief/, the
+   * studio's own target lists and pricing bands — stay out of search results.
    *
-   * NOT robots.txt, deliberately. That file is public, so listing /q/ in it
-   * would advertise the path to exactly the people the random filename is
-   * meant to hide it from.
+   * NOT robots.txt, deliberately. That file is public, so listing these paths
+   * in it would advertise them to exactly the people the random filename is
+   * meant to hide them from.
    */
   async headers() {
-    return [
+    const noIndex = [
       {
-        source: "/q/:path*",
-        headers: [
-          {
-            key: "X-Robots-Tag",
-            value: "noindex, nofollow, noarchive, nosnippet",
-          },
-        ],
+        key: "X-Robots-Tag",
+        value: "noindex, nofollow, noarchive, nosnippet",
       },
+    ];
+
+    return [
+      { source: "/q/:path*", headers: noIndex },
+      { source: "/brief/:path*", headers: noIndex },
     ];
   },
 };

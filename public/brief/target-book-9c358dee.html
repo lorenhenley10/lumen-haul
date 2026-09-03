@@ -1,0 +1,1240 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--
+  Same posture as the hosted estimates in /q/: world-readable to anyone holding
+  the URL, hidden from search. The filename's random suffix stops the
+  directory being guessed; this tag and the X-Robots-Tag header in
+  next.config.ts stop it being indexed. Deliberately NOT listed in robots.txt
+  — that file is public, so naming the path there would advertise it.
+-->
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="description" content="Lumen Haul outreach brief: the client types to look for, where to find them, and what to ask about budget.">
+<title>Lumen Haul Target Book</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+:root { color-scheme: light dark; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<style>
+/* ===========================================================================
+   TOKENS
+   Two accents carry structure, not decoration: --auto is the automotive
+   track, --tech is the Bay Area tech track. Every element belonging to a
+   track takes its hue from that track. --warn is the third, semantic layer:
+   skip, caution. It is never used for emphasis.
+   ======================================================================== */
+:root {
+  --paper:   #f4f4f1;
+  --surface: #ffffff;
+  --sunk:    #ebebe6;
+  --ink:     #15171a;
+  --ink-2:   #474d54;
+  --ink-3:   #757c84;
+  --rule:    #dcdcd6;
+  --rule-2:  #e8e8e3;
+
+  --auto:      #9e3418;
+  --tech:      #14646f;
+  --warn:      #856310;
+
+  --font-display: "Archivo", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-body: "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --measure: 66ch;
+  --page: 1080px;
+  --gutter: clamp(20px, 5vw, 56px);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper:   #111315;
+    --surface: #1a1d20;
+    --sunk:    #16191b;
+    --ink:     #eceee9;
+    --ink-2:   #a9b0b6;
+    --ink-3:   #7d858c;
+    --rule:    #2c3135;
+    --rule-2:  #23272a;
+    --auto:    #ef7f5c;
+    --tech:    #56b8c4;
+    --warn:    #d8ae4c;
+  }
+}
+
+:root[data-theme="dark"] {
+  --paper:   #111315;
+  --surface: #1a1d20;
+  --sunk:    #16191b;
+  --ink:     #eceee9;
+  --ink-2:   #a9b0b6;
+  --ink-3:   #7d858c;
+  --rule:    #2c3135;
+  --rule-2:  #23272a;
+  --auto:    #ef7f5c;
+  --tech:    #56b8c4;
+  --warn:    #d8ae4c;
+}
+
+/* ---------------------------------------------------------------------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.62;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; }
+
+:focus-visible { outline: 2px solid var(--auto); outline-offset: 3px; border-radius: 2px; }
+
+.wrap { max-width: var(--page); margin: 0 auto; padding-inline: var(--gutter); }
+
+/* ---- Type -------------------------------------------------------------- */
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  margin: 0;
+}
+h1 { font-size: clamp(2.1rem, 5.4vw, 3.2rem); letter-spacing: -0.035em; }
+h2 { font-size: clamp(1.45rem, 3.1vw, 1.95rem); }
+h3 { font-family: var(--font-body); font-size: 1.14rem; font-weight: 700; letter-spacing: -0.012em; }
+h4 { font-family: var(--font-body); font-size: 0.95rem; font-weight: 600; letter-spacing: 0; }
+
+p { margin: 0; }
+
+.lede { font-size: 1.12rem; line-height: 1.55; color: var(--ink-2); }
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+strong { font-weight: 600; color: var(--ink); }
+
+/* ---- Masthead ---------------------------------------------------------- */
+
+.masthead { padding-block: clamp(40px, 7vw, 72px) clamp(28px, 4vw, 40px); border-bottom: 1px solid var(--rule); }
+.masthead-meta { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-bottom: 26px; }
+.masthead h1 { max-width: 16ch; }
+.masthead .lede { margin-top: 22px; max-width: 60ch; }
+
+/* The assistant's job, as four steps. This IS a sequence, so it is numbered. */
+.job { margin-top: 34px; display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+.job > div { background: var(--surface); padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 4px; }
+.job .n { font-family: var(--font-mono); font-size: 0.68rem; font-weight: 700; color: var(--auto); letter-spacing: 0.1em; }
+.job b { font-size: 0.98rem; font-weight: 600; }
+.job p { font-size: 0.85rem; color: var(--ink-2); line-height: 1.45; }
+
+/* ---- Nav --------------------------------------------------------------- */
+
+nav.jump { position: sticky; top: 0; z-index: 20; background: var(--paper); background: color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--rule); }
+nav.jump ul { display: flex; list-style: none; margin: 0 auto; padding: 0 var(--gutter); max-width: var(--page); overflow-x: auto; scrollbar-width: none; }
+nav.jump ul::-webkit-scrollbar { display: none; }
+nav.jump a {
+  display: block; padding: 13px 16px 13px 0; margin-right: 8px;
+  font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--ink-3); text-decoration: none;
+  white-space: nowrap; transition: color 0.16s;
+}
+nav.jump a:hover { color: var(--ink); }
+
+/* ---- Sections ---------------------------------------------------------- */
+
+section { padding-block: clamp(44px, 6vw, 72px); border-bottom: 1px solid var(--rule); }
+section:last-of-type { border-bottom: 0; }
+.sec-head { margin-bottom: 32px; }
+.sec-head .label { display: block; margin-bottom: 10px; }
+.sec-head p { margin-top: 14px; color: var(--ink-2); max-width: var(--measure); }
+
+.note {
+  padding: 16px 20px;
+  background: var(--sunk);
+  border-left: 3px solid var(--ink-2);
+  max-width: 68ch;
+  font-size: 0.94rem;
+  color: var(--ink-2);
+}
+
+/* ---- The model --------------------------------------------------------- */
+
+.model { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0 44px; }
+.model > div { display: flex; flex-direction: column; }
+.mark {
+  display: grid;
+  grid-template-columns: 26px 1fr;
+  gap: 4px 14px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--rule-2);
+  align-items: baseline;
+}
+.mark .n {
+  font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700;
+  color: var(--auto); font-variant-numeric: tabular-nums;
+}
+.mark h4 { grid-column: 2; }
+.mark p { grid-column: 2; font-size: 0.91rem; color: var(--ink-2); line-height: 1.5; }
+.mark .ask {
+  grid-column: 2; margin-top: 7px; font-size: 0.88rem; color: var(--ink);
+  font-weight: 500; padding-left: 12px; border-left: 2px solid var(--auto);
+}
+
+/* ---- Budget bands ------------------------------------------------------ */
+
+.bands { display: flex; flex-direction: column; border: 1px solid var(--rule); background: var(--surface); }
+.band {
+  display: grid;
+  grid-template-columns: 168px 1fr auto;
+  gap: 6px 24px;
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--rule-2);
+  align-items: center;
+}
+.band:last-child { border-bottom: 0; }
+.band .amt {
+  font-family: var(--font-mono); font-variant-numeric: tabular-nums;
+  font-weight: 700; font-size: 0.98rem; letter-spacing: -0.02em;
+}
+.band p { font-size: 0.92rem; color: var(--ink-2); }
+.band .verdict {
+  font-family: var(--font-mono); font-size: 0.66rem; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap;
+}
+.band.skip  .amt, .band.skip  .verdict { color: var(--warn); }
+.band.dig   .amt, .band.dig   .verdict { color: var(--ink-3); }
+.band.good  .amt, .band.good  .verdict { color: var(--tech); }
+.band.hot   .amt, .band.hot   .verdict { color: var(--auto); }
+@media (max-width: 720px) {
+  .band { grid-template-columns: 1fr; gap: 4px; }
+  .band .verdict { justify-self: start; }
+}
+
+/* ---- Tracks ------------------------------------------------------------ */
+
+.track-a { color: var(--auto); --track: var(--auto); }
+.track-b { color: var(--tech); --track: var(--tech); }
+
+.track-head {
+  display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap;
+  padding-bottom: 16px; margin-bottom: 26px; border-bottom: 2px solid currentColor;
+}
+.track-head h2 { color: var(--ink); }
+.track-head .badge {
+  font-family: var(--font-mono); font-size: 0.67rem; letter-spacing: 0.13em;
+  text-transform: uppercase; padding: 4px 9px; border: 1px solid currentColor;
+  color: inherit; white-space: nowrap;
+}
+
+.pitch {
+  padding: 18px 22px; border-left: 3px solid currentColor; background: var(--sunk);
+  margin-bottom: 34px; max-width: 72ch;
+}
+.pitch .label { color: inherit; }
+.pitch .line {
+  margin-top: 8px; font-family: var(--font-display); font-size: 1.2rem;
+  font-weight: 600; line-height: 1.32; letter-spacing: -0.018em;
+  color: var(--ink); text-wrap: balance;
+}
+.pitch .sub { margin-top: 11px; font-size: 0.91rem; color: var(--ink-2); }
+
+/* ---- Segment entries --------------------------------------------------- */
+
+.seg {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: 12px 40px;
+  padding: 24px 0 26px;
+  padding-left: 20px;
+  border-top: 1px solid var(--rule);
+  border-left: 3px solid currentColor;
+}
+.segments > .seg:last-child { border-bottom: 1px solid var(--rule); }
+
+.seg-title { display: flex; align-items: baseline; gap: 11px; flex-wrap: wrap; }
+.seg-title h3 { color: var(--ink); }
+.rank {
+  font-family: var(--font-mono); font-size: 0.62rem; font-weight: 700;
+  letter-spacing: 0.1em; padding: 3px 7px; color: var(--paper);
+  background: var(--track); white-space: nowrap;
+}
+.rank.tier2 { background: transparent; color: inherit; border: 1px solid currentColor; }
+
+.seg-left > p { margin-top: 9px; font-size: 0.93rem; color: var(--ink-2); }
+
+.seg-right { display: flex; flex-direction: column; gap: 14px; padding-top: 3px; }
+.field .label { display: block; margin-bottom: 5px; }
+.field p { font-size: 0.89rem; color: var(--ink-2); line-height: 1.5; }
+
+.deal {
+  font-family: var(--font-mono); font-variant-numeric: tabular-nums;
+  font-size: 0.94rem; font-weight: 500; color: var(--ink);
+}
+.deal em { font-style: normal; color: var(--ink-3); font-size: 0.81rem; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 2px; }
+.chip {
+  font-size: 0.77rem; line-height: 1.35; padding: 3px 8px;
+  border: 1px solid var(--rule); background: var(--surface);
+  color: var(--ink-2); white-space: nowrap;
+}
+.chip em { font-style: normal; color: var(--ink-3); }
+.chip.own { border-color: currentColor; color: inherit; font-weight: 600; }
+
+@media (max-width: 860px) { .seg { grid-template-columns: 1fr; gap: 18px; } }
+
+/* ---- Signals ----------------------------------------------------------- */
+
+.signals { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+.signals > div { background: var(--surface); padding: 17px 19px 19px; display: flex; flex-direction: column; gap: 5px; }
+.signals b { font-size: 0.95rem; font-weight: 600; }
+.signals p { font-size: 0.86rem; color: var(--ink-2); line-height: 1.45; }
+.signals .where { font-family: var(--font-mono); font-size: 0.68rem; color: var(--ink-3); margin-top: 3px; line-height: 1.4; }
+
+/* ---- Sourcing ---------------------------------------------------------- */
+
+.sources { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 34px 44px; }
+.source-col > .label { display: block; padding-bottom: 10px; border-bottom: 2px solid currentColor; margin-bottom: 4px; color: inherit; }
+.source-col ol { margin: 0; padding: 0; list-style: none; counter-reset: src; }
+.source-col li {
+  counter-increment: src; padding: 13px 0 13px 32px;
+  border-bottom: 1px solid var(--rule-2); position: relative;
+  font-size: 0.89rem; color: var(--ink-2);
+}
+.source-col li::before {
+  content: counter(src, decimal-leading-zero); position: absolute; left: 0; top: 14px;
+  font-family: var(--font-mono); font-size: 0.67rem; color: inherit; opacity: 0.75; font-weight: 500;
+}
+.source-col li b { display: block; color: var(--ink); font-weight: 600; font-size: 0.94rem; margin-bottom: 2px; }
+
+/* ---- Outreach ---------------------------------------------------------- */
+
+.who { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin-bottom: 30px; }
+.who > div { background: var(--surface); padding: 18px 20px; }
+.who .label { display: block; margin-bottom: 9px; color: inherit; }
+.who ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 7px; }
+.who li { font-size: 0.88rem; color: var(--ink-2); display: flex; gap: 9px; align-items: baseline; }
+.who li .k { font-family: var(--font-mono); font-size: 0.7rem; color: var(--ink-3); flex: 0 0 auto; width: 16px; }
+.who li.yes .k { color: var(--track); }
+.who li.no .k { color: var(--warn); }
+
+.script { border: 1px solid var(--rule); background: var(--surface); padding: 22px 24px; max-width: 72ch; }
+.script .label { display: block; margin-bottom: 12px; }
+.script pre {
+  margin: 0; font-family: var(--font-body); font-size: 0.92rem; line-height: 1.6;
+  color: var(--ink-2); white-space: pre-wrap; word-wrap: break-word;
+}
+.script pre b { color: var(--ink); font-weight: 600; }
+
+/* ---- Asking about money ------------------------------------------------ */
+
+.asks { display: flex; flex-direction: column; margin-bottom: 36px; border-top: 1px solid var(--rule); }
+.asks > div { padding: 16px 0 16px 20px; border-bottom: 1px solid var(--rule); border-left: 3px solid var(--tech); }
+.asks q { font-size: 1.02rem; font-weight: 500; color: var(--ink); font-style: normal; display: block; }
+.asks p { margin-top: 6px; font-size: 0.88rem; color: var(--ink-2); }
+
+.handoff { border: 1px solid var(--rule); background: var(--surface); padding: 20px 24px; max-width: 62ch; }
+.handoff .label { display: block; margin-bottom: 12px; }
+.handoff ol { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
+.handoff li { font-size: 0.92rem; color: var(--ink-2); }
+.handoff li b { color: var(--ink); font-weight: 600; }
+
+.sub-head { font-family: var(--font-body); font-size: 1.05rem; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 16px; }
+
+/* ---- Skip -------------------------------------------------------------- */
+
+.skip-wrap { color: var(--warn); }
+.skip-lead {
+  padding: 20px 24px; border-left: 3px solid var(--warn); background: var(--sunk);
+  max-width: 70ch; margin-bottom: 28px;
+}
+.skip-lead .amt {
+  font-family: var(--font-mono); font-size: 1.5rem; font-weight: 700;
+  color: var(--warn); letter-spacing: -0.03em; display: block;
+}
+.skip-lead p { margin-top: 8px; font-size: 0.96rem; color: var(--ink-2); }
+.skip-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px 40px; }
+.skip-list div { display: flex; gap: 11px; align-items: baseline; font-size: 0.91rem; color: var(--ink-2); line-height: 1.5; }
+.skip-list .k { font-family: var(--font-mono); font-size: 0.72rem; color: var(--warn); flex: 0 0 auto; }
+.skip-list b { color: var(--ink); font-weight: 600; }
+
+/* ---- Footer ------------------------------------------------------------ */
+
+footer { padding-block: 40px 56px; border-top: 1px solid var(--rule); color: var(--ink-3); font-size: 0.85rem; }
+footer p { max-width: 70ch; }
+footer p + p { margin-top: 12px; }
+
+@media (prefers-reduced-motion: reduce) { * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; } }
+
+/* ===========================================================================
+   TARGET TRACKING
+   The chips in every "Names to work" list are clickable. One click steps a
+   name through the states below and the choice is kept in this browser's
+   localStorage — it is yours alone, it is not sent anywhere, and it survives
+   a reload. Existing clients (.chip.own) are deliberately NOT trackable:
+   they are proof to cite in an email, not names to pitch.
+   ======================================================================== */
+
+.chip[data-track] {
+  cursor: pointer;
+  user-select: none;
+  padding-left: 22px;
+  position: relative;
+  transition: background 140ms ease, border-color 140ms ease, color 140ms ease;
+}
+.chip[data-track]::before {
+  content: "";
+  position: absolute;
+  left: 7px;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  margin-top: -4px;
+  border: 1px solid var(--ink-3);
+  border-radius: 50%;
+  background: transparent;
+}
+.chip[data-track]:hover { border-color: var(--ink-3); color: var(--ink); }
+
+.chip[data-state="1"] { border-color: var(--ink-3); color: var(--ink); }
+.chip[data-state="1"]::before { background: var(--ink-3); border-color: var(--ink-3); }
+
+.chip[data-state="2"] { border-color: var(--tech); color: var(--tech); font-weight: 600; }
+.chip[data-state="2"]::before { background: var(--tech); border-color: var(--tech); }
+
+.chip[data-state="3"] { border-color: var(--auto); color: var(--auto); font-weight: 600; }
+.chip[data-state="3"]::before { background: var(--auto); border-color: var(--auto); }
+
+.chip[data-state="4"] { opacity: 0.45; text-decoration: line-through; }
+.chip[data-state="4"]::before { background: var(--warn); border-color: var(--warn); }
+
+/* "Hide worked" — anything that is no longer untouched drops out of view. */
+body.hide-worked .chip[data-state="1"],
+body.hide-worked .chip[data-state="2"],
+body.hide-worked .chip[data-state="3"],
+body.hide-worked .chip[data-state="4"] { display: none; }
+
+/* ---- The tracker bar, second row of the sticky header ------------------ */
+
+.tracker {
+  border-top: 1px solid var(--rule-2);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 18px;
+  max-width: var(--page);
+  margin: 0 auto;
+  padding: 9px var(--gutter);
+}
+
+.tracker .count {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.tracker .count b { color: var(--ink); font-weight: 700; }
+
+.legend { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-right: auto; }
+.legend span {
+  display: flex; align-items: center; gap: 6px;
+  font-family: var(--font-mono); font-size: 0.63rem;
+  letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-3);
+  white-space: nowrap;
+}
+.legend i { width: 8px; height: 8px; border-radius: 50%; flex: 0 0 auto; }
+.legend .s1 i { background: var(--ink-3); }
+.legend .s2 i { background: var(--tech); }
+.legend .s3 i { background: var(--auto); }
+.legend .s4 i { background: var(--warn); }
+
+.tracker button {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  background: transparent;
+  color: var(--ink-2);
+  border: 1px solid var(--rule);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 140ms ease, border-color 140ms ease;
+}
+.tracker button:hover { color: var(--ink); border-color: var(--ink-3); }
+.tracker button[aria-pressed="true"] { color: var(--ink); border-color: var(--ink); }
+
+/* The tracker is a screen tool. On paper it, and the sticky nav, are noise. */
+@media print {
+  nav.jump { display: none; }
+  .chip[data-track] { padding-left: 8px; }
+  .chip[data-track]::before { display: none; }
+  body.hide-worked .chip { display: inline-block !important; }
+}
+
+</style>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="masthead-meta">
+      <span class="label">Lumen Haul</span>
+      <span class="label">Outreach brief</span>
+      <span class="label">Rev. September 2026</span>
+    </div>
+    <h1>The clients we are looking for</h1>
+    <p class="lede">Two kinds of company are worth your time. <strong>Automotive</strong> is the volume side &mdash; the same buyer, the same job, over and over. <strong>Bay Area tech</strong> is the bigger-invoice side &mdash; fewer jobs, several times the number. Everything here is sorted by how winnable it is with the work already on our reel.</p>
+
+    <div class="job">
+      <div><span class="n">STEP 01</span><b>Find them</b><p>Build the list from the sources in section 05.</p></div>
+      <div><span class="n">STEP 02</span><b>Reach out</b><p>Right person, specific reason. Section 06.</p></div>
+      <div><span class="n">STEP 03</span><b>Find the budget</b><p>The one thing you have to come back with. Section 07.</p></div>
+      <div><span class="n">STEP 04</span><b>Hand to Loren</b><p>Five facts, then it is off your desk.</p></div>
+    </div>
+  </div>
+</header>
+
+<nav class="jump">
+  <ul>
+    <li><a href="#model">The model</a></li>
+    <li><a href="#automotive">Automotive</a></li>
+    <li><a href="#tech">Bay Area tech</a></li>
+    <li><a href="#signals">When to reach out</a></li>
+    <li><a href="#sourcing">Where to find them</a></li>
+    <li><a href="#outreach">Who to contact</a></li>
+    <li><a href="#budget">The budget question</a></li>
+    <li><a href="#skip">What to skip</a></li>
+  </ul>
+
+  <div class="tracker">
+    <div class="legend">
+      <span class="s1"><i></i>Contacted</span>
+      <span class="s2"><i></i>Replied</span>
+      <span class="s3"><i></i>Handed over</span>
+      <span class="s4"><i></i>No</span>
+    </div>
+    <span class="count" id="tk-count"></span>
+    <button type="button" id="tk-hide" aria-pressed="false">Hide worked</button>
+    <button type="button" id="tk-copy">Copy status</button>
+    <button type="button" id="tk-reset">Reset</button>
+  </div>
+</nav>
+
+<main>
+
+<!-- =====================================================================
+     THE MODEL
+     ================================================================== -->
+<section id="model">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="label">01 — The model</span>
+      <h2>Five marks of a client worth chasing</h2>
+      <p>Hold these five in your head and you can size up almost any company in about a minute. You do not need all five &mdash; three is a good lead and four is a strong one. Mark 01 is the closest thing to mandatory, because we point cameras at real things.</p>
+    </div>
+
+    <div class="model">
+      <div>
+        <div class="mark">
+          <span class="n">01</span>
+          <h4>There is a physical thing to shoot</h4>
+          <p>A car, a wheel, a machine, a product, a stage full of people. Companies selling software with nothing to point a lens at are a harder job and a smaller one.</p>
+          <p class="ask">Could I describe what the camera is looking at?</p>
+        </div>
+        <div class="mark">
+          <span class="n">02</span>
+          <h4>They will need it again</h4>
+          <p>A product line, a build calendar, an event series, a roster of customers. A company with one thing to shoot once is worth a single invoice. A company with twelve is worth a year.</p>
+          <p class="ask">What do they launch, build or run on a schedule?</p>
+        </div>
+        <div class="mark">
+          <span class="n">03</span>
+          <h4>Someone there owns a budget</h4>
+          <p>A named person with a marketing, brand, events or talent budget. At small shops that is the owner. At bigger companies it is rarely the founder and never the intern.</p>
+          <p class="ask">Can I name the person and their title?</p>
+        </div>
+      </div>
+      <div>
+        <div class="mark">
+          <span class="n">04</span>
+          <h4>They are close, or they will pay travel</h4>
+          <p>San Francisco and San Jose carry no travel charge. Anywhere else is billed on top, which is fine as long as they know it before the estimate goes out &mdash; not after.</p>
+          <p class="ask">Inside 90 minutes? If not, will travel be paid?</p>
+        </div>
+        <div class="mark">
+          <span class="n">05</span>
+          <h4>Their current content is worse than ours</h4>
+          <p>Look at their Instagram and their website hero. A company posting mediocre work cares enough to publish and not enough to be good at it. That gap is the whole pitch.</p>
+          <p class="ask">Is our reel visibly better than what they have now?</p>
+        </div>
+        <div class="mark" style="border-bottom:0;">
+          <span class="n">&mdash;</span>
+          <h4>And one thing that is <em>not</em> a mark</h4>
+          <p>Company size. A twelve-person wheel brand with a launch calendar beats a 400-person company that shoots one video a year. Do not filter by headcount, and do not filter by funding stage either &mdash; the budget question sorts that out for you.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="note" style="margin-top:30px;">
+      <strong>What a job is usually worth.</strong> Most single jobs land between <strong>$1,200 and $3,200</strong>. A good one &mdash; two or three days with several deliverables &mdash; runs <strong>$6,000 to $12,000</strong>. The big ones, run as a program across months rather than a single shoot, reach <strong>$25,000 to $50,000</strong>. You are not quoting any of these. They are here so you know whether a budget answer is worth getting excited about.
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     TRACK A — AUTOMOTIVE
+     ================================================================== -->
+<section id="automotive" class="track-a">
+  <div class="wrap">
+    <div class="track-head">
+      <span class="label" style="color:inherit;">Track A</span>
+      <h2>Automotive</h2>
+      <span class="badge">Volume &middot; Start here</span>
+    </div>
+
+    <div class="pitch">
+      <span class="label">How to frame it</span>
+      <p class="line">&ldquo;You have a product that only sells when it looks like the reason someone bought the car. We shoot it that way, on a schedule, for a set number per vehicle.&rdquo;</p>
+      <p class="sub">This buyer is not shopping for art direction. They want <strong>a repeatable job at a known price</strong>, because their calendar runs on product launches and event dates. Proof to lead with: Blaque Diamond Wheels, Formula Drift, Shoreline Motoring, Hotpit Autofest.</p>
+    </div>
+
+    <div class="segments">
+
+      <div class="seg">
+        <div class="seg-left">
+          <div class="seg-title"><h3>Aftermarket wheel brands</h3><span class="rank">Best fit</span></div>
+          <p>The strongest segment on the page, because three are already clients. A wheel brand carries dozens of designs in several finishes, and each has to be shot on multiple cars &mdash; the same wheel on a Tesla and on a Raptor are two different assets. The need never runs out.</p>
+        </div>
+        <div class="seg-right">
+          <div class="field"><span class="label">Why they buy</span><p>New designs, new finishes, new fitments, and the SEMA show cycle every autumn.</p></div>
+          <div class="field"><span class="label">Typical budget</span><p class="deal">$1,800&ndash;$3,000 <em>per vehicle</em><br>$8,000&ndash;$15,000 <em>/ month if they go standing</em></p></div>
+          <div class="field"><span class="label">Names to work</span>
+            <div class="chips"><span class="chip own">Blaque Diamond &check;</span><span class="chip own">1886 &check;</span><span class="chip own">Watanabe &check;</span><span class="chip">Vossen</span><span class="chip">Rotiform</span><span class="chip">HRE</span><span class="chip">Titan 7</span><span class="chip">fifteen52</span><span class="chip">Konig</span><span class="chip">Enkei</span><span class="chip">Work Wheels</span><span class="chip">Rays / Volk</span><span class="chip">BC Forged</span><span class="chip">Apex Race Parts</span><span class="chip">Method</span><span class="chip">Black Rhino</span><span class="chip">Fuel Off-Road</span><span class="chip">KMC</span><span class="chip">Forgeline</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="seg">
+        <div class="seg-left">
+          <div class="seg-title"><h3>Restomod and restoration builders</h3><span class="rank">Biggest money</span></div>
+          <p>The most under-worked opportunity here. A restomod costs the customer somewhere between $300,000 and $1.5 million and takes over a year to build &mdash; and the shop&rsquo;s entire marketing is the documentation of that build, because it is how the next commission gets sold.</p>
+        </div>
+        <div class="seg-right">
+          <div class="field"><span class="label">Why they buy</span><p>They need the build filmed across its whole arc plus a hero piece at the reveal. That is six to ten visits over a year, not one shoot.</p></div>
+          <div class="field"><span class="label">Typical budget</span><p class="deal">$25,000&ndash;$50,000 <em>/ full build program</em><br>$6,000&ndash;$12,000 <em>/ reveal film alone</em></p></div>
+          <div class="field"><span class="label">Names to work</span>
+            <div class="chips"><span class="chip">Canepa <em>(Scotts Valley)</em></span><span class="chip">Kindred Motorworks <em>(Vallejo)</em></span><span class="chip">Fantasy Junction <em>(Emeryville)</em></span><span class="chip">Singer</span><span class="chip">Icon 4x4</span><span class="chip">Ringbrothers</span><span class="chip">Speedkore</span><span class="chip">Emory Motorsports</span><span class="chip">Gunther Werks</span><span class="chip">Legacy Overland</span><span class="chip">Velocity Restorations</span><span class="chip">Gateway Bronco</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="seg">
+        <div class="seg-left">
+          <div class="seg-title"><h3>Performance parts and tuning</h3><span class="rank tier2">Volume</span></div>
+          <p>The same buying pattern as wheels, often with more money behind it. An exhaust or a turbo is not photogenic on its own, so they need someone who can shoot the install, the dyno and the car moving &mdash; a higher bar, which is exactly why fewer people clear it.</p>
+        </div>
+        <div class="seg-right">
+          <div class="field"><span class="label">Why they buy</span><p>Product launches, the SEMA and PRI shows, sponsored builds, and constant demand for install content.</p></div>
+          <div class="field"><span class="label">Typical budget</span><p class="deal">$4,000&ndash;$9,000 <em>/ launch</em><br>$6,000&ndash;$14,000 <em>/ quarter, standing</em></p></div>
+          <div class="field"><span class="label">Names to work</span>
+            <div class="chips"><span class="chip">Borla</span><span class="chip">aFe Power</span><span class="chip">Akrapovi&ccaron;</span><span class="chip">KW Suspension</span><span class="chip">&Ouml;hlins</span><span class="chip">Fortune Auto</span><span class="chip">BC Racing</span><span class="chip">ProCharger</span><span class="chip">Vortech</span><span class="chip">Garrett</span><span class="chip">COBB</span><span class="chip">APR</span><span class="chip">Unitronic</span><span class="chip">Dinan</span><span class="chip">StopTech</span><span class="chip">Girodisc</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="seg">
+        <div class="seg-left">
+          <div class="seg-title"><h3>Custom shops, wrap and paint</h3><span class="rank tier2">Local, repeats</span></div>
+          <p>Shoreline Motoring already proves this works. A busy shop turns out a notable car every two or three weeks, and every one is an asset they currently shoot themselves on a phone. Smaller jobs, but dense in the Bay Area and they repeat forever.</p>
+        </div>
+        <div class="seg-right">
+          <div class="field"><span class="label">Why they buy</span><p>Their whole lead flow is Instagram. A shop with a weak feed loses six-figure builds to a shop with a strong one, and they know it.</p></div>
+          <div class="field"><span class="label">Typical budget</span><p class="deal">$1,200&ndash;$2,500 <em>/ car</em><br>$3,500&ndash;$6,000 <em>/ month, 2&ndash;3 cars</em></p></div>
+          <div class="field"><span class="label">How to work it</span><p>These sell by proximity and visible work more than by email. Once we shoot at one shop, the shops nearby tend to call &mdash; so prioritize the first one in any given area.</p></div>
+        </div>
+      </div>
+
+      <div class="seg">
+        <div class="seg-left">
+          <div class="seg-title"><h3>Exotic, classic and collector dealers</h3><span class="rank tier2">High per car</span></div>
+          <p>Read this one carefully, because it is <strong>not car dealers generally</strong>. A two-million-dollar car justifies a four-thousand-dollar film because the film <em>is</em> the listing. A used Camry does not. The Bay Area and Monterey have unusual density of the first kind.</p>
+        </div>
+        <div class="seg-right">
+          <div class="field"><span class="label">Why they buy</span><p>Auction consignments and high-value private listings. Bring a Trailer permanently raised the bar on what a listing has to look like.</p></div>
+          <div class="field"><span class="label">Typical budget</span><p class="deal">$2,500&ndash;$5,000 <em>/ vehicle</em><br>$10,000&ndash;$20,000 <em>/ auction season block</em></p></div>
+          <div class="field"><span class="label">Names to work</span>
+            <div class="chips"><span class="chip">Canepa</span><span class="chip">Fantasy Junction</span><span class="chip">RM Sotheby&rsquo;s consignors</span><span class="chip">Gooding &amp; Co</span><span class="chip">Bonhams</span><span class="chip">Bring a Trailer top sellers</span><span class="chip">Hemmings directory</span><span class="chip">Bay Area exotic dealers</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="seg">
+        <div class="seg-left">
+          <div class="seg-title"><h3>Motorsport sponsors and teams</h3><span class="rank tier2">Aim one layer out</span></div>
+          <p>Formula Drift is already a client, which opens the door &mdash; but the series itself has its own crew. The money sits one layer out: <strong>the brands sponsoring teams</strong>, who spend heavily and have nothing to show for it internally, and teams needing a deck to justify next season.</p>
+        </div>
+        <div class="seg-right">
+          <div class="field"><span class="label">Why they buy</span><p>A sponsor spends six figures on a livery and cannot show the finance team what it bought. A recap film is how the spend gets renewed &mdash; an easy yes with a hard deadline.</p></div>
+          <div class="field"><span class="label">Typical budget</span><p class="deal">$5,000&ndash;$12,000 <em>/ race weekend</em><br>$20,000&ndash;$45,000 <em>/ season</em></p></div>
+          <div class="field"><span class="label">Names to work</span>
+            <div class="chips"><span class="chip own">Formula Drift &check;</span><span class="chip">FD team title sponsors</span><span class="chip">Oil and fluid brands</span><span class="chip">Tool brands</span><span class="chip">Energy drink activations</span><span class="chip">Sonoma Raceway series</span><span class="chip">Laguna Seca clubs</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="seg">
+        <div class="seg-left">
+          <div class="seg-title"><h3>Events and car shows</h3><span class="rank tier2">Also a lead source</span></div>
+          <p>Hotpit Autofest is a client already. Treat this as two things at once: a paid job, and the best prospecting ground we have. <strong>Monterey Car Week is 90 minutes away and puts every builder, collector dealer and wheel brand in one place for eight days.</strong></p>
+        </div>
+        <div class="seg-right">
+          <div class="field"><span class="label">Why they buy</span><p>Organizers need next year&rsquo;s sell sheet. Exhibitors and sponsors need proof of their activation. Two different buyers standing at the same event.</p></div>
+          <div class="field"><span class="label">Typical budget</span><p class="deal">$3,500&ndash;$8,000 <em>/ event, organizer</em><br>$2,000&ndash;$5,000 <em>/ exhibitor</em></p></div>
+          <div class="field"><span class="label">Names to work</span>
+            <div class="chips"><span class="chip own">Hotpit Autofest &check;</span><span class="chip">Monterey Car Week</span><span class="chip">The Quail</span><span class="chip">Motorlux</span><span class="chip">Luftgek&uuml;hlt</span><span class="chip">Radwood</span><span class="chip">Sonoma Speed Festival</span><span class="chip">Wekfest</span><span class="chip">Import Alliance</span><span class="chip">SEMA</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="seg">
+        <div class="seg-left">
+          <div class="seg-title"><h3>EV and mobility companies</h3><span class="rank tier2">Both tracks at once</span></div>
+          <p>Automotive companies with tech-company budgets, sitting in our backyard. They need real vehicle cinematography, and nearly every vendor pitching them is a tech-video shop that has never shot a car in motion. Our reel wins these on sight.</p>
+        </div>
+        <div class="seg-right">
+          <div class="field"><span class="label">Why they buy</span><p>Launches, funding announcements, investor and recruiting material, and endless demand for the vehicle actually moving.</p></div>
+          <div class="field"><span class="label">Typical budget</span><p class="deal">$12,000&ndash;$30,000 <em>/ launch</em><br><em>Price these on the tech scale, not the automotive one.</em></p></div>
+          <div class="field"><span class="label">Names to work</span>
+            <div class="chips"><span class="chip">Rivian</span><span class="chip">Lucid</span><span class="chip">Zoox</span><span class="chip">Waymo</span><span class="chip">Nuro</span><span class="chip">Gatik</span><span class="chip">Harbinger</span><span class="chip">Xos</span><span class="chip">Applied Intuition</span><span class="chip">ChargePoint</span><span class="chip">EVgo</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     TRACK B — BAY AREA TECH
+     ================================================================== -->
+<section id="tech" class="track-b">
+  <div class="wrap">
+    <div class="track-head">
+      <span class="label" style="color:inherit;">Track B</span>
+      <h2>Bay Area tech</h2>
+      <span class="badge">Bigger invoices &middot; Fewer jobs</span>
+    </div>
+
+    <div class="pitch">
+      <span class="label">How to frame it</span>
+      <p class="line">&ldquo;We shoot machines and hardware the way car commercials shoot cars. Most people filming startups have never had to light metal.&rdquo;</p>
+      <p class="sub">Do not pitch a tech company as a general video vendor &mdash; there are hundreds within ten miles and they all compete on price. Pitch <strong>the automotive craft as the reason to pick us</strong>. The car reel is the asset here, not something to hide. WeAreDevelopers and Stereotypes are proof this side already converts.</p>
+    </div>
+
+    <div class="segments">
+
+      <div class="seg">
+        <div class="seg-left">
+          <div class="seg-title"><h3>Hardware, robotics and deep tech</h3><span class="rank">Best fit</span></div>
+          <p>The closest match between what we do well and what these buyers cannot get anywhere else. They have a <em>physical object</em> &mdash; a robot, a drone, an aircraft, an instrument &mdash; and no idea how to shoot it. Every automotive skill transfers directly.</p>
+        </div>
+        <div class="seg-right">
+          <div class="field"><span class="label">Why they buy</span><p>Launch films, investor material, trade show loops, recruiting. Hardware companies raise money on how real the thing looks on video.</p></div>
+          <div class="field"><span class="label">Typical budget</span><p class="deal">$15,000&ndash;$35,000 <em>/ launch film</em><br>$6,000&ndash;$12,000 <em>/ single product piece</em></p></div>
+          <div class="field"><span class="label">Names to work</span>
+            <div class="chips"><span class="chip own">eufy Make &check;</span><span class="chip">Figure</span><span class="chip">1X</span><span class="chip">Physical Intelligence</span><span class="chip">Skydio</span><span class="chip">Zipline</span><span class="chip">Chef Robotics</span><span class="chip">Astranis</span><span class="chip">Varda</span><span class="chip">Radiant</span><span class="chip">Base Power</span><span class="chip">Verkada</span><span class="chip">Samsara</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="seg">
+        <div class="seg-left">
+          <div class="seg-title"><h3>Funded startups, seed through Series D</h3><span class="rank">Widest pool</span></div>
+          <p>Contact these at any stage &mdash; <strong>the budget question sorts them out for you</strong>, so there is no reason to filter by round before you have asked. What changes with stage is who decides and how much: at seed it is the founder with a few thousand dollars, and past Series B it is a marketing lead with real money.</p>
+        </div>
+        <div class="seg-right">
+          <div class="field"><span class="label">The best moment to catch one</span><p>A company that raised in the last 90 days <em>and</em> just hired its first brand or content person. That person has money to spend, no vendor picked yet, and pressure to show work fast.</p></div>
+          <div class="field"><span class="label">Typical budget</span><p class="deal">$3,000&ndash;$8,000 <em>/ seed and Series A</em><br>$15,000&ndash;$40,000 <em>/ Series B and up</em></p></div>
+          <div class="field"><span class="label">Where they are</span><p>VC portfolio pages first, then Crunchbase. Full method in <a href="#sourcing">section 05</a>.</p></div>
+        </div>
+      </div>
+
+      <div class="seg">
+        <div class="seg-left">
+          <div class="seg-title"><h3>Conferences and their sponsors</h3><span class="rank">Already proven</span></div>
+          <p>WeAreDevelopers is the reference job. This is the best dollar-per-day work we do: multi-day by definition, a deadline nobody can move, and a deliverable list that multiplies. The Bay Area conference calendar is the densest anywhere.</p>
+        </div>
+        <div class="seg-right">
+          <div class="field"><span class="label">Two buyers, not one</span><p><strong>The organizer</strong> needs a recap and next year&rsquo;s sell sheet. <strong>Every sponsor with a booth</strong> needs their activation filmed &mdash; smaller, faster, and we are already on site.</p></div>
+          <div class="field"><span class="label">Typical budget</span><p class="deal">$12,000&ndash;$30,000 <em>/ organizer</em><br>$4,000&ndash;$9,000 <em>/ sponsor</em></p></div>
+          <div class="field"><span class="label">Names to work</span>
+            <div class="chips"><span class="chip own">WeAreDevelopers &check;</span><span class="chip">Dreamforce</span><span class="chip">NVIDIA GTC</span><span class="chip">SaaStr Annual</span><span class="chip">Figma Config</span><span class="chip">AWS regional events</span><span class="chip">AI summit circuit</span><span class="chip">Developer conferences</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="seg">
+        <div class="seg-left">
+          <div class="seg-title"><h3>B2B software customer stories</h3><span class="rank tier2">Best repeat work</span></div>
+          <p>The most reliably budgeted video in enterprise software, and almost nobody thinks to sell it. A customer story film needs travel to the customer&rsquo;s site &mdash; billable days &mdash; and a company at scale needs six to twelve a year in the same format.</p>
+        </div>
+        <div class="seg-right">
+          <div class="field"><span class="label">Why they buy</span><p>Sales asks for them constantly. Every enterprise deal needs a reference story, and the sales team is loud about it internally.</p></div>
+          <div class="field"><span class="label">Typical budget</span><p class="deal">$10,000&ndash;$25,000 <em>/ story</em><br>$60,000&ndash;$150,000 <em>/ year for a full slate</em></p></div>
+          <div class="field"><span class="label">Names to work</span>
+            <div class="chips"><span class="chip">Databricks</span><span class="chip">Snowflake</span><span class="chip">Rippling</span><span class="chip">Vanta</span><span class="chip">Retool</span><span class="chip">Samsara</span><span class="chip">Scale AI</span><span class="chip">Glean</span><span class="chip">Sierra</span><span class="chip">Harvey</span><span class="chip">Clay</span><span class="chip">Decagon</span><span class="chip">Figma</span><span class="chip">Airtable</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="seg">
+        <div class="seg-left">
+          <div class="seg-title"><h3>Venture firms</h3><span class="rank tier2">Doors, not just jobs</span></div>
+          <p>A VC firm is worth contacting less for its own budget than for what sits behind it: <strong>a hundred portfolio companies who all need what we sell and take vendor recommendations from the firm.</strong> One relationship here beats a month of cold email.</p>
+        </div>
+        <div class="seg-right">
+          <div class="field"><span class="label">Why they buy</span><p>Firms compete for founders on brand now. Content is how they do it, and marketing support is a perk they have promised and have to deliver.</p></div>
+          <div class="field"><span class="label">Typical budget</span><p class="deal">$10,000&ndash;$30,000 <em>/ portfolio film series</em><br><em>The referrals matter more than the invoice.</em></p></div>
+          <div class="field"><span class="label">Names to work</span>
+            <div class="chips"><span class="chip">a16z</span><span class="chip">Sequoia</span><span class="chip">Greylock</span><span class="chip">Lightspeed</span><span class="chip">Kleiner Perkins</span><span class="chip">Bessemer</span><span class="chip">First Round</span><span class="chip">Craft</span><span class="chip">Felicis</span><span class="chip">Uncork</span><span class="chip">Amplify</span><span class="chip">Y Combinator</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="seg">
+        <div class="seg-left">
+          <div class="seg-title"><h3>Recruiting and employer brand</h3><span class="rank tier2">Different pot of money</span></div>
+          <p>Paid from the People or Talent budget rather than Marketing &mdash; a separate pot, a separate approver, and far less competition for it. Companies refresh this every year or so and need role-specific cuts in between.</p>
+        </div>
+        <div class="seg-right">
+          <div class="field"><span class="label">Why they buy</span><p>Engineering recruiting is brutal and expensive. A good &ldquo;how we work&rdquo; film lifts application rates, and talent leaders track that number closely.</p></div>
+          <div class="field"><span class="label">Typical budget</span><p class="deal">$12,000&ndash;$30,000 <em>/ program</em></p></div>
+          <div class="field"><span class="label">Who to ask for</span><p>Head of Talent Brand, Director of Recruiting, or Head of People. Never Marketing &mdash; wrong budget, and they will just bounce it.</p></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     SIGNALS
+     ================================================================== -->
+<section id="signals">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="label">04 — When to reach out</span>
+      <h2>Catch them at the moment they have to spend</h2>
+      <p>A company that fits the model but has no reason to act this month will not answer. A company hitting one of these answers at several times the normal rate &mdash; so build the list around triggers, not just names.</p>
+    </div>
+
+    <div class="signals">
+      <div>
+        <b>Just hired a brand or content person</b>
+        <p>New budget, no vendor picked, and someone under pressure to produce something visible fast. The strongest signal there is.</p>
+        <span class="where">LinkedIn job changes + recent funding news</span>
+      </div>
+      <div>
+        <b>A video producer role open 60+ days</b>
+        <p>The budget is approved and they cannot fill the seat. We solve that today, without a hire.</p>
+        <span class="where">LinkedIn Jobs, Ashby, Greenhouse boards</span>
+      </div>
+      <div>
+        <b>Booked a booth at a big show</b>
+        <p>A date they cannot move, money already committed, and content is always the last thing they sort out.</p>
+        <span class="where">SEMA and conference exhibitor lists</span>
+      </div>
+      <div>
+        <b>New product or SKU announced</b>
+        <p>Launch assets are needed on a fixed date and the calendar is already locked.</p>
+        <span class="where">Brand newsletters, SEMA New Products Showcase</span>
+      </div>
+      <div>
+        <b>Raised money in the last 90 days</b>
+        <p>Cash to deploy and pressure to look bigger than they are. True at every stage, seed included.</p>
+        <span class="where">Crunchbase, TechCrunch, VC announcement pages</span>
+      </div>
+      <div>
+        <b>A build reveal on the calendar</b>
+        <p>A restomod or vehicle debut is a hard deadline with a real audience already waiting for it.</p>
+        <span class="where">Shop Instagram, event entry lists, auction catalogs</span>
+      </div>
+      <div>
+        <b>Sponsoring a team or an event</b>
+        <p>They have spent real money and have nothing to show the finance team for it yet.</p>
+        <span class="where">Liveries, sponsor boards, series partner pages</span>
+      </div>
+      <div>
+        <b>A competitor just published something good</b>
+        <p>The fastest budget approval in any industry is a direct rival suddenly looking better than you.</p>
+        <span class="where">Watch the category, then email the one lagging</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     SOURCING
+     ================================================================== -->
+<section id="sourcing">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="label">05 — Where to find them</span>
+      <h2>The lists to work from</h2>
+      <p>All of these are free or close to it, and each produces a structured list rather than guesswork. Work them in order. Aim for around 40 good names a week, not 400 scraped ones.</p>
+    </div>
+
+    <div class="sources">
+      <div class="source-col track-a">
+        <span class="label">Automotive</span>
+        <ol>
+          <li><b>SEMA Show exhibitor directory</b> The best single list in the industry &mdash; roughly 2,400 companies, searchable and filterable by product category. Pull wheels, suspension and exhaust into a sheet and that alone is a quarter of work.</li>
+          <li><b>SEMA New Products Showcase</b> Same show, sharper filter. A brand entering a new product has a launch budget allocated right now.</li>
+          <li><b>Distributor brand portfolios</b> Turn 14, Keystone and Wheel Pros each list hundreds of brands publicly. Every one has a marketing function.</li>
+          <li><b>The Instagram tag method</b> Find the best fifteen automotive photographers in the country and look at who they tag. Those companies already pay for this work &mdash; the qualifying is done for you.</li>
+          <li><b>Bring a Trailer and Cars &amp; Bids seller pages</b> Dealers listing repeatedly at high value. Their listing quality tells you instantly whether they need us.</li>
+          <li><b>Hemmings dealer directory</b> Classic and collector dealers by state. Start with California.</li>
+          <li><b>PRI directory</b> The motorsport equivalent of SEMA, with a harder-core parts buyer.</li>
+          <li><b>Event vendor lists</b> Wekfest, Import Alliance, Monterey Car Week. Everyone listed paid to be there, which means they spend on marketing.</li>
+        </ol>
+      </div>
+
+      <div class="source-col track-b">
+        <span class="label">Bay Area tech</span>
+        <ol>
+          <li><b>VC portfolio pages</b> Start here, before Crunchbase. a16z, Sequoia, Lightspeed and Greylock publish every portfolio company on a free, structured page.</li>
+          <li><b>Crunchbase, filtered</b> Bay Area, funded in the last six months. Include seed &mdash; just ask about budget early rather than assuming there is none.</li>
+          <li><b>The hiring cross-reference</b> The single best move in this document. Take the funded list, then search LinkedIn for people who started as Head of Brand, Content Lead or Creative Director there in the last 90 days. That overlap is the target list.</li>
+          <li><b>Stale job postings</b> Search LinkedIn Jobs for &ldquo;Video Producer&rdquo; and &ldquo;Content Producer&rdquo; in the Bay Area. Anything open past 60 days is budget with nobody to spend it. Email the hiring manager, not HR.</li>
+          <li><b>Conference sponsor lists</b> A sponsor list is a list of companies with budget, already qualified. Pull Dreamforce, GTC, SaaStr and the developer conferences.</li>
+          <li><b>Y Combinator directory</b> Everything past Series A first, then a lighter pass over the current batch.</li>
+          <li><b>Customer logo walls</b> Open a big software company&rsquo;s customers page. Every logo is a potential customer story, and the software company often pays for the film.</li>
+          <li><b>Hardware newsletters</b> The Robot Report, IEEE Spectrum, hardware funding trackers. Physical-product companies fit us best and are hardest to find by keyword.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     OUTREACH
+     ================================================================== -->
+<section id="outreach">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="label">06 — Who to contact</span>
+      <h2>The title is half the outcome</h2>
+      <p>The same email to the wrong person fails. In tech, aiming too high gets it forwarded down and lost. In automotive, aiming too low gets nothing at all, because below the owner nobody controls spend.</p>
+    </div>
+
+    <div class="who">
+      <div class="track-a">
+        <span class="label">Automotive — ask for</span>
+        <ul>
+          <li class="yes"><span class="k">&rarr;</span><span><b>Marketing Director</b> or Marketing Manager at brands over 30 people</span></li>
+          <li class="yes"><span class="k">&rarr;</span><span><b>The owner</b> at any shop or brand under 30 people &mdash; they decide personally, in one conversation</span></li>
+          <li class="yes"><span class="k">&rarr;</span><span><b>Brand Manager</b> at distributor-owned brands</span></li>
+          <li class="no"><span class="k">&times;</span><span>Social media coordinator &mdash; no budget, and they may see us as a threat</span></li>
+          <li class="no"><span class="k">&times;</span><span>General info@ inboxes &mdash; nobody reads them</span></li>
+        </ul>
+      </div>
+      <div class="track-b">
+        <span class="label">Tech — ask for</span>
+        <ul>
+          <li class="yes"><span class="k">&rarr;</span><span><b>Head of Brand</b> or Brand Marketing Lead &mdash; the single best title</span></li>
+          <li class="yes"><span class="k">&rarr;</span><span><b>Creative Director</b> or Head of Content</span></li>
+          <li class="yes"><span class="k">&rarr;</span><span><b>The founder</b>, at seed and Series A &mdash; past that it stops being their call</span></li>
+          <li class="yes"><span class="k">&rarr;</span><span><b>Head of Talent Brand</b> for recruiting work &mdash; separate budget</span></li>
+          <li class="yes"><span class="k">&rarr;</span><span><b>Event Marketing Manager</b> for conference and booth work</span></li>
+          <li class="no"><span class="k">&times;</span><span>CMO at anything over 200 people &mdash; always delegates</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="script">
+      <span class="label">The shape of a first email — adapt it, don't send it verbatim</span>
+      <pre><b>Subject:</b> The BD-F25 launch
+
+Saw the F25 go up last week — the Mercedes shots are doing
+a lot of work on that page.
+
+I work with Lumen Haul, a film and photography studio in the
+Bay Area. Three wheel brands on the roster right now, plus
+Formula Drift. Most of what we do is per-vehicle packages at
+a set number, so a launch doesn't need a new estimate each time.
+
+If you have fitments coming that need shooting, is there a
+budget range this would sit in? Happy to put you straight on
+to Loren, who directs and shoots everything.</pre>
+    </div>
+
+    <div class="note" style="margin-top:26px;">
+      <strong>Three rules for every email.</strong> One: reference something specific and recent &mdash; a product, a round, a booth, a build. The specificity <em>is</em> the credibility, and generic emails get deleted. Two: lead with the frame, not a reel link; the reel goes in the second email, once they have replied. Three: keep it under 120 words and end with one ask, not two.
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     BUDGET
+     ================================================================== -->
+<section id="budget">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="label">07 — The budget question</span>
+      <h2>This is the thing you are actually being paid to find out</h2>
+      <p>Everything before this section exists to get you into a conversation. This is the conversation. You are not quoting, negotiating or scoping &mdash; you are finding out what number they have in mind, then handing them to Loren.</p>
+    </div>
+
+    <div class="asks">
+      <div>
+        <q>&ldquo;Have you had something like this made before? Roughly what did that run?&rdquo;</q>
+        <p>The best opener by a distance. It asks about the past rather than about their limit, so it does not feel like being priced &mdash; and people answer it honestly.</p>
+      </div>
+      <div>
+        <q>&ldquo;Is there a number this needs to land under, so I point Loren at the right scope?&rdquo;</q>
+        <p>Frames the question as helping them rather than qualifying them. The phrase &ldquo;the right scope&rdquo; does a lot of work.</p>
+      </div>
+      <div>
+        <q>&ldquo;Is this coming out of a set marketing budget, or approved case by case?&rdquo;</q>
+        <p>Use it when they dodge the number. The answer tells you almost as much &mdash; a set budget means real money and a client who can repeat.</p>
+      </div>
+      <div>
+        <q>&ldquo;What did the booth itself cost, out of interest?&rdquo;</q>
+        <p>For events and shows. People who will not name a video budget will happily tell you what the booth cost, and it scales predictably from there.</p>
+      </div>
+    </div>
+
+    <p class="sub-head">What their answer means</p>
+
+    <div class="bands">
+      <div class="band skip">
+        <span class="amt">Under $500 / day</span>
+        <p>Below the floor. Close it out politely &mdash; no counter-offer, no discount, no &ldquo;let me check.&rdquo; This is the one number you can decide on by yourself.</p>
+        <span class="verdict">Skip</span>
+      </div>
+      <div class="band dig">
+        <span class="amt">&ldquo;No idea&rdquo;</span>
+        <p>Not a dead lead. Ask what they spent on their last launch, their booth, or their website. If there is genuinely no money anywhere, park it and note a date to try again.</p>
+        <span class="verdict">Dig once</span>
+      </div>
+      <div class="band good">
+        <span class="amt">$1,500&ndash;$5,000</span>
+        <p>A normal, healthy job. Hand it over. Most of our work lives right here and it is exactly what we want more of.</p>
+        <span class="verdict">Hand over</span>
+      </div>
+      <div class="band good">
+        <span class="amt">$5,000&ndash;$15,000</span>
+        <p>A good one. Hand over the same day and say so in the note &mdash; this is worth Loren rearranging his week for.</p>
+        <span class="verdict">Hand over, flagged</span>
+      </div>
+      <div class="band hot">
+        <span class="amt">$15,000+</span>
+        <p>Or any mention of an annual budget, a retainer, or a series of films. Message Loren directly rather than by email. Do not let this one sit overnight.</p>
+        <span class="verdict">Call him</span>
+      </div>
+    </div>
+
+    <div class="handoff" style="margin-top:34px;">
+      <span class="label">What to send Loren — five things, nothing more</span>
+      <ol>
+        <li><b>Company</b>, and one line on what they do</li>
+        <li><b>Contact name and title</b>, plus how to reach them</li>
+        <li><b>What they want made</b>, in their words rather than ours</li>
+        <li><b>When</b> &mdash; the date driving it, if there is one</li>
+        <li><b>The budget</b>, and how they answered when you asked</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     SKIP
+     ================================================================== -->
+<section id="skip" class="skip-wrap">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="label">08 — What to skip</span>
+      <h2>One number, and a short list</h2>
+    </div>
+
+    <div class="skip-lead">
+      <span class="amt">$500 / day</span>
+      <p>That is the floor, and it is the only hard rule here. Anything working out below it &mdash; a $400 car shoot, forty walkarounds at $150 each, a day of coverage for $300 &mdash; is not a small job, it is a loss. Close those out politely and move on. Everything below is a soft steer rather than a ban: if one of them turns out to have real budget behind it, bring it anyway.</p>
+    </div>
+
+    <div class="skip-list">
+      <div><span class="k">&times;</span><span><b>Weddings and real estate.</b> Fine money, wrong studio &mdash; it changes how our other clients price us.</span></div>
+      <div><span class="k">&times;</span><span><b>Volume car dealerships.</b> They want forty inventory walkarounds at $150 each. Exotic and classic dealers are a completely different business, and those we want.</span></div>
+      <div><span class="k">&times;</span><span><b>Equity, revenue share or &ldquo;exposure.&rdquo;</b> Decline in one line. No counter-offer needed.</span></div>
+      <div><span class="k">&times;</span><span><b>Free tests and spec work.</b> &ldquo;Shoot one and if we like it we&rsquo;ll do twelve&rdquo; is a free shoot with a story attached.</span></div>
+      <div><span class="k">&times;</span><span><b>Crypto and web3 promos.</b> Payment risk, and it does not sit well on the reel.</span></div>
+      <div><span class="k">&times;</span><span><b>Influencer personal-brand content.</b> Expects production value at creator prices, and often pays in tagged posts.</span></div>
+      <div><span class="k">&times;</span><span><b>Agency subcontracting.</b> Fine occasionally, but they own the client and take most of the money &mdash; never let it become the main source.</span></div>
+      <div><span class="k">&times;</span><span><b>Out of region with no travel budget.</b> San Francisco and San Jose are free; everywhere else has to be paid for, and they need to know that early.</span></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><strong>About the company names.</strong> Every name here is a research lead, not a vetted prospect. The ones marked with a check are existing Lumen Haul clients &mdash; use them as proof in an email and as a way in through people they know, but do not pitch them. Everything else needs a quick check that they still exist and have not just hired someone in-house.</p>
+    <p><strong>About the numbers.</strong> Budget ranges are what these kinds of clients typically pay, not our price list. You are never quoting &mdash; they are here so you can tell a promising answer from a weak one when you ask. Loren sets every actual number.</p>
+    <p style="margin-top:20px;"><span class="label">Lumen Haul &middot; loren@lumenhaul.com &middot; (970) 689-9617</span></p>
+  </div>
+</footer>
+
+<script>
+/* ===========================================================================
+   TARGET TRACKING
+
+   Everything here is per-browser and local. A file under public/ is static —
+   there is no server to write to and nothing typed or clicked on this page
+   leaves the machine it was clicked on. That is the point: the same link can
+   be handed to anyone, and each person keeps their own working state.
+
+   THE ID IS DERIVED FROM THE CHIP'S OWN TEXT, not from its position in the
+   document. Positions shift every time a name is added to a list, and an
+   index-keyed store would silently reassign everyone's progress to the wrong
+   companies on the next edit. Renaming a chip loses that one chip's state,
+   which is the cheaper failure.
+   ======================================================================== */
+(function () {
+  "use strict";
+
+  var KEY = "lh-brief-targets-v1";
+  var STATES = ["", "Contacted", "Replied", "Handed to Loren", "No"];
+
+  /* localStorage throws outright in some privacy modes rather than returning
+     null, so every access is guarded and a failure degrades to a page that
+     still reads correctly and just does not remember. */
+  function load() {
+    try { return JSON.parse(localStorage.getItem(KEY)) || {}; }
+    catch (e) { return {}; }
+  }
+  function save(data) {
+    try { localStorage.setItem(KEY, JSON.stringify(data)); }
+    catch (e) { /* full, blocked, or private — nothing to do but carry on */ }
+  }
+
+  function idOf(el) {
+    return el.textContent.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  }
+
+  var state = load();
+
+  /* Existing clients are excluded: the brief says to cite them, not pitch
+     them, so giving them a "contacted" state would be the wrong affordance. */
+  var chips = [].slice.call(document.querySelectorAll(".chip:not(.own)"));
+
+  chips.forEach(function (chip) {
+    var id = idOf(chip);
+    chip.setAttribute("data-track", id);
+    chip.setAttribute("role", "button");
+    chip.setAttribute("tabindex", "0");
+    apply(chip, state[id] || 0);
+
+    chip.addEventListener("click", function () { step(chip); });
+    chip.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); step(chip); }
+    });
+  });
+
+  function apply(chip, n) {
+    var name = chip.textContent.trim();
+    if (n) chip.setAttribute("data-state", String(n));
+    else chip.removeAttribute("data-state");
+    chip.setAttribute("aria-label", n ? name + " — " + STATES[n] : name + " — not yet contacted");
+  }
+
+  function step(chip) {
+    var id = chip.getAttribute("data-track");
+    var next = ((state[id] || 0) + 1) % STATES.length;
+    if (next) state[id] = next; else delete state[id];
+    apply(chip, next);
+    save(state);
+    count();
+  }
+
+  /* ---- The bar ---------------------------------------------------------- */
+
+  var readout = document.getElementById("tk-count");
+  function count() {
+    var worked = chips.filter(function (c) { return c.hasAttribute("data-state"); }).length;
+    readout.innerHTML = "<b>" + worked + "</b> of <b>" + chips.length + "</b> worked";
+  }
+  count();
+
+  var hideBtn = document.getElementById("tk-hide");
+  hideBtn.addEventListener("click", function () {
+    var on = document.body.classList.toggle("hide-worked");
+    hideBtn.setAttribute("aria-pressed", on ? "true" : "false");
+  });
+
+  /* A plain-text roll-up, because the handoff to Loren happens in a message,
+     not in this page. Grouped by state and ordered the way the list is worked. */
+  var copyBtn = document.getElementById("tk-copy");
+  copyBtn.addEventListener("click", function () {
+    var groups = [[], [], [], [], []];
+    chips.forEach(function (c) {
+      var n = Number(c.getAttribute("data-state") || 0);
+      if (n) groups[n].push(c.textContent.trim());
+    });
+    var out = ["Lumen Haul — outreach status, " + new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }), ""];
+    [3, 2, 1, 4].forEach(function (n) {
+      if (!groups[n].length) return;
+      out.push(STATES[n].toUpperCase() + " (" + groups[n].length + ")");
+      groups[n].forEach(function (name) { out.push("  " + name); });
+      out.push("");
+    });
+    if (out.length === 2) out.push("Nothing worked yet.");
+    var text = out.join("\n");
+
+    var done = function () {
+      var was = copyBtn.textContent;
+      copyBtn.textContent = "Copied";
+      setTimeout(function () { copyBtn.textContent = was; }, 1600);
+    };
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(done, function () { window.prompt("Copy this:", text); });
+    } else {
+      window.prompt("Copy this:", text);
+    }
+  });
+
+  var resetBtn = document.getElementById("tk-reset");
+  resetBtn.addEventListener("click", function () {
+    if (!window.confirm("Clear every mark on this page? This cannot be undone.")) return;
+    state = {};
+    save(state);
+    chips.forEach(function (c) { apply(c, 0); });
+    count();
+  });
+})();
+</script>
+
+</body>
+</html>
