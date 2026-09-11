@@ -193,10 +193,11 @@ const seeds: ProjectSeed[] = [
   {
     slug: "blaque-diamond-model-s",
     client: "Blaque Diamond Wheels",
-    title: "Tesla Model S Plaid",
+    title: "Infiniti Q50, BD-F25",
+    media: "blaque-diamond-q50",
     summary:
-      "Product film for a wheel fitment on a Model S Plaid, shot ultrawide to keep the full stance of the car in frame.",
-    filmDuration: 70,
+      "The Q50 against glass and concrete, cut to hold the whole stance of the car in ultrawide before moving in on the wheel.",
+    filmDuration: 76,
     // The client is four fitments, not one, and /stills/blaque-diamond has
     // always shown them that way. These are the films that go with them.
     moreFilms: [
@@ -215,11 +216,11 @@ const seeds: ProjectSeed[] = [
         duration: 55,
       },
       {
-        media: "blaque-diamond-q50",
-        title: "Infiniti Q50, BD-F25",
+        media: "blaque-diamond-model-s",
+        title: "Tesla Model S Plaid",
         summary:
-          "The Q50 against glass and concrete, cut to hold the whole stance of the car in ultrawide before moving in on the wheel.",
-        duration: 76,
+          "Product film for a wheel fitment on a Model S Plaid, shot ultrawide to keep the full stance of the car in frame.",
+        duration: 70,
       },
     ],
     year: 2023,
