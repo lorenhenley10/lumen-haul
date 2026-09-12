@@ -83,9 +83,36 @@ export function ProjectHero({ project }: { project: Project }) {
         </span>
       </button>
 
-      {/* Reading panel. Transparent to clicks so the media button stays hittable. */}
-      <div className="pointer-events-none absolute inset-0 z-[var(--z-content)] grid place-items-center bg-background/40 py-24 container">
-        <div className="max-w-prose">
+      {/*
+        Reading panel. Transparent to clicks so the media button stays hittable.
+
+        Bottom-aligned, on the same footing as the home hero lockup and the
+        reel: `pb-frame-foot` is the token those were tuned to, and it tracks
+        viewport height because a fixed inset reads as a footer on a short
+        window and as a crop on a tall one. Centring the lockup here put the
+        title across the middle of the frame, where it fought the play
+        affordance for the same pixels and covered the subject of the shot.
+
+        `pt-24` is a guard, not a placement — with the content bottom-aligned
+        it only matters when a long summary on a short window would otherwise
+        run up under the fixed header.
+
+        Left, not centred. The lockup is left-aligned type, so centring the BOX
+        that holds it parked a left-aligned block a third of the way into the
+        frame, on no gutter at all.
+
+        Inset on `px-12`, which is the reel slide's inset for the same kind of
+        panel — a bottom-aligned lockup over full-frame footage — and not the
+        1rem page gutter. The gutter is sized for text on a page ground, where
+        the measure does the work; 16px of air under display type laid over a
+        moving image just reads as type falling off the left edge. This panel
+        already shares the reel's footing, so it takes the reel's sides too.
+
+        Mobile keeps the page gutter: 3rem a side off a 390px screen is a
+        sixth of the width gone, and the reel this borrows from is desktop-only.
+      */}
+      <div className="pointer-events-none absolute inset-0 z-[var(--z-content)] flex flex-col items-start justify-end bg-background/40 px-container pt-24 pb-frame-foot md:px-12">
+        <div className="w-full max-w-prose">
           <Reveal immediate staggerChildren className="flex flex-col items-start gap-8">
             {/*
               The counterpart to the "next story" card at the foot of the page,
