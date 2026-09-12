@@ -158,6 +158,26 @@
   --radius-pill: 9999px;
   --shadow-base: 0px 10px 50px rgb(0 0 0 / 0.1);
 
+  /*
+     Type set over footage — the story hero lockup.
+
+     There is no ground under that type on purpose: the frame is the work and
+     dimming all of it to caption a corner of it is the wrong trade. Without a
+     ground, white type dissolves wherever the shot goes bright, which on the
+     Blaque Diamond loop is the car body and the concrete behind it.
+
+     Two layers, both tight. The 1px/2px pass is the one doing the work: it
+     hugs the glyph and gives the edge somewhere to land. The 2px/6px pass is
+     separation only, and is kept to a 6px blur so it reads as weight under
+     the letter rather than as a halo around it — past roughly 10px it stops
+     looking like a shadow and starts looking like a smudged ground, which is
+     the thing we just removed.
+
+     Held deliberately low: enough to keep the lockup legible on a bright
+     frame, not enough to be visible as an effect on a dark one. */
+  --text-shadow-film:
+    0 1px 2px rgb(0 0 0 / 0.45), 0 2px 6px rgb(0 0 0 / 0.3);
+
   /* --- Motion -------------------------------------------------------------
      Durations in seconds so they can be handed straight to GSAP. */
   --duration-instant: 0.12s;

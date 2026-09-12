@@ -110,8 +110,23 @@ export function ProjectHero({ project }: { project: Project }) {
 
         Mobile keeps the page gutter: 3rem a side off a 390px screen is a
         sixth of the width gone, and the reel this borrows from is desktop-only.
+
+        NO GROUND UNDER THE TYPE, deliberately — not a flat wash and not a
+        gradient. This panel used to carry `bg-background/40`, which dimmed the
+        entire frame to protect copy that, once bottom-aligned, only occupies
+        the lower third. The film is the work; dimming all of it to caption a
+        corner of it is the wrong trade, and a bottom-weighted gradient is the
+        same trade wearing a nicer edge. The type carries itself at full
+        strength, which is the house rule for anything set over footage.
+
+        What carries the type instead is `text-shadow-film`, which is per-glyph
+        and leaves the frame alone. It is set here rather than on each element
+        because text-shadow inherits, so the back link, the title and the
+        summary all pick it up from one declaration. The Play film button
+        inherits it too and is unaffected — it has its own ground and blur, so
+        there is nothing for the shadow to separate it from.
       */}
-      <div className="pointer-events-none absolute inset-0 z-[var(--z-content)] flex flex-col items-start justify-end bg-background/40 px-container pt-24 pb-frame-foot md:px-12">
+      <div className="pointer-events-none absolute inset-0 z-[var(--z-content)] flex flex-col items-start justify-end px-container pt-24 pb-frame-foot text-shadow-film md:px-12">
         <div className="w-full max-w-prose">
           <Reveal immediate staggerChildren className="flex flex-col items-start gap-8">
             {/*
