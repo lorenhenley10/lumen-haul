@@ -32,7 +32,35 @@ export function ProjectHero({ project }: { project: Project }) {
   const label = `Play ${project.client} — ${project.title}`;
 
   return (
-    <section className="relative sticky top-0 h-dvh">
+    <section
+      /*
+        `z-[var(--z-content)] bg-background` is the reveal-footer contract —
+        the same pair HomeHero and ReelDesktop carry, for the same reason.
+
+        The footer is fixed at `--z-reveal` and comes LATER in the document
+        than this hero, so a hero left on the default layer loses the
+        paint-order tie and the footer draws across its bottom half: the giant
+        wordmark sitting over the film, cutting the title in two.
+
+        It is not only a visual tie. `position: sticky` creates a stacking
+        context whatever its z-index, so everything inside this section is
+        trapped underneath the section's own level — including the reading
+        panel, which already asks for `--z-content` and cannot get there from
+        in here. That is why BOTH play affordances stopped working: hit
+        testing follows paint order, and the footer was taking every click
+        aimed at the lower half of the hero, "Play film" included.
+
+        The ground matters too. MediaFrame's black is the only thing making
+        this section opaque today, and a frame that has not decoded yet would
+        be a hole straight through to the footer.
+
+        `relative` used to sit alongside `sticky` here. Both set `position`,
+        so which one won was down to the order Tailwind happened to emit them
+        in — a coin toss next to a stacking bug. Sticky is the one that was
+        winning and the one the layout needs; the other is gone.
+      */
+      className="sticky top-0 z-[var(--z-content)] h-dvh bg-background"
+    >
       <button
         type="button"
         onClick={() => openFilm(heroFilmOf(project))}
