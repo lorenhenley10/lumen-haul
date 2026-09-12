@@ -66,12 +66,21 @@ const seeds: StillsSeed[] = [
     client: "Shoreline Motoring",
     title: "Builds",
     description:
-      "Three builds for the same shop, each shot on delivery: static, lit, and framed to sell the stance rather than the spec sheet.",
-    year: 2024,
+      "Four builds for the same shop, each shot on delivery and framed to sell the stance rather than the spec sheet — three of them static and lit, and the Yukon out on the dirt, where the lift and the tyres are the point.",
+    // 2025 rather than the 2024 this was: the Yukon is the most recent work in
+    // the set, and the field is one year for the whole client. Same convention
+    // as Blaque Diamond, whose 2023 is the year of the shoot and not of any of
+    // the four cars in it.
+    year: 2025,
     galleries: [
       { media: "stills-shoreline-f150", title: "Ford F-150 Raptor R" },
       { media: "stills-shoreline-amg-gt", title: "Mercedes-AMG GT" },
       { media: "stills-shoreline-rs6", title: "Audi RS6 Avant, 1886 Wheels" },
+      // Filed under Stills/Arena Wheels, and the only set here whose source
+      // folder is named for the wheel rather than the shop. It is a Shoreline
+      // build like the other three — the filenames credit them — so the
+      // Arena ASRs are named in the title the way 1886 is on the RS6.
+      { media: "stills-shoreline-yukon", title: "GMC Yukon AT4, Arena Wheels" },
     ],
   },
   {
@@ -99,11 +108,12 @@ const seeds: StillsSeed[] = [
     client: "JOBY",
     title: "Product and Lifestyle",
     description:
-      "Mounts and grips photographed in use rather than on seamless — clamped to a railing, carried into the desert, held by someone actually shooting with them.",
+      "Mounts and grips photographed in use rather than on seamless — clamped to a railing, carried into the desert, run down the beach at dusk, and held throughout by someone actually shooting with them.",
     year: 2024,
     galleries: [
       { media: "stills-joby-lifestyle", title: "Mounted Product" },
       { media: "stills-joby-joshua-tree", title: "Joshua Tree" },
+      { media: "stills-joby-telepod", title: "TelePod Mini" },
     ],
   },
   {
@@ -150,6 +160,15 @@ const seeds: StillsSeed[] = [
       "A sportbike shot moving on canyon roads, panned at speed through the corners and out into the light.",
     year: 2024,
     galleries: [{ media: "stills-cf-moto" }],
+  },
+  {
+    slug: "rs-watanabe",
+    client: "RS Watanabe",
+    title: "JCCS",
+    description:
+      "Eight-spokes at the Japanese Classic Car Show — under Datsuns and AE86s out on the floor, then in close enough to read the engraving on a spoke, and back out to the stand they were being sold from.",
+    year: 2022,
+    galleries: [{ media: "stills-watanabe-jccs" }],
   },
 ];
 
