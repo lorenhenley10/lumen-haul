@@ -395,7 +395,7 @@ export const stillsManifest: Record<string, StillMeta[]> = {
     { file: "12.653d2ce4.jpg", width: 2560, height: 1706 },
     { file: "13.61780932.jpg", width: 2560, height: 1706 },
     { file: "14.615dfc2c.jpg", width: 2560, height: 1706 },
-    { file: "15.e2014323.jpg", width: 2560, height: 1706 },
+    { file: "15.d1594b0d.jpg", width: 2560, height: 1706 },
     { file: "16.83ed7007.jpg", width: 2560, height: 1706 },
     { file: "17.26071870.jpg", width: 2560, height: 1706 },
     { file: "18.7bf2d238.jpg", width: 2560, height: 1706 },
