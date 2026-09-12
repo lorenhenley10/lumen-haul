@@ -98,24 +98,20 @@ SCALE="scale='if(gt(iw,ih),2560,-2)':'if(gt(iw,ih),-2,2560)'"
 # four and now sits with them on /stills/blaque-diamond, so it takes a
 # `stills-` folder of its own like everything else here. The source path is the
 # only thing about it that is still unusual.
-# Two source folders here are named for a WHEEL BRAND but do not land under one:
-#
-#   Stills/Arena Wheels     -> stills-shoreline-yukon
-#   Stills/Watanabe Wheels  -> stills-watanabe-jccs
-#
-# The first is a Shoreline Motoring build — a GMC Yukon AT4 on Arena ASRs, and
-# the filenames credit the shop — so it joins the other three Shoreline cars
-# rather than opening a set for the wheel. The second genuinely is the wheel
+# Stills/Watanabe Wheels is named for a WHEEL BRAND and is genuinely that
 # brand's own set, shot at JCCS, so the slug says what the pictures are of
 # rather than repeating the folder.
 #
-# Worth stating because the folder name is the only clue either way, and the
-# two folders look identical from the outside.
+# The Yukon used to be the confusing twin of it — filed at the top level as
+# Stills/Arena Wheels while actually being a Shoreline Motoring build. It now
+# sits under Shoreline with the other three cars and its filenames say Yukon
+# rather than Sierra, so the path finally matches the work and this needs no
+# explaining.
 read -r -d '' JOBS <<'EOF'
 stills-shoreline-amg-gt|Stills/Shoreline Motoring/Shoreline AMG GT High Res
 stills-shoreline-f150|Stills/Shoreline Motoring/Shoreline F150 Photos/Final Photos
 stills-shoreline-rs6|Stills/Shoreline Motoring/Shoreline Motoring Audi RS6 Avant 1886 Wheels
-stills-shoreline-yukon|Stills/Arena Wheels
+stills-shoreline-yukon|Stills/Shoreline Motoring/Arena Wheels GMC Yukon
 stills-blaque-diamond-q50|Stills/Blaque Diamond/2017_Infiniti_Q50_Blaque_Diamond_Wheels_BD_F25_DDT
 stills-blaque-diamond-raptor|Stills/Blaque Diamond/2018_Ford_F150_Raptor_Blaque_Diamond_Wheels_BD_O728_Textured_Black/High Res 2
 stills-blaque-diamond-model-3|Stills/Blaque Diamond/2022 Tesla Model 3 BD F29/High Res

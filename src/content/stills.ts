@@ -76,10 +76,9 @@ const seeds: StillsSeed[] = [
       { media: "stills-shoreline-f150", title: "Ford F-150 Raptor R" },
       { media: "stills-shoreline-amg-gt", title: "Mercedes-AMG GT" },
       { media: "stills-shoreline-rs6", title: "Audi RS6 Avant, 1886 Wheels" },
-      // Filed under Stills/Arena Wheels, and the only set here whose source
-      // folder is named for the wheel rather than the shop. It is a Shoreline
-      // build like the other three — the filenames credit them — so the
-      // Arena ASRs are named in the title the way 1886 is on the RS6.
+      // The Arena ASRs are named in the title the way 1886 is on the RS6:
+      // the wheel is the reason the shop commissioned the shoot, so it earns
+      // the second half of the line without taking the set.
       { media: "stills-shoreline-yukon", title: "GMC Yukon AT4, Arena Wheels" },
     ],
   },
