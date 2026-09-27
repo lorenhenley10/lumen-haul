@@ -1,0 +1,819 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lumen Haul — 84codes Invoice</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ===========================================================================
+   TOKENS
+   Black ink on white paper. The gray ramp is measured against white:
+   --ink-2 is 11.4:1, --ink-3 is 5.3:1, so both clear AA at body size.
+   Nothing lighter than --ink-3 ever carries a word that has to be read.
+   ======================================================================== */
+:root {
+  --paper:        #ffffff;
+  --ink:          #000000;
+  --ink-2:        #3d3d3d;
+  --ink-3:        #6b6b6b;
+  --rule:         #d6d6d6;
+  --rule-2:       #ededed;
+  --fill:         #f4f4f4;
+
+  --font-sans: "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* Sheet geometry — US Letter. Change `--sheet-w/h` for A4 (210mm/297mm). */
+  --sheet-w: 8.5in;
+  --sheet-h: 11in;
+  --pad-x:   0.75in;
+  --pad-t:   0.60in;
+  --pad-b:   0.62in;
+
+  /* The two right-hand money columns. Declared once so the production table,
+     the equipment options and the summary all share one right edge. */
+  --col-rate:   88px;
+  --col-amount: 104px;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* The screen backdrop behind the sheets. Painted on html and body both:
+     body's paint stops at body's box, and the strip beyond it is html's. */
+  --backdrop: #8f8f8f;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+html { background: var(--backdrop); }
+
+body {
+  margin: 0;
+  background: var(--backdrop);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "kern" 1;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root { --backdrop: #2a2a2a; }
+}
+
+/* ===========================================================================
+   SHEET
+   ======================================================================== */
+.sheet {
+  position: relative;
+  width: var(--sheet-w);
+  height: var(--sheet-h);
+  padding: var(--pad-t) var(--pad-x) var(--pad-b);
+  margin: 24px auto;
+  background: var(--paper);
+  box-shadow: 0 2px 28px rgb(0 0 0 / 0.28);
+  overflow: hidden;
+}
+
+/* ===========================================================================
+   MASTHEAD
+   ======================================================================== */
+.masthead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 14px;
+  border-bottom: 1.25px solid var(--ink);
+}
+
+.identity { display: flex; align-items: center; gap: 11px; }
+
+.identity img {
+  display: block;
+  height: 34px;
+  width: auto;
+}
+
+.wordmark {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+  line-height: 1;
+  margin: 0 0 4px;
+}
+
+.identity-sub {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  line-height: 1;
+}
+
+.doc-id { text-align: right; }
+
+.doc-kind {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 4px;
+}
+
+.doc-no {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+/* The estimate this invoice settles, under the invoice's own number. */
+.doc-ref {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-top: 5px;
+}
+
+/* Continuation masthead on pages 2 and 3 — quieter, no logo. */
+.masthead--cont { align-items: baseline; padding-bottom: 10px; }
+.masthead--cont .wordmark { font-size: 13px; margin: 0; letter-spacing: -0.015em; }
+
+/* ===========================================================================
+   FIELD LABELS AND FILLABLE TEXT
+   ======================================================================== */
+.label {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  font-weight: 500;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  line-height: 1;
+}
+
+/* ===========================================================================
+   PARTIES + JOB STRIP
+   ======================================================================== */
+.parties {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 40px;
+  margin-top: 16px;
+}
+
+.party .label { margin-bottom: 9px; }
+.party address { font-style: normal; line-height: 1.62; color: var(--ink-2); }
+.party .party-name { color: var(--ink); font-weight: 600; letter-spacing: -0.01em; }
+
+.jobstrip {
+  display: grid;
+  /* Sized to content, not four equal columns: the venue name is the longest
+     value by far, and in a quarter of the width it broke onto a second line. */
+  grid-template-columns: repeat(4, auto);
+  justify-content: space-between;
+  gap: 0 20px;
+  margin-top: 18px;
+  /* dl carries a 1em bottom margin from the UA sheet. Stated here so the
+     strip's spacing is set in one place rather than half-inherited. */
+  margin-bottom: 10px;
+  padding: 12px 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+
+.jobstrip .label { margin-bottom: 6px; }
+.jobstrip dd { margin: 0; font-size: 12.5px; letter-spacing: -0.005em; }
+
+/* ===========================================================================
+   SECTION HEADS
+   ======================================================================== */
+.section { margin-top: 18px; }
+
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1.25px solid var(--ink);
+}
+
+.section-head h2 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.022em;
+}
+
+.section-note {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: -0.01em;
+  color: var(--ink-3);
+  text-align: right;
+}
+
+/* ===========================================================================
+   LINE ITEM ROWS
+   One grid template drives the production table and the equipment options,
+   so the rate and amount columns hold the same right edge on every page.
+   ======================================================================== */
+.rows { margin-top: 2px; }
+
+.row {
+  display: grid;
+  grid-template-columns: 20px 1fr 52px var(--col-rate) var(--col-amount);
+  align-items: baseline;
+  gap: 0 8px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--rule-2);
+}
+
+.row--head {
+  padding: 9px 0 6px;
+  border-bottom: 1px solid var(--rule);
+}
+.row--head > * { color: var(--ink-3); }
+
+.row-index {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-3);
+}
+
+.row-title {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 500;
+  letter-spacing: -0.012em;
+}
+
+.row-desc {
+  display: block;
+  margin-top: 2px;
+  font-size: 11px;
+  line-height: 1.34;
+  color: var(--ink-3);
+  max-width: 62ch;
+}
+
+.num {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  text-align: right;
+  letter-spacing: -0.02em;
+}
+
+.amount { font-weight: 500; }
+
+/* Subtotal */
+.subtotal {
+  display: grid;
+  grid-template-columns: 1fr var(--col-amount);
+  gap: 0 8px;
+  align-items: baseline;
+  padding: 11px 0 0;
+  margin-top: -1px;
+  border-top: 1.25px solid var(--ink);
+}
+.subtotal-label {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+.subtotal .num { font-size: 14px; font-weight: 500; }
+
+/* A line about the table it sits under, not a line of the table. */
+.rows-note {
+  margin: 9px 0 0;
+  font-size: 11px;
+  line-height: 1.44;
+  color: var(--ink-2);
+}
+
+/* Rows whose quantity is always one drop the quantity column entirely. */
+.rows--fixed .row {
+  grid-template-columns: 20px 1fr var(--col-rate) var(--col-amount);
+}
+
+/* The schedule carries a duration, not a price, so it keeps only the last
+   column. That column is the amount column's width, so the times sit on the
+   same right edge as the money above them. */
+.rows--time .row {
+  grid-template-columns: 20px 1fr var(--col-amount);
+}
+
+/* Equipment folded into the package rate says so where its amount would be. */
+.num.included { color: var(--ink-2); }
+
+/* ===========================================================================
+   TOTAL BAR
+   ======================================================================== */
+.total {
+  display: grid;
+  grid-template-columns: 1fr var(--col-amount);
+  align-items: center;
+  gap: 0 8px;
+  margin-top: 14px;
+  padding: 13px 14px 13px 16px;
+  background: var(--ink);
+  color: var(--paper);
+}
+.total-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.total .num { font-size: 19px; font-weight: 500; color: var(--paper); }
+
+/* ===========================================================================
+   TERMS + SIGNATURE
+   ======================================================================== */
+/* One term per ruled row, label beside its text. A two-column grid of five
+   terms left one orphaned and let each row's gap grow to fit its taller
+   neighbour, so the spacing never read as even. */
+.terms { margin-top: 2px; }
+.term {
+  display: grid;
+  grid-template-columns: 170px 1fr;
+  align-items: baseline;
+  gap: 0 20px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--rule-2);
+}
+.term p { margin: 0; font-size: 11px; line-height: 1.44; color: var(--ink-2); }
+
+.signature {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 40px;
+  margin-top: 20px;
+}
+/* Enough height above each line to actually sign or write on it. The height
+   is fixed because the client's name is set as .mixed at a larger size, and
+   the two signature lines would otherwise sit a pixel apart. */
+.sign-col .label { height: 10px; margin-bottom: 44px; }
+.sign-line {
+  border-bottom: 1px solid var(--ink);
+  height: 0;
+  margin-bottom: 5px;
+}
+.sign-cap {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 36px;
+}
+.sign-cap:last-child { margin-bottom: 0; }
+
+/* ===========================================================================
+   SHEET FOOTER
+   ======================================================================== */
+.sheet-foot {
+  position: absolute;
+  left: var(--pad-x);
+  right: var(--pad-x);
+  bottom: calc(var(--pad-b) - 26px);
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 8px;
+  border-top: 1px solid var(--rule);
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* An email set in small caps reads as decoration rather than an address. */
+.sheet-foot .mixed { text-transform: none; letter-spacing: 0.02em; }
+
+/* A name with internal capitals has to keep them. */
+.label.mixed { text-transform: none; letter-spacing: 0.04em; font-size: 9.5px; }
+
+/* ===========================================================================
+   SCREEN-ONLY TOOLBAR
+   ======================================================================== */
+.toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 11px 18px;
+  background: #111;
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.02em;
+}
+.toolbar b { font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; }
+.toolbar span { color: #a3a3a3; }
+.toolbar-hint {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.toolbar button {
+  flex: none;
+  padding: 8px 15px;
+  border: 0;
+  background: #fff;
+  color: #000;
+  font: inherit;
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 160ms var(--ease), transform 160ms var(--ease);
+}
+.toolbar button:hover { background: #d4d4d4; }
+.toolbar button:active { transform: translateY(1px); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ===========================================================================
+   PRINT
+   ======================================================================== */
+@page { size: letter; margin: 0; }
+
+@media print {
+  html, body { background: #fff; }
+  body { font-size: 13px; }
+
+  .toolbar { display: none !important; }
+
+  .sheet {
+    margin: 0;
+    box-shadow: none;
+    break-after: page;
+    page-break-after: always;
+    /* fit() may have zoomed the sheet to suit the window. Paper is paper. */
+    zoom: 1 !important;
+  }
+  .sheet:last-of-type { break-after: auto; page-break-after: auto; }
+
+  /* The total bar is solid black and Chrome drops backgrounds unless the
+     print dialog is told otherwise. This makes it survive either way. */
+  .total {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .row, .term { break-inside: avoid; page-break-inside: avoid; }
+}
+
+/* On a phone the toolbar hint truncates mid-date. Drop it; the sheet
+   directly below says the same thing. */
+@media screen and (max-width: 640px) {
+  .toolbar-hint span { display: none; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="toolbar">
+  <div class="toolbar-hint">
+    <b>Invoice</b>
+    <span>&nbsp;&nbsp;84codes &middot; $500 due 12 October 2026</span>
+  </div>
+  <button type="button" onclick="window.print()">Print / Save as PDF</button>
+</div>
+
+<section class="sheet" id="sheet-1">
+
+  <header class="masthead">
+    <div class="identity">
+      <img src="data:image/png;base64,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" alt="Lumen Haul">
+      <div>
+        <div class="wordmark">Lumen Haul</div>
+        <div class="identity-sub">Film &amp; Photography &middot; Redwood City, CA</div>
+      </div>
+    </div>
+    <div class="doc-id">
+      <div class="doc-kind">Invoice</div>
+      <div class="doc-no">LH&#8209;<span>260927</span></div>
+      <div class="doc-ref">Against estimate LH&#8209;260917</div>
+    </div>
+  </header>
+
+  <div class="parties">
+    <div class="party">
+      <div class="label">From</div>
+      <address>
+        <span class="party-name">Lumen Haul</span><br>
+        Loren Henley, Director &amp; Cinematographer<br>
+        12475 Skyline Blvd<br>
+        Redwood City, CA 94062<br>
+        (970) 689&#8209;9617<br>
+        loren@lumenhaul.com
+      </address>
+    </div>
+    <div class="party">
+      <div class="label">Billed to</div>
+      <address>
+        <span class="party-name">84codes</span><br>
+        Julia Lindberg<br>
+        Brand Marketing, Events &amp; Conferences<br>
+        +46&nbsp;70&nbsp;646&nbsp;29&nbsp;74<br>
+        julia@84codes.com
+      </address>
+    </div>
+  </div>
+
+  <dl class="jobstrip">
+    <div>
+      <dt class="label">Project</dt>
+      <dd>Portrait session</dd>
+    </div>
+    <div>
+      <dt class="label">Shoot date</dt>
+      <dd>Wed 23 Sept 2026</dd>
+    </div>
+    <div>
+      <dt class="label">Location</dt>
+      <dd>San Jos&eacute; McEnery Convention Center</dd>
+    </div>
+    <div>
+      <dt class="label">Invoiced / due</dt>
+      <dd>27 Sept &middot; 12 Oct 2026</dd>
+    </div>
+  </dl>
+
+  <section class="section">
+    <div class="section-head">
+      <h2>Production</h2>
+      <div class="section-note">Wednesday 23 September 2026 &middot; flat rate</div>
+    </div>
+
+    <div class="rows rows--fixed">
+      <div class="row row--head">
+        <div class="row-index">&nbsp;</div>
+        <div class="label">Item</div>
+        <div class="label num">Rate</div>
+        <div class="label num">Amount</div>
+      </div>
+
+      <div class="row">
+        <div class="row-index">01</div>
+        <div>
+          <div class="row-title">Portrait session, full package</div>
+          <div class="row-desc">Direction, lighting and capture for three subjects.</div>
+        </div>
+        <div class="num">$500</div>
+        <div class="num amount">$500</div>
+      </div>
+
+      <div class="row">
+        <div class="row-index">02</div>
+        <div>
+          <div class="row-title">Portable backdrop</div>
+          <div class="row-desc">A clean, consistent background for every subject.</div>
+        </div>
+        <div class="num">&nbsp;</div>
+        <div class="num included">Included</div>
+      </div>
+
+      <div class="row">
+        <div class="row-index">03</div>
+        <div>
+          <div class="row-title">Professional full&#8209;frame camera</div>
+          <div class="row-desc">A full&#8209;frame camera body and lenses.</div>
+        </div>
+        <div class="num">&nbsp;</div>
+        <div class="num included">Included</div>
+      </div>
+
+      <div class="row">
+        <div class="row-index">04</div>
+        <div>
+          <div class="row-title">Flash lighting equipment</div>
+          <div class="row-desc">Flash heads, modifiers and stands.</div>
+        </div>
+        <div class="num">&nbsp;</div>
+        <div class="num included">Included</div>
+      </div>
+
+      <div class="row">
+        <div class="row-index">05</div>
+        <div>
+          <div class="row-title">Travel and conference admission</div>
+          <div class="row-desc">Both covered by Lumen Haul, and not billed here.</div>
+        </div>
+        <div class="num">&nbsp;</div>
+        <div class="num included">Included</div>
+      </div>
+    </div>
+
+    <div class="total">
+      <div class="total-label">Amount due (USD)</div>
+      <div class="num">$500</div>
+    </div>
+  </section>
+
+  <section class="section" style="margin-top:26px">
+    <div class="section-head">
+      <h2>Deliverables</h2>
+      <div class="section-note">Included in the rate &middot; delivered over Google Drive</div>
+    </div>
+
+    <div class="rows rows--time">
+      <div class="row row--head">
+        <div class="row-index">&nbsp;</div>
+        <div class="label">Item</div>
+        <div class="label num">Count</div>
+      </div>
+
+      <div class="row">
+        <div class="row-index">01</div>
+        <div>
+          <div class="row-title">Final photographs, edited and retouched</div>
+          <div class="row-desc">One square 1:1 image of each subject, plus one bonus image of one subject.</div>
+        </div>
+        <div class="num">4 &times;&nbsp;4</div>
+      </div>
+
+      <div class="subtotal">
+        <div class="subtotal-label">Total files: 4 photographs &times; 4 resolutions</div>
+        <div class="num">16</div>
+      </div>
+    </div>
+
+    <p class="rows-note">Deliverables revised from estimate LH&#8209;260917, with a bonus image added. Approved by Julia Lindberg.</p>
+  </section>
+
+  <footer class="sheet-foot">
+    <div>Lumen Haul &middot; lumenhaul.com</div>
+    <div>Invoice LH&#8209;260927</div>
+    <div>Page 1 of 2</div>
+  </footer>
+</section>
+
+<section class="sheet" id="sheet-2">
+
+  <header class="masthead masthead--cont">
+    <div class="wordmark">Lumen Haul</div>
+    <div class="doc-kind">Invoice LH&#8209;260927 &middot; Schedule and terms</div>
+  </header>
+
+  <section class="section" style="margin-top:26px">
+    <div class="section-head">
+      <h2>Time on site</h2>
+      <div class="section-note">Wednesday 23 September 2026</div>
+    </div>
+
+    <div class="rows rows--time">
+      <div class="row row--head">
+        <div class="row-index">&nbsp;</div>
+        <div class="label">Block</div>
+        <div class="label num">Time</div>
+      </div>
+
+      <div class="row">
+        <div class="row-index">01</div>
+        <div>
+          <div class="row-title">Roll in and setup</div>
+          <div class="row-desc">Bringing the kit in, building the set and testing the light.</div>
+        </div>
+        <div class="num">1 hr</div>
+      </div>
+
+      <div class="row">
+        <div class="row-index">02</div>
+        <div>
+          <div class="row-title">Shooting</div>
+          <div class="row-desc">Three subjects, one after another on the finished set.</div>
+        </div>
+        <div class="num">30 min</div>
+      </div>
+
+      <div class="row">
+        <div class="row-index">03</div>
+        <div>
+          <div class="row-title">Wrap and roll out</div>
+          <div class="row-desc">Taking down the set and lights and clearing the space.</div>
+        </div>
+        <div class="num">1 hr</div>
+      </div>
+
+      <div class="subtotal">
+        <div class="subtotal-label">Total time on site</div>
+        <div class="num">2.5 hrs</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="margin-top:26px">
+    <div class="section-head">
+      <h2>Terms</h2>
+    </div>
+    <div class="terms">
+      <div class="term">
+        <div class="label">The day</div>
+        <p>Two and a half hours on site with three subjects, as estimated. No overtime, no additional subjects, and nothing billed beyond the flat rate.</p>
+      </div>
+      <div class="term">
+        <div class="label">Location</div>
+        <p>San Jos&eacute; McEnery Convention Center. Travel costs and conference admission were carried by Lumen Haul and are not billed.</p>
+      </div>
+      <div class="term">
+        <div class="label">Delivery</div>
+        <p>Final files delivered over Google Drive within 6 days of the shoot, by Tuesday 29 September 2026.</p>
+      </div>
+      <div class="term">
+        <div class="label">Files and usage</div>
+        <p>Unlimited use of the portraits for marketing, press, social and event promotion, worldwide and in perpetuity. Raw files stay with Lumen Haul; portfolio use once the work is public.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="margin-top:26px">
+    <div class="section-head">
+      <h2>Payment</h2>
+      <div class="section-note">Net 15 &middot; due 12 October 2026</div>
+    </div>
+    <div class="terms">
+      <div class="term">
+        <div class="label">Amount due</div>
+        <p>$500.00 (USD), payable by 12 October 2026.</p>
+      </div>
+      <div class="term">
+        <div class="label">Pay by</div>
+        <p>Zelle to (970) 689&#8209;9617, under Loren Henley.</p>
+      </div>
+      <div class="term">
+        <div class="label">Reference</div>
+        <p>Quote invoice LH&#8209;260927 with the payment.</p>
+      </div>
+      <div class="term">
+        <div class="label">Questions</div>
+        <p>Loren Henley &middot; (970) 689&#8209;9617 &middot; loren@lumenhaul.com</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="sheet-foot">
+    <div>Loren Henley &middot; (970) 689&#8209;9617 &middot; <span class="mixed">loren@lumenhaul.com</span></div>
+    <div>Invoice LH&#8209;260927</div>
+    <div>Page 2 of 2</div>
+  </footer>
+</section>
+
+<script>
+/* Fit the sheet to a narrow window without reflowing the printed layout.
+   Zoom rather than transform: scale, so the box itself shrinks and the page
+   never takes a horizontal scrollbar. clientWidth rather than innerWidth,
+   which reports the overflowed width once the sheet is wider than a phone. */
+(function () {
+  function fit() {
+    var natural = 8.5 * 96;
+    var avail = document.documentElement.clientWidth || window.innerWidth;
+    var scale = Math.min(1, (avail - 32) / natural);
+    document.querySelectorAll(".sheet").forEach(function (s) {
+      s.style.zoom = scale < 1 ? scale : "";
+    });
+  }
+  window.addEventListener("resize", fit);
+  fit();
+})();
+</script>
+</body>
+</html>
